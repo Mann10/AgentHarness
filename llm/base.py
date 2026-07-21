@@ -3,6 +3,7 @@ from collections.abc import Generator
 
 from config import Config
 from context.context import ConversationContext
+from tool.models import LLMResponse, Tool
 
 
 class BaseLLMClient(ABC):
@@ -10,13 +11,17 @@ class BaseLLMClient(ABC):
         self.config = config
 
     @abstractmethod
-    def chat(self, context: ConversationContext, **kwargs) -> str: ...
+    async def chat(
+        self, context: ConversationContext, *, tools: list[Tool] | None = None, **kwargs
+    ) -> LLMResponse: ...
 
     @abstractmethod
-    def chat_from_messages(self, messages: list[dict], **kwargs) -> str: ...
+    async def chat_from_messages(
+        self, messages: list[dict], *, tools: list[dict] | None = None, **kwargs
+    ) -> LLMResponse: ...
 
     @abstractmethod
-    def stream_chat(
+    async def stream_chat(
         self, context: ConversationContext, **kwargs
     ) -> Generator[str, None, None]: ...
 
