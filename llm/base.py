@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Generator
 
 from config import Config
+from context.context import ConversationContext
 
 
 class BaseLLMClient(ABC):
@@ -9,11 +10,14 @@ class BaseLLMClient(ABC):
         self.config = config
 
     @abstractmethod
-    def chat(self, messages: list[dict], **kwargs) -> str: ...
+    def chat(self, context: ConversationContext, **kwargs) -> str: ...
+
+    @abstractmethod
+    def chat_from_messages(self, messages: list[dict], **kwargs) -> str: ...
 
     @abstractmethod
     def stream_chat(
-        self, messages: list[dict], **kwargs
+        self, context: ConversationContext, **kwargs
     ) -> Generator[str, None, None]: ...
 
     def count_tokens(self, text: str) -> int:
