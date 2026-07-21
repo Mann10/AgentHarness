@@ -1,11 +1,23 @@
 from config import Config
+from context import ConversationContext
 from llm import OpenAIClient
 
 
 def main():
     config = Config()
     client = OpenAIClient(config)
-    messages = [{"role": "system", "content": config.system_prompt}]
+    context = ConversationContext(
+        system_prompt=config.system_prompt,
+        count_tokens=client.count_tokens,
+        token_limit=config.max_tokens,
+        summarize_fn=lambda msgs: client.chat_from_messages(
+            [
+                {"role": "system", "content": "Summarize the following conversation concisely while preserving key details."},
+                *msgs,
+            ],
+            temperature=0.3,
+        ),
+    )
 
     print("Agent Harness v1 — type 'exit' or 'quit' to stop.\n")
 
@@ -16,13 +28,12 @@ def main():
         if not user_input:
             continue
 
-        messages.append({"role": "user", "content": user_input})
-        response = client.chat(messages)
-        messages.append({"role": "assistant", "content": response})
+        context.add_user_message(user_input)
+        response = client.chat(context)
+        context.add_assistant_message(response)
 
-        token_count = client.count_tokens(response)
         print(response)
-        print(f"[{token_count} tokens]")
+        print(f"[{context.total_tokens}/{config.max_tokens} tokens]")
         print()
 
 
