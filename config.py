@@ -14,3 +14,4 @@ class Config:
     system_prompt: str = field(default_factory=lambda: getenv("SYSTEM_PROMPT", "You are a helpful assistant."))
     temperature: float = field(default_factory=lambda: float(getenv("TEMPERATURE", "0.7")))
     max_tokens: int = field(default_factory=lambda: int(getenv("MAX_TOKENS", "4096")))
+    mcp_config_path: str = field(default_factory=lambda: getenv("MCP_CONFIG_PATH", "mcp_servers.json"))
