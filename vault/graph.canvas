@@ -1,0 +1,2084 @@
+{
+  "nodes": [
+    {
+      "id": "g0",
+      "type": "group",
+      "label": "OpenAIClient",
+      "x": 0,
+      "y": 0,
+      "width": 1100,
+      "height": 620,
+      "color": "1"
+    },
+    {
+      "id": "n_llm_base_basellmclient_init",
+      "type": "file",
+      "file": ".__init__()_1.md",
+      "x": 20,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_openai_client_openaiclient_init",
+      "type": "file",
+      "file": ".__init__()_2.md",
+      "x": 220,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_openai_client_openaiclient_call_sdk",
+      "type": "file",
+      "file": "._call_sdk().md",
+      "x": 420,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_base_basellmclient_chat",
+      "type": "file",
+      "file": ".chat().md",
+      "x": 620,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_openai_client_openaiclient_chat",
+      "type": "file",
+      "file": ".chat()_1.md",
+      "x": 820,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_base_basellmclient_chat_from_messages",
+      "type": "file",
+      "file": ".chat_from_messages().md",
+      "x": 20,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_openai_client_openaiclient_chat_from_messages",
+      "type": "file",
+      "file": ".chat_from_messages()_1.md",
+      "x": 220,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_base_basellmclient_count_tokens",
+      "type": "file",
+      "file": ".count_tokens().md",
+      "x": 420,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_base_basellmclient_stream_chat",
+      "type": "file",
+      "file": ".stream_chat().md",
+      "x": 620,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_abc",
+      "type": "file",
+      "file": "ABC.md",
+      "x": 820,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_base_basellmclient",
+      "type": "file",
+      "file": "BaseLLMClient.md",
+      "x": 20,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_config_config",
+      "type": "file",
+      "file": "Config.md",
+      "x": 220,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_exception",
+      "type": "file",
+      "file": "Exception.md",
+      "x": 420,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_errors_llmconnectionerror",
+      "type": "file",
+      "file": "LLMConnectionError.md",
+      "x": 620,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_errors_llmerror",
+      "type": "file",
+      "file": "LLMError.md",
+      "x": 820,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_llmresponse",
+      "type": "file",
+      "file": "LLMResponse.md",
+      "x": 20,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_errors_llmresponseerror",
+      "type": "file",
+      "file": "LLMResponseError.md",
+      "x": 220,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_openai_client_openaiclient",
+      "type": "file",
+      "file": "OpenAIClient.md",
+      "x": 420,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_base",
+      "type": "file",
+      "file": "base.py.md",
+      "x": 620,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_config_py_config",
+      "type": "file",
+      "file": "config.py.md",
+      "x": 820,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_errors",
+      "type": "file",
+      "file": "errors.py.md",
+      "x": 20,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_init",
+      "type": "file",
+      "file": "llm__init__.py.md",
+      "x": 220,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_openai_client",
+      "type": "file",
+      "file": "openai_client.py.md",
+      "x": 420,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g1",
+      "type": "group",
+      "label": "tool/__init__.py",
+      "x": 1180,
+      "y": 0,
+      "width": 1100,
+      "height": 520,
+      "color": "2"
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider_init",
+      "type": "file",
+      "file": ".__init__()_4.md",
+      "x": 1200,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider_start_http",
+      "type": "file",
+      "file": "._start_http().md",
+      "x": 1400,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider_start_stdio",
+      "type": "file",
+      "file": "._start_stdio().md",
+      "x": 1600,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_localtoolprovider_call_tool",
+      "type": "file",
+      "file": ".call_tool().md",
+      "x": 1800,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider_call_tool",
+      "type": "file",
+      "file": ".call_tool()_1.md",
+      "x": 2000,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_toolprovider_call_tool",
+      "type": "file",
+      "file": ".call_tool()_2.md",
+      "x": 1200,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider_fetch_tools",
+      "type": "file",
+      "file": ".fetch_tools()_1.md",
+      "x": 1400,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_config_mcpconfig_from_dict",
+      "type": "file",
+      "file": ".from_dict().md",
+      "x": 1600,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_config_mcpconfig_from_file",
+      "type": "file",
+      "file": ".from_file().md",
+      "x": 1800,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_load_config",
+      "type": "file",
+      "file": ".load_config().md",
+      "x": 2000,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider_shutdown",
+      "type": "file",
+      "file": ".shutdown()_1.md",
+      "x": 1200,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider_start",
+      "type": "file",
+      "file": ".start()_1.md",
+      "x": 1400,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_config_mcpconfig",
+      "type": "file",
+      "file": "MCPConfig.md",
+      "x": 1600,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_config_mcpserverconfig",
+      "type": "file",
+      "file": "MCPServerConfig.md",
+      "x": 1800,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider_mcptoolprovider",
+      "type": "file",
+      "file": "MCPToolProvider.md",
+      "x": 2000,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_toolresult",
+      "type": "file",
+      "file": "ToolResult.md",
+      "x": 1200,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_mcp_provider",
+      "type": "file",
+      "file": "mcp_provider.py.md",
+      "x": 1400,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry",
+      "type": "file",
+      "file": "registry.py.md",
+      "x": 1600,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_init",
+      "type": "file",
+      "file": "tool__init__.py.md",
+      "x": 1800,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_config",
+      "type": "file",
+      "file": "toolconfig.py.md",
+      "x": 2000,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g2",
+      "type": "group",
+      "label": "ConversationContext",
+      "x": 2360,
+      "y": 0,
+      "width": 1100,
+      "height": 520,
+      "color": "3"
+    },
+    {
+      "id": "n_context_context_conversationcontext_init",
+      "type": "file",
+      "file": ".__init__().md",
+      "x": 2380,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_message_message_post_init",
+      "type": "file",
+      "file": ".__post_init__().md",
+      "x": 2580,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext_maybe_summarize",
+      "type": "file",
+      "file": "._maybe_summarize().md",
+      "x": 2780,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext_add_assistant_message",
+      "type": "file",
+      "file": ".add_assistant_message().md",
+      "x": 2980,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext_add_assistant_tool_message",
+      "type": "file",
+      "file": ".add_assistant_tool_message().md",
+      "x": 3180,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext_add_message",
+      "type": "file",
+      "file": ".add_message().md",
+      "x": 2380,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext_add_tool_message",
+      "type": "file",
+      "file": ".add_tool_message().md",
+      "x": 2580,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext_add_user_message",
+      "type": "file",
+      "file": ".add_user_message().md",
+      "x": 2780,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_llm_openai_client_openaiclient_stream_chat",
+      "type": "file",
+      "file": ".stream_chat()_1.md",
+      "x": 2980,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext_to_llm_messages",
+      "type": "file",
+      "file": ".to_llm_messages().md",
+      "x": 3180,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context_conversationcontext",
+      "type": "file",
+      "file": "ConversationContext.md",
+      "x": 2380,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_message_message",
+      "type": "file",
+      "file": "Message.md",
+      "x": 2580,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_toolcall",
+      "type": "file",
+      "file": "ToolCall.md",
+      "x": 2780,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_context",
+      "type": "file",
+      "file": "context.py.md",
+      "x": 2980,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_init",
+      "type": "file",
+      "file": "context__init__.py.md",
+      "x": 3180,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_context_message",
+      "type": "file",
+      "file": "message.py.md",
+      "x": 2380,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models",
+      "type": "file",
+      "file": "models.py.md",
+      "x": 2580,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g3",
+      "type": "group",
+      "label": "ToolRegistry",
+      "x": 0,
+      "y": 700,
+      "width": 1100,
+      "height": 520,
+      "color": "4"
+    },
+    {
+      "id": "n_tool_registry_toolregistry_init",
+      "type": "file",
+      "file": ".__init__()_5.md",
+      "x": 20,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_register_tools",
+      "type": "file",
+      "file": "._register_tools().md",
+      "x": 220,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_resolve_with_namespace",
+      "type": "file",
+      "file": "._resolve_with_namespace().md",
+      "x": 420,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_add_provider",
+      "type": "file",
+      "file": ".add_provider().md",
+      "x": 620,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_call_tool",
+      "type": "file",
+      "file": ".call_tool()_3.md",
+      "x": 820,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_toolprovider_fetch_tools",
+      "type": "file",
+      "file": ".fetch_tools()_2.md",
+      "x": 20,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_list_tools",
+      "type": "file",
+      "file": ".list_tools().md",
+      "x": 220,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_provider_count",
+      "type": "file",
+      "file": ".provider_count().md",
+      "x": 420,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_toolprovider_shutdown",
+      "type": "file",
+      "file": ".shutdown()_2.md",
+      "x": 620,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_shutdown",
+      "type": "file",
+      "file": ".shutdown()_3.md",
+      "x": 820,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_toolprovider_start",
+      "type": "file",
+      "file": ".start()_2.md",
+      "x": 20,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_start",
+      "type": "file",
+      "file": ".start()_3.md",
+      "x": 220,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry_tool_count",
+      "type": "file",
+      "file": ".tool_count().md",
+      "x": 420,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_protocol",
+      "type": "file",
+      "file": "Protocol.md",
+      "x": 620,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_toolprovider",
+      "type": "file",
+      "file": "ToolProvider.md",
+      "x": 820,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_toolregistry",
+      "type": "file",
+      "file": "ToolRegistry.md",
+      "x": 20,
+      "y": 1020,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_registry_summarize_args",
+      "type": "file",
+      "file": "_summarize_args().md",
+      "x": 220,
+      "y": 1020,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g4",
+      "type": "group",
+      "label": "Tool",
+      "x": 1180,
+      "y": 700,
+      "width": 880,
+      "height": 520,
+      "color": "5"
+    },
+    {
+      "id": "n_tool_local_provider_localtoolprovider_init",
+      "type": "file",
+      "file": ".__init__()_3.md",
+      "x": 1200,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_localtoolprovider_add_tool",
+      "type": "file",
+      "file": ".add_tool().md",
+      "x": 1400,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_localtoolprovider_fetch_tools",
+      "type": "file",
+      "file": ".fetch_tools().md",
+      "x": 1600,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_localtoolprovider_shutdown",
+      "type": "file",
+      "file": ".shutdown().md",
+      "x": 1800,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_localtoolprovider_start",
+      "type": "file",
+      "file": ".start().md",
+      "x": 1200,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_localtoolprovider",
+      "type": "file",
+      "file": "LocalToolProvider.md",
+      "x": 1400,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_models_tool",
+      "type": "file",
+      "file": "Tool.md",
+      "x": 1600,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_arg_summary",
+      "type": "file",
+      "file": "_arg_summary().md",
+      "x": 1800,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_list_dir",
+      "type": "file",
+      "file": "_list_dir().md",
+      "x": 1200,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_read_file",
+      "type": "file",
+      "file": "_read_file().md",
+      "x": 1400,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_write_file",
+      "type": "file",
+      "file": "_write_file().md",
+      "x": 1600,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider",
+      "type": "file",
+      "file": "local_provider.py.md",
+      "x": 1800,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_main",
+      "type": "file",
+      "file": "main().md",
+      "x": 1200,
+      "y": 1020,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main",
+      "type": "file",
+      "file": "main.py.md",
+      "x": 1400,
+      "y": 1020,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool_local_provider_register_builtin_tools",
+      "type": "file",
+      "file": "register_builtin_tools().md",
+      "x": 1600,
+      "y": 1020,
+      "width": 180,
+      "height": 60
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_config_py_config_config_config",
+      "fromNode": "n_config_py_config",
+      "toNode": "n_config_config",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_config_config_llm_base",
+      "fromNode": "n_config_config",
+      "toNode": "n_llm_base",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_config_config_llm_base_basellmclient_init",
+      "fromNode": "n_config_config",
+      "toNode": "n_llm_base_basellmclient_init",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_config_config_llm_openai_client",
+      "fromNode": "n_config_config",
+      "toNode": "n_llm_openai_client",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_config_config_llm_openai_client_openaiclient_init",
+      "fromNode": "n_config_config",
+      "toNode": "n_llm_openai_client_openaiclient_init",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_config_config_main",
+      "fromNode": "n_config_config",
+      "toNode": "n_main",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_config_config_main_main",
+      "fromNode": "n_config_config",
+      "toNode": "n_main_main",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_init_context_context",
+      "fromNode": "n_context_init",
+      "toNode": "n_context_context",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_init_context_context_conversationcontext",
+      "fromNode": "n_context_init",
+      "toNode": "n_context_context_conversationcontext",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_init_context_message",
+      "fromNode": "n_context_init",
+      "toNode": "n_context_message",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_init_context_message_message",
+      "fromNode": "n_context_init",
+      "toNode": "n_context_message_message",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_context_context_conversationcontext",
+      "fromNode": "n_context_context",
+      "toNode": "n_context_context_conversationcontext",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_context_message",
+      "fromNode": "n_context_context",
+      "toNode": "n_context_message",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_context_message_message",
+      "fromNode": "n_context_context",
+      "toNode": "n_context_message_message",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_tool_models",
+      "fromNode": "n_context_context",
+      "toNode": "n_tool_models",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_tool_models_toolcall",
+      "fromNode": "n_context_context",
+      "toNode": "n_tool_models_toolcall",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_llm_base",
+      "fromNode": "n_context_context",
+      "toNode": "n_llm_base",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_llm_openai_client",
+      "fromNode": "n_context_context",
+      "toNode": "n_llm_openai_client",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_main",
+      "fromNode": "n_context_context",
+      "toNode": "n_main",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_add_assistant_message",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_add_assistant_message",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_add_assistant_tool_message",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_add_assistant_tool_message",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_add_message",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_add_message",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_add_tool_message",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_add_tool_message",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_add_user_message",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_add_user_message",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_init",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_maybe_summarize",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_maybe_summarize",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_context_context_conversationcontext_to_llm_messages",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_context_context_conversationcontext_to_llm_messages",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_llm_base",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_llm_base",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_llm_base_basellmclient_chat",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_llm_base_basellmclient_chat",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_llm_base_basellmclient_stream_chat",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_llm_base_basellmclient_stream_chat",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_llm_openai_client",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_llm_openai_client",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_llm_openai_client_openaiclient_chat",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_llm_openai_client_openaiclient_chat",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_llm_openai_client_openaiclient_stream_chat",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_llm_openai_client_openaiclient_stream_chat",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_main",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_main",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_main_main",
+      "fromNode": "n_context_context_conversationcontext",
+      "toNode": "n_main_main",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_init_context_message_message",
+      "fromNode": "n_context_context_conversationcontext_init",
+      "toNode": "n_context_message_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_message_context_context_conversationcontext_add_assistant_message",
+      "fromNode": "n_context_context_conversationcontext_add_message",
+      "toNode": "n_context_context_conversationcontext_add_assistant_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_message_context_context_conversationcontext_maybe_summarize",
+      "fromNode": "n_context_context_conversationcontext_add_message",
+      "toNode": "n_context_context_conversationcontext_maybe_summarize",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_message_context_message_message",
+      "fromNode": "n_context_context_conversationcontext_add_message",
+      "toNode": "n_context_message_message",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_message_context_context_conversationcontext_add_user_message",
+      "fromNode": "n_context_context_conversationcontext_add_message",
+      "toNode": "n_context_context_conversationcontext_add_user_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_user_message_context_message_message",
+      "fromNode": "n_context_context_conversationcontext_add_user_message",
+      "toNode": "n_context_message_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_assistant_message_context_message_message",
+      "fromNode": "n_context_context_conversationcontext_add_assistant_message",
+      "toNode": "n_context_message_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_assistant_tool_message_context_context_conversationcontext_maybe_summarize",
+      "fromNode": "n_context_context_conversationcontext_add_assistant_tool_message",
+      "toNode": "n_context_context_conversationcontext_maybe_summarize",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_assistant_tool_message_context_message_message",
+      "fromNode": "n_context_context_conversationcontext_add_assistant_tool_message",
+      "toNode": "n_context_message_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_assistant_tool_message_tool_models_toolcall",
+      "fromNode": "n_context_context_conversationcontext_add_assistant_tool_message",
+      "toNode": "n_tool_models_toolcall",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_add_tool_message_context_message_message",
+      "fromNode": "n_context_context_conversationcontext_add_tool_message",
+      "toNode": "n_context_message_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_context_conversationcontext_maybe_summarize_context_message_message",
+      "fromNode": "n_context_context_conversationcontext_maybe_summarize",
+      "toNode": "n_context_message_message",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_context_message_context_message_message",
+      "fromNode": "n_context_message",
+      "toNode": "n_context_message_message",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_context_message_tool_models",
+      "fromNode": "n_context_message",
+      "toNode": "n_tool_models",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_context_message_tool_models_toolcall",
+      "fromNode": "n_context_message",
+      "toNode": "n_tool_models_toolcall",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_context_message_message_context_message_message_post_init",
+      "fromNode": "n_context_message_message",
+      "toNode": "n_context_message_message_post_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_base",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_base",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_base_basellmclient",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_base_basellmclient",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_errors",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_errors",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_errors_llmconnectionerror",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_errors_llmconnectionerror",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_errors_llmerror",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_errors_llmerror",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_errors_llmresponseerror",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_errors_llmresponseerror",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_openai_client",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_openai_client",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_init_llm_openai_client_openaiclient",
+      "fromNode": "n_llm_init",
+      "toNode": "n_llm_openai_client_openaiclient",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_abc",
+      "fromNode": "n_llm_base",
+      "toNode": "n_abc",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_llm_base_basellmclient",
+      "fromNode": "n_llm_base",
+      "toNode": "n_llm_base_basellmclient",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_tool_models",
+      "fromNode": "n_llm_base",
+      "toNode": "n_tool_models",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_tool_models_llmresponse",
+      "fromNode": "n_llm_base",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_tool_models_tool",
+      "fromNode": "n_llm_base",
+      "toNode": "n_tool_models_tool",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_llm_openai_client",
+      "fromNode": "n_llm_base",
+      "toNode": "n_llm_openai_client",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_abc",
+      "fromNode": "n_llm_base_basellmclient",
+      "toNode": "n_abc",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_llm_base_basellmclient_chat",
+      "fromNode": "n_llm_base_basellmclient",
+      "toNode": "n_llm_base_basellmclient_chat",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_llm_base_basellmclient_chat_from_messages",
+      "fromNode": "n_llm_base_basellmclient",
+      "toNode": "n_llm_base_basellmclient_chat_from_messages",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_llm_base_basellmclient_count_tokens",
+      "fromNode": "n_llm_base_basellmclient",
+      "toNode": "n_llm_base_basellmclient_count_tokens",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_llm_base_basellmclient_init",
+      "fromNode": "n_llm_base_basellmclient",
+      "toNode": "n_llm_base_basellmclient_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_llm_base_basellmclient_stream_chat",
+      "fromNode": "n_llm_base_basellmclient",
+      "toNode": "n_llm_base_basellmclient_stream_chat",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_llm_openai_client",
+      "fromNode": "n_llm_base_basellmclient",
+      "toNode": "n_llm_openai_client",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_chat_tool_models_llmresponse",
+      "fromNode": "n_llm_base_basellmclient_chat",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_chat_tool_models_tool",
+      "fromNode": "n_llm_base_basellmclient_chat",
+      "toNode": "n_tool_models_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_base_basellmclient_chat_from_messages_tool_models_llmresponse",
+      "fromNode": "n_llm_base_basellmclient_chat_from_messages",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llm_errors_llmconnectionerror",
+      "fromNode": "n_llm_errors",
+      "toNode": "n_llm_errors_llmconnectionerror",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llm_errors_llmerror",
+      "fromNode": "n_llm_errors",
+      "toNode": "n_llm_errors_llmerror",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llm_errors_llmresponseerror",
+      "fromNode": "n_llm_errors",
+      "toNode": "n_llm_errors_llmresponseerror",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llm_openai_client",
+      "fromNode": "n_llm_errors",
+      "toNode": "n_llm_openai_client",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llmerror_llm_errors_llmconnectionerror",
+      "fromNode": "n_llm_errors_llmerror",
+      "toNode": "n_llm_errors_llmconnectionerror",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llmerror_exception",
+      "fromNode": "n_llm_errors_llmerror",
+      "toNode": "n_exception",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llmerror_llm_errors_llmresponseerror",
+      "fromNode": "n_llm_errors_llmerror",
+      "toNode": "n_llm_errors_llmresponseerror",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llmconnectionerror_llm_openai_client",
+      "fromNode": "n_llm_errors_llmconnectionerror",
+      "toNode": "n_llm_openai_client",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llmconnectionerror_llm_openai_client_openaiclient_call_sdk",
+      "fromNode": "n_llm_errors_llmconnectionerror",
+      "toNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llmresponseerror_llm_openai_client",
+      "fromNode": "n_llm_errors_llmresponseerror",
+      "toNode": "n_llm_openai_client",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_errors_llmresponseerror_llm_openai_client_openaiclient_call_sdk",
+      "fromNode": "n_llm_errors_llmresponseerror",
+      "toNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_llm_openai_client_openaiclient",
+      "fromNode": "n_llm_openai_client",
+      "toNode": "n_llm_openai_client_openaiclient",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_tool_models",
+      "fromNode": "n_llm_openai_client",
+      "toNode": "n_tool_models",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_tool_models_llmresponse",
+      "fromNode": "n_llm_openai_client",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_tool_models_tool",
+      "fromNode": "n_llm_openai_client",
+      "toNode": "n_tool_models_tool",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_tool_models_toolcall",
+      "fromNode": "n_llm_openai_client",
+      "toNode": "n_tool_models_toolcall",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_llm_openai_client_openaiclient_call_sdk",
+      "fromNode": "n_llm_openai_client_openaiclient",
+      "toNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_llm_openai_client_openaiclient_chat",
+      "fromNode": "n_llm_openai_client_openaiclient",
+      "toNode": "n_llm_openai_client_openaiclient_chat",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_llm_openai_client_openaiclient_chat_from_messages",
+      "fromNode": "n_llm_openai_client_openaiclient",
+      "toNode": "n_llm_openai_client_openaiclient_chat_from_messages",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_llm_openai_client_openaiclient_init",
+      "fromNode": "n_llm_openai_client_openaiclient",
+      "toNode": "n_llm_openai_client_openaiclient_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_llm_openai_client_openaiclient_stream_chat",
+      "fromNode": "n_llm_openai_client_openaiclient",
+      "toNode": "n_llm_openai_client_openaiclient_stream_chat",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_main",
+      "fromNode": "n_llm_openai_client_openaiclient",
+      "toNode": "n_main",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_main_main",
+      "fromNode": "n_llm_openai_client_openaiclient",
+      "toNode": "n_main_main",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_chat_llm_openai_client_openaiclient_call_sdk",
+      "fromNode": "n_llm_openai_client_openaiclient_chat",
+      "toNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_chat_tool_models_llmresponse",
+      "fromNode": "n_llm_openai_client_openaiclient_chat",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_chat_tool_models_tool",
+      "fromNode": "n_llm_openai_client_openaiclient_chat",
+      "toNode": "n_tool_models_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_chat_from_messages_llm_openai_client_openaiclient_call_sdk",
+      "fromNode": "n_llm_openai_client_openaiclient_chat_from_messages",
+      "toNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_chat_from_messages_tool_models_llmresponse",
+      "fromNode": "n_llm_openai_client_openaiclient_chat_from_messages",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_call_sdk_tool_models_llmresponse",
+      "fromNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_call_sdk_tool_models_tool",
+      "fromNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "toNode": "n_tool_models_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_llm_openai_client_openaiclient_call_sdk_tool_models_toolcall",
+      "fromNode": "n_llm_openai_client_openaiclient_call_sdk",
+      "toNode": "n_tool_models_toolcall",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_main_arg_summary",
+      "fromNode": "n_main",
+      "toNode": "n_main_arg_summary",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_main_main_main",
+      "fromNode": "n_main",
+      "toNode": "n_main_main",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_main_tool_config",
+      "fromNode": "n_main",
+      "toNode": "n_tool_config",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_main_tool_local_provider_localtoolprovider",
+      "fromNode": "n_main",
+      "toNode": "n_tool_local_provider_localtoolprovider",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_main_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_main",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_main_tool_registry_toolregistry",
+      "fromNode": "n_main",
+      "toNode": "n_tool_registry_toolregistry",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_main_main_main_arg_summary",
+      "fromNode": "n_main_main",
+      "toNode": "n_main_arg_summary",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_main_tool_local_provider_localtoolprovider",
+      "fromNode": "n_main_main",
+      "toNode": "n_tool_local_provider_localtoolprovider",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_main_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_main_main",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_main_tool_registry_toolregistry",
+      "fromNode": "n_main_main",
+      "toNode": "n_tool_registry_toolregistry",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_config",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_config",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_config_mcpconfig",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_config_mcpconfig",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_config_mcpserverconfig",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_config_mcpserverconfig",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_local_provider",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_local_provider",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_local_provider_localtoolprovider",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_local_provider_localtoolprovider",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_mcp_provider",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_mcp_provider",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_mcp_provider_mcptoolprovider",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_models",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_models",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_models_llmresponse",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_models_tool",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_models_tool",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_models_toolcall",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_models_toolcall",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_models_toolprovider",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_models_toolprovider",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_models_toolresult",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_models_toolresult",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_registry",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_registry",
+      "label": "re_exports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_init_tool_registry_toolregistry",
+      "fromNode": "n_tool_init",
+      "toNode": "n_tool_registry_toolregistry",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_tool_config_mcpconfig",
+      "fromNode": "n_tool_config",
+      "toNode": "n_tool_config_mcpconfig",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_tool_config_mcpserverconfig",
+      "fromNode": "n_tool_config",
+      "toNode": "n_tool_config_mcpserverconfig",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_tool_mcp_provider",
+      "fromNode": "n_tool_config",
+      "toNode": "n_tool_mcp_provider",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_tool_registry",
+      "fromNode": "n_tool_config",
+      "toNode": "n_tool_registry",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpserverconfig_tool_config_mcpconfig_from_dict",
+      "fromNode": "n_tool_config_mcpserverconfig",
+      "toNode": "n_tool_config_mcpconfig_from_dict",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpserverconfig_tool_mcp_provider",
+      "fromNode": "n_tool_config_mcpserverconfig",
+      "toNode": "n_tool_mcp_provider",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpserverconfig_tool_mcp_provider_mcptoolprovider_init",
+      "fromNode": "n_tool_config_mcpserverconfig",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_init",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpconfig_tool_config_mcpconfig_from_dict",
+      "fromNode": "n_tool_config_mcpconfig",
+      "toNode": "n_tool_config_mcpconfig_from_dict",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpconfig_tool_config_mcpconfig_from_file",
+      "fromNode": "n_tool_config_mcpconfig",
+      "toNode": "n_tool_config_mcpconfig_from_file",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpconfig_tool_registry",
+      "fromNode": "n_tool_config_mcpconfig",
+      "toNode": "n_tool_registry",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpconfig_from_dict_tool_config_mcpconfig_from_file",
+      "fromNode": "n_tool_config_mcpconfig_from_dict",
+      "toNode": "n_tool_config_mcpconfig_from_file",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_config_mcpconfig_from_file_tool_registry_toolregistry_load_config",
+      "fromNode": "n_tool_config_mcpconfig_from_file",
+      "toNode": "n_tool_registry_toolregistry_load_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_local_provider_list_dir",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_local_provider_list_dir",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_local_provider_localtoolprovider",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_local_provider_localtoolprovider",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_local_provider_read_file",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_local_provider_read_file",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_local_provider_write_file",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_local_provider_write_file",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_models",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_models",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_models_tool",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_models_tool",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_tool_models_toolresult",
+      "fromNode": "n_tool_local_provider",
+      "toNode": "n_tool_models_toolresult",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_tool_local_provider_localtoolprovider_add_tool",
+      "fromNode": "n_tool_local_provider_localtoolprovider",
+      "toNode": "n_tool_local_provider_localtoolprovider_add_tool",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_tool_local_provider_localtoolprovider_call_tool",
+      "fromNode": "n_tool_local_provider_localtoolprovider",
+      "toNode": "n_tool_local_provider_localtoolprovider_call_tool",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_tool_local_provider_localtoolprovider_fetch_tools",
+      "fromNode": "n_tool_local_provider_localtoolprovider",
+      "toNode": "n_tool_local_provider_localtoolprovider_fetch_tools",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_tool_local_provider_localtoolprovider_init",
+      "fromNode": "n_tool_local_provider_localtoolprovider",
+      "toNode": "n_tool_local_provider_localtoolprovider_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_tool_local_provider_localtoolprovider_shutdown",
+      "fromNode": "n_tool_local_provider_localtoolprovider",
+      "toNode": "n_tool_local_provider_localtoolprovider_shutdown",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_tool_local_provider_localtoolprovider_start",
+      "fromNode": "n_tool_local_provider_localtoolprovider",
+      "toNode": "n_tool_local_provider_localtoolprovider_start",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_tool_local_provider_localtoolprovider",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_add_tool_tool_models_tool",
+      "fromNode": "n_tool_local_provider_localtoolprovider_add_tool",
+      "toNode": "n_tool_models_tool",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_add_tool_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_tool_local_provider_localtoolprovider_add_tool",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_fetch_tools_tool_models_tool",
+      "fromNode": "n_tool_local_provider_localtoolprovider_fetch_tools",
+      "toNode": "n_tool_models_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_localtoolprovider_call_tool_tool_models_toolresult",
+      "fromNode": "n_tool_local_provider_localtoolprovider_call_tool",
+      "toNode": "n_tool_models_toolresult",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_local_provider_read_file_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_tool_local_provider_read_file",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "indirect_call [INFERRED]"
+    },
+    {
+      "id": "e_tool_local_provider_write_file_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_tool_local_provider_write_file",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "indirect_call [INFERRED]"
+    },
+    {
+      "id": "e_tool_local_provider_list_dir_tool_local_provider_register_builtin_tools",
+      "fromNode": "n_tool_local_provider_list_dir",
+      "toNode": "n_tool_local_provider_register_builtin_tools",
+      "label": "indirect_call [INFERRED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_tool_mcp_provider_mcptoolprovider",
+      "fromNode": "n_tool_mcp_provider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_tool_models",
+      "fromNode": "n_tool_mcp_provider",
+      "toNode": "n_tool_models",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_tool_models_tool",
+      "fromNode": "n_tool_mcp_provider",
+      "toNode": "n_tool_models_tool",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_tool_models_toolresult",
+      "fromNode": "n_tool_mcp_provider",
+      "toNode": "n_tool_models_toolresult",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_tool_registry",
+      "fromNode": "n_tool_mcp_provider",
+      "toNode": "n_tool_registry",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_mcp_provider_mcptoolprovider_call_tool",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_call_tool",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_mcp_provider_mcptoolprovider_fetch_tools",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_fetch_tools",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_mcp_provider_mcptoolprovider_init",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_mcp_provider_mcptoolprovider_shutdown",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_shutdown",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_mcp_provider_mcptoolprovider_start",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_start",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_mcp_provider_mcptoolprovider_start_http",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_start_http",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_mcp_provider_mcptoolprovider_start_stdio",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_start_stdio",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_registry",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_registry",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_tool_registry_toolregistry_load_config",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider",
+      "toNode": "n_tool_registry_toolregistry_load_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_start_tool_mcp_provider_mcptoolprovider_start_http",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider_start",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_start_http",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_start_tool_mcp_provider_mcptoolprovider_start_stdio",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider_start",
+      "toNode": "n_tool_mcp_provider_mcptoolprovider_start_stdio",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_fetch_tools_tool_models_tool",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider_fetch_tools",
+      "toNode": "n_tool_models_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_mcp_provider_mcptoolprovider_call_tool_tool_models_toolresult",
+      "fromNode": "n_tool_mcp_provider_mcptoolprovider_call_tool",
+      "toNode": "n_tool_models_toolresult",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_tool_models_llmresponse",
+      "fromNode": "n_tool_models",
+      "toNode": "n_tool_models_llmresponse",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_tool_models_tool",
+      "fromNode": "n_tool_models",
+      "toNode": "n_tool_models_tool",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_tool_models_toolcall",
+      "fromNode": "n_tool_models",
+      "toNode": "n_tool_models_toolcall",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_tool_models_toolprovider",
+      "fromNode": "n_tool_models",
+      "toNode": "n_tool_models_toolprovider",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_tool_models_toolresult",
+      "fromNode": "n_tool_models",
+      "toNode": "n_tool_models_toolresult",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_tool_registry",
+      "fromNode": "n_tool_models",
+      "toNode": "n_tool_registry",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_protocol",
+      "fromNode": "n_tool_models_toolprovider",
+      "toNode": "n_protocol",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_tool_models_toolprovider_call_tool",
+      "fromNode": "n_tool_models_toolprovider",
+      "toNode": "n_tool_models_toolprovider_call_tool",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_tool_models_toolprovider_fetch_tools",
+      "fromNode": "n_tool_models_toolprovider",
+      "toNode": "n_tool_models_toolprovider_fetch_tools",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_tool_models_toolprovider_shutdown",
+      "fromNode": "n_tool_models_toolprovider",
+      "toNode": "n_tool_models_toolprovider_shutdown",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_tool_models_toolprovider_start",
+      "fromNode": "n_tool_models_toolprovider",
+      "toNode": "n_tool_models_toolprovider_start",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_tool_registry",
+      "fromNode": "n_tool_models_toolprovider",
+      "toNode": "n_tool_registry",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_tool_registry_toolregistry_add_provider",
+      "fromNode": "n_tool_models_toolprovider",
+      "toNode": "n_tool_registry_toolregistry_add_provider",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_fetch_tools_tool_models_tool",
+      "fromNode": "n_tool_models_toolprovider_fetch_tools",
+      "toNode": "n_tool_models_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_toolprovider_call_tool_tool_models_toolresult",
+      "fromNode": "n_tool_models_toolprovider_call_tool",
+      "toNode": "n_tool_models_toolresult",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_tool_models_tool_tool_registry",
+      "fromNode": "n_tool_models_tool",
+      "toNode": "n_tool_registry",
+      "label": "imports [EXTRACTED]"
+    }
+  ]
+}

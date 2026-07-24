@@ -1,0 +1,147 @@
+{
+  ".obsidian/app.json": {
+    "mtime": 1784914347.303201,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": "99914b932bd37a50b983c5e7c90ae93b"
+  },
+  ".obsidian/appearance.json": {
+    "mtime": 1784914347.3055806,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": "99914b932bd37a50b983c5e7c90ae93b"
+  },
+  ".obsidian/core-plugins.json": {
+    "mtime": 1784914347.1439097,
+    "ast_hash": "7c877bea49eaeabb100563bd157b9051",
+    "semantic_hash": "7c877bea49eaeabb100563bd157b9051"
+  },
+  ".obsidian/graph.json": {
+    "mtime": 1784914369.569,
+    "ast_hash": "e0def24be89d988ddc09b1f6d754d866",
+    "semantic_hash": "e0def24be89d988ddc09b1f6d754d866"
+  },
+  ".obsidian/workspace.json": {
+    "mtime": 1784914356.4548817,
+    "ast_hash": "f52b80cf7b42f79394e8699d1b5354b7",
+    "semantic_hash": "f52b80cf7b42f79394e8699d1b5354b7"
+  },
+  ".opencode/opencode.json": {
+    "mtime": 1784914293.0842197,
+    "ast_hash": "f2ae21510d07365eb2bce8159272c7a0",
+    "semantic_hash": "f2ae21510d07365eb2bce8159272c7a0"
+  },
+  ".opencode/plugins/graphify.js": {
+    "mtime": 1784914293.0842197,
+    "ast_hash": "b33d000860642c6f4907a877e0387a21",
+    "semantic_hash": "b33d000860642c6f4907a877e0387a21"
+  },
+  "config.py": {
+    "mtime": 1784913888.586087,
+    "ast_hash": "f4528d23d0625395677695111c43a005",
+    "semantic_hash": "f4528d23d0625395677695111c43a005"
+  },
+  "context/__init__.py": {
+    "mtime": 1784648072.5303175,
+    "ast_hash": "7b49fa0b1b1eb479437e8c59ff514f6c",
+    "semantic_hash": "7b49fa0b1b1eb479437e8c59ff514f6c"
+  },
+  "context/context.py": {
+    "mtime": 1784913888.5875933,
+    "ast_hash": "535ac38120fddfe8536699b2eed4b72e",
+    "semantic_hash": "535ac38120fddfe8536699b2eed4b72e"
+  },
+  "context/message.py": {
+    "mtime": 1784913888.5886016,
+    "ast_hash": "8a759661d408962414bc5588d2e40792",
+    "semantic_hash": "8a759661d408962414bc5588d2e40792"
+  },
+  "llm/__init__.py": {
+    "mtime": 1784639817.7414021,
+    "ast_hash": "a00103c6820d6fb28b04971efab6f016",
+    "semantic_hash": "a00103c6820d6fb28b04971efab6f016"
+  },
+  "llm/base.py": {
+    "mtime": 1784913888.5895998,
+    "ast_hash": "a74998d6de5d92365e01b38f97e7da65",
+    "semantic_hash": "a74998d6de5d92365e01b38f97e7da65"
+  },
+  "llm/errors.py": {
+    "mtime": 1784639813.664359,
+    "ast_hash": "abd8af65fced3c8beb81ac7010465c7f",
+    "semantic_hash": "abd8af65fced3c8beb81ac7010465c7f"
+  },
+  "llm/openai_client.py": {
+    "mtime": 1784913888.5901449,
+    "ast_hash": "025f507aa9417d895f65dbcce948f05f",
+    "semantic_hash": "025f507aa9417d895f65dbcce948f05f"
+  },
+  "main.py": {
+    "mtime": 1784913888.5921526,
+    "ast_hash": "f1ea49862b9975d69d8c1a8a4c3a738d",
+    "semantic_hash": "f1ea49862b9975d69d8c1a8a4c3a738d"
+  },
+  "mcp_servers.json": {
+    "mtime": 1784913888.5921526,
+    "ast_hash": "d247e85f708e7976f0b90c2fc147b426",
+    "semantic_hash": "d247e85f708e7976f0b90c2fc147b426"
+  },
+  "tool/__init__.py": {
+    "mtime": 1784913888.5951524,
+    "ast_hash": "567b12d984eac4701f2d9c80ff0ed146",
+    "semantic_hash": "567b12d984eac4701f2d9c80ff0ed146"
+  },
+  "tool/config.py": {
+    "mtime": 1784913888.5951524,
+    "ast_hash": "87ccbd0cb18a9bf7c561de2f6383c986",
+    "semantic_hash": "87ccbd0cb18a9bf7c561de2f6383c986"
+  },
+  "tool/local_provider.py": {
+    "mtime": 1784913888.5961516,
+    "ast_hash": "cdc5322df99f756dc87c841c0814374b",
+    "semantic_hash": "cdc5322df99f756dc87c841c0814374b"
+  },
+  "tool/mcp_provider.py": {
+    "mtime": 1784913888.5971518,
+    "ast_hash": "f12d3f07743f773eb8bc975137c06af7",
+    "semantic_hash": "f12d3f07743f773eb8bc975137c06af7"
+  },
+  "tool/models.py": {
+    "mtime": 1784913888.5981514,
+    "ast_hash": "5c0e5f645ee621936c01790703836c2c",
+    "semantic_hash": "5c0e5f645ee621936c01790703836c2c"
+  },
+  "tool/registry.py": {
+    "mtime": 1784913888.5981514,
+    "ast_hash": "1ef2738e96c2543612937667014c5c9c",
+    "semantic_hash": "1ef2738e96c2543612937667014c5c9c"
+  },
+  "vault/.graphify_obsidian_manifest.json": {
+    "mtime": 1784914269.8625119,
+    "ast_hash": "f15d58783b384c45038401cb852f4bae",
+    "semantic_hash": "f15d58783b384c45038401cb852f4bae"
+  },
+  "vault/.obsidian/app.json": {
+    "mtime": 1784914382.8773313,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": "99914b932bd37a50b983c5e7c90ae93b"
+  },
+  "vault/.obsidian/appearance.json": {
+    "mtime": 1784914382.8785286,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": "99914b932bd37a50b983c5e7c90ae93b"
+  },
+  "vault/.obsidian/core-plugins.json": {
+    "mtime": 1784914382.4603643,
+    "ast_hash": "7c877bea49eaeabb100563bd157b9051",
+    "semantic_hash": "7c877bea49eaeabb100563bd157b9051"
+  },
+  "vault/.obsidian/graph.json": {
+    "mtime": 1784914406.235,
+    "ast_hash": "b1597ea10d974a77a2d14ed68162cccb",
+    "semantic_hash": "b1597ea10d974a77a2d14ed68162cccb"
+  },
+  "vault/.obsidian/workspace.json": {
+    "mtime": 1784914405.1406212,
+    "ast_hash": "c10d5b4746ec8dcb11e474802bc03885",
+    "semantic_hash": "c10d5b4746ec8dcb11e474802bc03885"
+  }
+}
