@@ -33,11 +33,9 @@ class ToolRegistry:
 
     def add_provider(
         self, name: str, provider: ToolProvider, namespace: str | None = None
-    ) -> list[Tool]:
+    ) -> None:
         self._providers[name] = provider
         self._namespace_map[name] = namespace
-        tools = list(self._provider_tools.get(name, []))
-        return tools
 
     async def start(self) -> None:
         for name, provider in self._providers.items():
@@ -65,10 +63,6 @@ class ToolRegistry:
         self._providers.clear()
         self._tool_map.clear()
         self._provider_tools.clear()
-
-    def add_provider_tools(self, provider_name: str, tools: list[Tool]) -> None:
-        self._provider_tools[provider_name] = tools
-        self._register_tools(provider_name, tools)
 
     def list_tools(self) -> list[Tool]:
         result = []
