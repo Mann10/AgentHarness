@@ -25,7 +25,6 @@ async def main() -> None:
     local_provider = LocalToolProvider()
     register_builtin_tools(local_provider)
     registry.add_provider("__builtin__", local_provider)
-    registry.add_provider_tools("__builtin__", await local_provider.fetch_tools())
 
     context = ConversationContext(
         system_prompt=config.system_prompt,
