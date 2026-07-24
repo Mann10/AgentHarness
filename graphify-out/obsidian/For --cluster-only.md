@@ -1,0 +1,17 @@
+---
+source_file: ".opencode/skills/graphify/references/update.md"
+type: "document"
+community: "Community None"
+location: "L202"
+tags:
+  - graphify/document
+  - graphify/EXTRACTED
+  - community/Community_None
+---
+
+# For --cluster-only
+
+## Connections
+- [[graphify reference incremental update and cluster-only]] - `contains` [EXTRACTED]
+
+#graphify/document #graphify/EXTRACTED #community/Community_None

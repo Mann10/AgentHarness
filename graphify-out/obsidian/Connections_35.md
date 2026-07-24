@@ -1,0 +1,17 @@
+---
+source_file: "vault/.load_config().md"
+type: "document"
+community: "Community None"
+location: "L14"
+tags:
+  - graphify/document
+  - graphify/EXTRACTED
+  - community/Community_None
+---
+
+# Connections
+
+## Connections
+- [[.load_config()_2]] - `contains` [EXTRACTED]
+
+#graphify/document #graphify/EXTRACTED #community/Community_None

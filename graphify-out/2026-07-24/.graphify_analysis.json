@@ -1,0 +1,273 @@
+{
+  "communities": {
+    "0": [
+      "abc",
+      "config_config",
+      "config_py_config",
+      "exception",
+      "llm_base",
+      "llm_base_basellmclient",
+      "llm_base_basellmclient_chat",
+      "llm_base_basellmclient_chat_from_messages",
+      "llm_base_basellmclient_count_tokens",
+      "llm_base_basellmclient_init",
+      "llm_base_basellmclient_stream_chat",
+      "llm_errors",
+      "llm_errors_llmconnectionerror",
+      "llm_errors_llmerror",
+      "llm_errors_llmresponseerror",
+      "llm_init",
+      "llm_openai_client",
+      "llm_openai_client_openaiclient",
+      "llm_openai_client_openaiclient_call_sdk",
+      "llm_openai_client_openaiclient_chat",
+      "llm_openai_client_openaiclient_chat_from_messages",
+      "llm_openai_client_openaiclient_init",
+      "tool_models_llmresponse",
+      "tool_models_tool"
+    ],
+    "1": [
+      "protocol",
+      "tool_models_toolprovider",
+      "tool_models_toolprovider_call_tool",
+      "tool_models_toolprovider_fetch_tools",
+      "tool_models_toolprovider_shutdown",
+      "tool_models_toolprovider_start",
+      "tool_registry_summarize_args",
+      "tool_registry_toolregistry",
+      "tool_registry_toolregistry_add_provider",
+      "tool_registry_toolregistry_call_tool",
+      "tool_registry_toolregistry_init",
+      "tool_registry_toolregistry_list_tools",
+      "tool_registry_toolregistry_load_config",
+      "tool_registry_toolregistry_provider_count",
+      "tool_registry_toolregistry_register_tools",
+      "tool_registry_toolregistry_resolve_with_namespace",
+      "tool_registry_toolregistry_shutdown",
+      "tool_registry_toolregistry_start",
+      "tool_registry_toolregistry_tool_count"
+    ],
+    "2": [
+      "context_context",
+      "context_context_conversationcontext",
+      "context_context_conversationcontext_add_assistant_message",
+      "context_context_conversationcontext_add_assistant_tool_message",
+      "context_context_conversationcontext_add_message",
+      "context_context_conversationcontext_add_tool_message",
+      "context_context_conversationcontext_add_user_message",
+      "context_context_conversationcontext_init",
+      "context_context_conversationcontext_maybe_summarize",
+      "context_context_conversationcontext_to_llm_messages",
+      "context_init",
+      "context_message",
+      "context_message_message",
+      "context_message_message_post_init",
+      "llm_openai_client_openaiclient_stream_chat",
+      "tool_models",
+      "tool_models_toolcall"
+    ],
+    "3": [
+      "main",
+      "main_arg_summary",
+      "main_main",
+      "tool_local_provider",
+      "tool_local_provider_list_dir",
+      "tool_local_provider_localtoolprovider",
+      "tool_local_provider_localtoolprovider_add_tool",
+      "tool_local_provider_localtoolprovider_call_tool",
+      "tool_local_provider_localtoolprovider_fetch_tools",
+      "tool_local_provider_localtoolprovider_init",
+      "tool_local_provider_localtoolprovider_shutdown",
+      "tool_local_provider_localtoolprovider_start",
+      "tool_local_provider_read_file",
+      "tool_local_provider_register_builtin_tools",
+      "tool_local_provider_write_file",
+      "tool_models_toolresult"
+    ],
+    "4": [
+      "tool_config",
+      "tool_config_mcpconfig",
+      "tool_config_mcpconfig_from_dict",
+      "tool_config_mcpconfig_from_file",
+      "tool_config_mcpserverconfig",
+      "tool_init",
+      "tool_mcp_provider",
+      "tool_mcp_provider_mcptoolprovider",
+      "tool_mcp_provider_mcptoolprovider_call_tool",
+      "tool_mcp_provider_mcptoolprovider_fetch_tools",
+      "tool_mcp_provider_mcptoolprovider_init",
+      "tool_mcp_provider_mcptoolprovider_shutdown",
+      "tool_mcp_provider_mcptoolprovider_start",
+      "tool_mcp_provider_mcptoolprovider_start_http",
+      "tool_mcp_provider_mcptoolprovider_start_stdio",
+      "tool_registry"
+    ],
+    "5": [
+      "opencode_plugins_graphify",
+      "opencode_plugins_graphify_graphifyplugin",
+      "opencode_plugins_graphify_rationale_4"
+    ],
+    "6": [
+      "obsidian_app"
+    ],
+    "7": [
+      "vault_obsidian_app"
+    ]
+  },
+  "cohesion": {
+    "0": 0.2246376811594203,
+    "1": 0.1286549707602339,
+    "2": 0.27941176470588236,
+    "3": 0.21666666666666667,
+    "4": 0.24166666666666667,
+    "5": 0.6666666666666666,
+    "6": 1.0,
+    "7": 1.0
+  },
+  "gods": [
+    {
+      "id": "context_context_conversationcontext",
+      "label": "ConversationContext",
+      "degree": 22
+    },
+    {
+      "id": "tool_models_tool",
+      "label": "Tool",
+      "degree": 21
+    },
+    {
+      "id": "tool_registry_toolregistry",
+      "label": "ToolRegistry",
+      "degree": 19
+    },
+    {
+      "id": "llm_openai_client_openaiclient",
+      "label": "OpenAIClient",
+      "degree": 17
+    },
+    {
+      "id": "llm_base_basellmclient",
+      "label": "BaseLLMClient",
+      "degree": 14
+    },
+    {
+      "id": "tool_mcp_provider_mcptoolprovider",
+      "label": "MCPToolProvider",
+      "degree": 14
+    },
+    {
+      "id": "context_message_message",
+      "label": "Message",
+      "degree": 13
+    },
+    {
+      "id": "tool_local_provider_localtoolprovider",
+      "label": "LocalToolProvider",
+      "degree": 13
+    },
+    {
+      "id": "tool_models_toolresult",
+      "label": "ToolResult",
+      "degree": 12
+    },
+    {
+      "id": "tool_models_llmresponse",
+      "label": "LLMResponse",
+      "degree": 11
+    }
+  ],
+  "surprises": [
+    {
+      "source": "BaseLLMClient",
+      "target": "ConversationContext",
+      "source_files": [
+        "llm/base.py",
+        "context/context.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "OpenAIClient",
+      "target": "ConversationContext",
+      "source_files": [
+        "llm/openai_client.py",
+        "context/context.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "OpenAIClient",
+      "target": "ToolCall",
+      "source_files": [
+        "llm/openai_client.py",
+        "tool/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "BaseLLMClient",
+      "target": "Config",
+      "source_files": [
+        "llm/base.py",
+        "config.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "OpenAIClient",
+      "target": "Config",
+      "source_files": [
+        "llm/openai_client.py",
+        "config.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `Tool` connect `Tool` to `ToolRegistry`, `ConversationContext`, `LocalToolProvider`, `tool/__init__.py`?",
+      "why": "High betweenness centrality (0.223) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `ToolRegistry` connect `ToolRegistry` to `Tool`, `LocalToolProvider`, `tool/__init__.py`?",
+      "why": "High betweenness centrality (0.181) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `ConversationContext` connect `ConversationContext` to `Tool`, `LocalToolProvider`?",
+      "why": "High betweenness centrality (0.162) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 4 inferred relationships involving `ConversationContext` (e.g. with `Message` and `ToolCall`) actually correct?",
+      "why": "`ConversationContext` has 4 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 5 inferred relationships involving `Tool` (e.g. with `BaseLLMClient` and `OpenAIClient`) actually correct?",
+      "why": "`Tool` has 5 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 4 inferred relationships involving `ToolRegistry` (e.g. with `MCPToolProvider` and `Tool`) actually correct?",
+      "why": "`ToolRegistry` has 4 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 8 inferred relationships involving `OpenAIClient` (e.g. with `Config` and `ConversationContext`) actually correct?",
+      "why": "`OpenAIClient` has 8 INFERRED edges - model-reasoned connections that need verification."
+    }
+  ]
+}
