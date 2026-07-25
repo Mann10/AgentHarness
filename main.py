@@ -15,17 +15,39 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
+SUMMARIZATION_PROMPT = """\
+You are summarizing a conversation between a user and an AI coding assistant \
+for the purpose of preserving context in a long-running session.
+
+Read the following conversation history and produce a concise summary that captures:
+
+1. **Current goal** — What the user is working on
+2. **Key decisions** — Important choices made and why
+3. **Progress made** — What has been accomplished so far
+4. **Files/tools touched** — Which files were created/modified, tools invoked
+5. **Open questions** — Any unresolved issues or next steps discussed
+6. **Technical context** — Important technical details the assistant needs to know
+
+Write this as a structured report (not a narrative). Use bullet points.
+The summary will be read by an AI assistant to continue the conversation,
+so include everything necessary to maintain continuity.
+"""
+
+
 def _make_summarize_fn(client: OpenAIClient):
-    return lambda msgs: client.chat_from_messages(
-        [
-            {
-                "role": "system",
-                "content": "Summarize the following conversation concisely while preserving key details.",
-            },
-            *msgs,
-        ],
-        temperature=0.3,
-    )
+    async def _summarize(msgs: list[dict]) -> str:
+        response = await client.chat_from_messages(
+            [
+                {
+                    "role": "system",
+                    "content": SUMMARIZATION_PROMPT,
+                },
+                *msgs,
+            ],
+            temperature=0.3,
+        )
+        return response.content
+    return _summarize
 
 
 async def _resolve_session(
