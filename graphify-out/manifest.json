@@ -1,14 +1,4 @@
 {
-  ".opencode/opencode.json": {
-    "mtime": 1784966208.780455,
-    "ast_hash": "1efe24ecf938911d4f23e4b1c6ec91f7",
-    "semantic_hash": ""
-  },
-  ".opencode/plugins/graphify.js": {
-    "mtime": 1784914293.0842197,
-    "ast_hash": "b33d000860642c6f4907a877e0387a21",
-    "semantic_hash": "b33d000860642c6f4907a877e0387a21"
-  },
   "config.py": {
     "mtime": 1784913888.586087,
     "ast_hash": "f4528d23d0625395677695111c43a005",
@@ -20,14 +10,14 @@
     "semantic_hash": "7b49fa0b1b1eb479437e8c59ff514f6c"
   },
   "context/context.py": {
-    "mtime": 1784969305.463402,
-    "ast_hash": "4717354b24f0aa3ef1c7826452e25906",
-    "semantic_hash": ""
+    "mtime": 1784984655.2732718,
+    "ast_hash": "47cb9ad06428dfe4d69a5381cc8f3176",
+    "semantic_hash": "47cb9ad06428dfe4d69a5381cc8f3176"
   },
   "context/message.py": {
-    "mtime": 1784969294.5547009,
+    "mtime": 1784970078.1858542,
     "ast_hash": "b269c0faa33b646391b4e9e0ee7c5374",
-    "semantic_hash": ""
+    "semantic_hash": "b269c0faa33b646391b4e9e0ee7c5374"
   },
   "llm/__init__.py": {
     "mtime": 1784639817.7414021,
@@ -35,9 +25,9 @@
     "semantic_hash": "a00103c6820d6fb28b04971efab6f016"
   },
   "llm/base.py": {
-    "mtime": 1784969368.659989,
+    "mtime": 1784970078.1973724,
     "ast_hash": "485585cef9480d2f254332c7147ee9bd",
-    "semantic_hash": ""
+    "semantic_hash": "485585cef9480d2f254332c7147ee9bd"
   },
   "llm/errors.py": {
     "mtime": 1784639813.664359,
@@ -50,9 +40,9 @@
     "semantic_hash": "025f507aa9417d895f65dbcce948f05f"
   },
   "main.py": {
-    "mtime": 1784969400.7176542,
-    "ast_hash": "a0e5f911e3a2c02f45c82c3e468a6905",
-    "semantic_hash": ""
+    "mtime": 1784984673.6010323,
+    "ast_hash": "82449a11f454781594a8c12b33a62109",
+    "semantic_hash": "82449a11f454781594a8c12b33a62109"
   },
   "mcp_servers.json": {
     "mtime": 1784913888.5921526,
@@ -90,108 +80,38 @@
     "semantic_hash": "1ef2738e96c2543612937667014c5c9c"
   },
   "agent/__init__.py": {
-    "mtime": 1784916178.2813964,
-    "ast_hash": "d4cdc7604414f5560bdb2644cf2d7358",
-    "semantic_hash": ""
+    "mtime": 1784970056.9097981,
+    "ast_hash": "f3e7f69a3c122fc61580275df0648b90",
+    "semantic_hash": "f3e7f69a3c122fc61580275df0648b90"
   },
   "agent/core.py": {
-    "mtime": 1784969386.6910353,
-    "ast_hash": "be4578aa87c1106acdb33a800173a9f3",
-    "semantic_hash": ""
+    "mtime": 1784970078.1843367,
+    "ast_hash": "3dc03d7b7212d4024e9d293bbbc88282",
+    "semantic_hash": "3dc03d7b7212d4024e9d293bbbc88282"
   },
   "agent/result.py": {
-    "mtime": 1784916170.784513,
-    "ast_hash": "aea045aa3b920832d718d97e20bd326a",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/SKILL.md": {
-    "mtime": 1784914293.0687928,
-    "ast_hash": "a8188bdf35abb58e750eb1750272caf8",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/add-watch.md": {
-    "mtime": 1784903512.5448797,
-    "ast_hash": "d59d027fe449f06aa03905a01184e779",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/exports.md": {
-    "mtime": 1784903512.5454376,
-    "ast_hash": "9da2a2152e60a22f07f05fed5158f287",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/extraction-spec.md": {
-    "mtime": 1784903512.5464444,
-    "ast_hash": "42fef56a01698118f7fd722acdadea34",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/github-and-merge.md": {
-    "mtime": 1784903512.5474439,
-    "ast_hash": "cde13df085e4c492aeb7ba298a996d0d",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/hooks.md": {
-    "mtime": 1784903512.5474439,
-    "ast_hash": "3f545db6ce646650bb9de588f5512a27",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/query.md": {
-    "mtime": 1784903512.5484438,
-    "ast_hash": "3c46f8ad006874260614ed8657d02307",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/transcribe.md": {
-    "mtime": 1784903512.5494437,
-    "ast_hash": "67b6a5fa6c0974e18f60db9f8932fbd8",
-    "semantic_hash": ""
-  },
-  ".opencode/skills/graphify/references/update.md": {
-    "mtime": 1784903512.5494437,
-    "ast_hash": "9378bd03d56baaf78bd738ab3848f142",
-    "semantic_hash": ""
-  },
-  "AGENTS.md": {
-    "mtime": 1784969412.6752155,
-    "ast_hash": "14ea350e51b2e4ee25da9367df0d77ac",
-    "semantic_hash": ""
-  },
-  "plans/context-layer.md": {
-    "mtime": 1784648072.5358279,
-    "ast_hash": "c8939e670794c162b9e40876a646e5a2",
-    "semantic_hash": ""
-  },
-  "plans/llm-client-refactor.md": {
-    "mtime": 1784639799.2118905,
-    "ast_hash": "ea32ca1ab7515e74001a5d834747d4fc",
-    "semantic_hash": ""
-  },
-  "plans/tool-mcp-module.md": {
-    "mtime": 1784913888.5931513,
-    "ast_hash": "ea44743457c98a424ddeea12fa93b85a",
-    "semantic_hash": ""
+    "mtime": 1784970056.9107401,
+    "ast_hash": "97c1bad6b75ec717a048f1ced70289ac",
+    "semantic_hash": "97c1bad6b75ec717a048f1ced70289ac"
   },
   "requirements.txt": {
-    "mtime": 1784914151.4127607,
+    "mtime": 1784970057.252798,
     "ast_hash": "10f5ce3d697e68c73d51625f8dcb5db0",
     "semantic_hash": ""
   },
   "session/__init__.py": {
-    "mtime": 1784969345.3114166,
-    "ast_hash": "e2bfcdf91de5c1012d1a4113e7c902e1",
-    "semantic_hash": ""
+    "mtime": 1784970078.199636,
+    "ast_hash": "1cb1c64f3290eceeaf0d4e12fd43f03f",
+    "semantic_hash": "1cb1c64f3290eceeaf0d4e12fd43f03f"
   },
   "session/models.py": {
-    "mtime": 1784969325.2558143,
-    "ast_hash": "4ce5f9dd38d555daff457d7824f2b47a",
-    "semantic_hash": ""
+    "mtime": 1784970078.2006423,
+    "ast_hash": "cbe4261f04eb3d6aa7f26ebf7b646b15",
+    "semantic_hash": "cbe4261f04eb3d6aa7f26ebf7b646b15"
   },
   "session/store.py": {
-    "mtime": 1784969337.0904438,
-    "ast_hash": "1bdf07f77ddd32e111a3b42888d638d3",
-    "semantic_hash": ""
-  },
-  "plans/session-module.md": {
-    "mtime": 1784969285.7186282,
-    "ast_hash": "bf9ef297f960a42e6a45b7592e8e4f45",
-    "semantic_hash": ""
+    "mtime": 1784971147.493716,
+    "ast_hash": "0095a7c670f1dc04b5ace442610175f3",
+    "semantic_hash": "0095a7c670f1dc04b5ace442610175f3"
   }
 }

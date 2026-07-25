@@ -16,7 +16,7 @@ class ConversationContext:
         token_limit: int,
         summarize_fn: Callable[[list[dict]], Awaitable[str]] | None = None,
         summarize_threshold: float = 0.75,
-        keep_recent_exchanges: int = 2,
+        keep_recent_exchanges: int = 1,
     ) -> None:
         self._count_tokens = count_tokens
         self.token_limit = token_limit
@@ -81,17 +81,10 @@ class ConversationContext:
         keep_count = self._keep_recent_exchanges * 2
         recent = self._messages[-keep_count:] if keep_count > 0 else []
 
-        always_keep = []
-        if not any(m in recent for m in self._messages if m.role == "user"):
-            for m in reversed(self._messages):
-                if m.role == "user":
-                    always_keep.append(m)
-                    break
-
         to_summarize = [
             m
             for m in self._messages
-            if m not in recent and m not in always_keep
+            if m not in recent
         ]
         if not to_summarize:
             return
@@ -118,11 +111,11 @@ class ConversationContext:
         )
         summary_msg.token_count = self._count_tokens(summary_msg.content)
 
-        for m in to_summarize:
-            self._messages.remove(m)
-            self.total_tokens -= m.token_count
+        to_summarize_set = set(to_summarize)
+        self._messages = [m for m in self._messages if m not in to_summarize_set]
+        self.total_tokens = sum(m.token_count for m in self._messages)
 
-        self._messages.insert(len(system_msgs), summary_msg)
+        self._messages.insert(0, summary_msg)
         self.total_tokens += summary_msg.token_count
 
         preview = (
