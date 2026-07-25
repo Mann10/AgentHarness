@@ -32,8 +32,7 @@ class JSONLSessionStore(SessionStore):
 
     def __init__(self, base_dir: str | None = None):
         if base_dir is None:
-            h = hashlib.sha256(os.getcwd().encode()).hexdigest()[:16]
-            base_dir = Path.home() / ".agentharness" / "projects" / h
+            base_dir = Path.cwd() / ".agentharness"
         self._dir = Path(base_dir)
         self._dir.mkdir(parents=True, exist_ok=True)
 

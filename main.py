@@ -43,24 +43,41 @@ async def _resolve_session(
             summarize_fn=summarize_fn,
         )
 
-    last = max(sessions, key=lambda s: s.updated_at)
-    saved = await store.load(last.id)
-    if saved is not None:
+    sorted_sessions = sorted(sessions, key=lambda s: s.updated_at, reverse=True)
+    print("\nSaved sessions:")
+    for i, s in enumerate(sorted_sessions, 1):
+        title = s.title or "untitled"
+        print(f"  {i}. {s.id[:8]}  {title:<30} {s.message_count:>4} msgs")
+    print("  n. Start a new session\n")
+
+    while True:
+        choice = (await asyncio.to_thread(input, "Choose session [1/n]: ")).strip().lower()
+        if choice == "n":
+            return Session.create(
+                system_prompt=config.system_prompt,
+                count_tokens=client.count_tokens,
+                token_limit=config.max_tokens,
+                summarize_fn=summarize_fn,
+            )
+        try:
+            idx = int(choice) - 1
+            selected = sorted_sessions[idx]
+        except (ValueError, IndexError):
+            print(f"Invalid. Enter a number 1-{len(sessions)} or 'n'.")
+            continue
+
+        saved = await store.load(selected.id)
+        if saved is None:
+            print(f"Session '{selected.id[:8]}' could not be loaded. Try another.")
+            continue
         await saved.restore_context(
             count_tokens=client.count_tokens,
             token_limit=config.max_tokens,
             summarize_fn=summarize_fn,
         )
         label = saved.title or "untitled"
-        print(f"Resumed session \"{label}\" ({saved.id[:8]}, {len(saved.context._messages)} messages)")
+        print(f"Resumed \"{label}\" ({saved.id[:8]}, {len(saved.context._messages)} messages)")
         return saved
-
-    return Session.create(
-        system_prompt=config.system_prompt,
-        count_tokens=client.count_tokens,
-        token_limit=config.max_tokens,
-        summarize_fn=summarize_fn,
-    )
 
 
 async def _handle_session_cmd(
