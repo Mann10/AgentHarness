@@ -4,3 +4,4 @@ venv
 .obsidian/
 graphify-out/cache/
 .agentharness/
+.opencode
