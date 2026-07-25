@@ -5,3 +5,4 @@ venv
 graphify-out/cache/
 .agentharness/
 .opencode
+.planning
