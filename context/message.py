@@ -18,3 +18,16 @@ class Message:
     def __post_init__(self) -> None:
         if self.role not in VALID_ROLES:
             raise ValueError(f"Invalid role '{self.role}'. Must be one of {sorted(VALID_ROLES)}")
+
+    @classmethod
+    def from_dict(cls, d: dict) -> Message:
+        tool_calls = None
+        if d.get("tool_calls"):
+            tool_calls = [ToolCall(**tc) for tc in d["tool_calls"]]
+        return cls(
+            role=d["role"],
+            content=d.get("content", ""),
+            token_count=d.get("token_count", 0),
+            tool_calls=tool_calls,
+            tool_call_id=d.get("tool_call_id"),
+        )

@@ -17,7 +17,7 @@ class BaseLLMClient(ABC):
 
     @abstractmethod
     async def chat_from_messages(
-        self, messages: list[dict], *, tools: list[dict] | None = None, **kwargs
+        self, messages: list[dict], *, tools: list[Tool] | list[dict] | None = None, **kwargs
     ) -> LLMResponse: ...
 
     @abstractmethod

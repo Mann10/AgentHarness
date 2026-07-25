@@ -1,16 +1,16 @@
 # Graph Report - AgentHarness  (2026-07-25)
 
 ## Corpus Check
-- 34 files · ~16,264 words
+- 38 files · ~19,197 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 209 nodes · 367 edges · 19 communities (14 shown, 5 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 30 edges (avg confidence: 0.5)
+- 266 nodes · 464 edges · 22 communities (17 shown, 5 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 26 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5995f2f5`
+- Built from commit: `412a7c0f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,9 +21,12 @@
 - LocalToolProvider
 - tool/__init__.py
 - graphify.js
+- Session
+- Design Details
 - What You Must Do When Invoked
 - Design Details
 - Context Layer Module
+- opencode.json
 - LLM Client Module Refactor
 - graphify reference: extra exports and benchmark
 - graphify reference: query, path, explain
@@ -36,53 +39,61 @@
 - extraction-spec.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `ConversationContext` - 26 edges
-2. `ToolRegistry` - 22 edges
-3. `Tool` - 21 edges
-4. `BaseLLMClient` - 17 edges
-5. `OpenAIClient` - 17 edges
-6. `MCPToolProvider` - 14 edges
-7. `Agent` - 13 edges
-8. `Message` - 13 edges
-9. `LocalToolProvider` - 13 edges
-10. `ToolResult` - 12 edges
+1. `ConversationContext` - 28 edges
+2. `Session` - 27 edges
+3. `ToolRegistry` - 19 edges
+4. `OpenAIClient` - 17 edges
+5. `Tool` - 17 edges
+6. `Agent` - 16 edges
+7. `Message` - 15 edges
+8. `BaseLLMClient` - 15 edges
+9. `JSONLSessionStore` - 15 edges
+10. `MCPToolProvider` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Agent` --uses--> `ConversationContext`  [INFERRED]
   agent/core.py → context/context.py
 - `Agent` --uses--> `BaseLLMClient`  [INFERRED]
   agent/core.py → llm/base.py
+- `Agent` --uses--> `Session`  [INFERRED]
+  agent/core.py → session/models.py
 - `Agent` --uses--> `ToolRegistry`  [INFERRED]
   agent/core.py → tool/registry.py
 - `BaseLLMClient` --uses--> `ConversationContext`  [INFERRED]
   llm/base.py → context/context.py
-- `OpenAIClient` --uses--> `ConversationContext`  [INFERRED]
-  llm/openai_client.py → context/context.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (19 total, 5 thin omitted)
+## Communities (22 total, 5 thin omitted)
 
 ### Community 0 - "Tool"
-Cohesion: 0.20
-Nodes (9): ABC, Config, Exception, BaseLLMClient, LLMConnectionError, LLMError, LLMResponseError, OpenAIClient (+1 more)
+Cohesion: 0.23
+Nodes (10): Config, Exception, BaseLLMClient, ABC, LLMConnectionError, LLMError, LLMResponseError, OpenAIClient (+2 more)
 
 ### Community 1 - "ToolRegistry"
 Cohesion: 0.10
 Nodes (8): Protocol, MCPConfig, MCPServerConfig, MCPToolProvider, ToolProvider, ToolResult, _summarize_args(), ToolRegistry
 
 ### Community 2 - "ConversationContext"
-Cohesion: 0.31
+Cohesion: 0.21
 Nodes (3): ConversationContext, Message, ToolCall
 
 ### Community 3 - "LocalToolProvider"
-Cohesion: 0.26
-Nodes (7): main(), _list_dir(), LocalToolProvider, _read_file(), register_builtin_tools(), _write_file(), Tool
+Cohesion: 0.21
+Nodes (9): _handle_session_cmd(), main(), _make_summarize_fn(), _resolve_session(), _list_dir(), LocalToolProvider, _read_file(), register_builtin_tools() (+1 more)
 
 ### Community 4 - "tool/__init__.py"
-Cohesion: 0.31
+Cohesion: 0.27
 Nodes (3): Agent, _arg_summary(), AgentResult
+
+### Community 6 - "Session"
+Cohesion: 0.15
+Nodes (6): Path, Session, SessionSummary, JSONLSessionStore, ABC, SessionStore
+
+### Community 7 - "Design Details"
+Cohesion: 0.11
+Nodes (17): 1. Session Format — JSONL (append-only event log), 2. `session/models.py` — Session, 3. `session/store.py` — JSONLSessionStore, 4. `context/context.py` — Changes, 5. `agent/core.py` — Changes, 6. `main.py` — Full rewrite, 7. `context/message.py` — New Method, 8. `AGENTS.md` — Subagent Rule (+9 more)
 
 ### Community 8 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -95,6 +106,10 @@ Nodes (17): 10. `main.py` — Async REPL with Tool Loop, 1. `tool/models.py`, 2.
 ### Community 10 - "Context Layer Module"
 Cohesion: 0.15
 Nodes (12): BaseLLMClient changes (`llm/base.py`), Context Layer Module, ConversationContext (`context/context.py`), Design Details, Files to Create, Files to Modify, Goal, Implementation Order (+4 more)
+
+### Community 11 - "opencode.json"
+Cohesion: 0.50
+Nodes (3): plugin, $schema, .opencode/plugins/graphify.js
 
 ### Community 15 - "LLM Client Module Refactor"
 Cohesion: 0.18
@@ -121,24 +136,24 @@ Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
 ## Knowledge Gaps
-- **75 isolated node(s):** `Usage`, `What graphify is for`, `Step 0 - GitHub repos and multi-path merge (only if a URL or several paths)`, `Step 1 - Ensure graphify is installed`, `Step 2 - Detect files` (+70 more)
+- **93 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `Usage`, `What graphify is for`, `Step 0 - GitHub repos and multi-path merge (only if a URL or several paths)` (+88 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `Session` connect `Session` to `ConversationContext`, `LocalToolProvider`, `tool/__init__.py`?**
+  _High betweenness centrality (0.059) - this node is a cross-community bridge._
 - **Why does `ToolRegistry` connect `ToolRegistry` to `LocalToolProvider`, `tool/__init__.py`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
-- **Why does `Tool` connect `LocalToolProvider` to `Tool`, `ToolRegistry`, `ConversationContext`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
-- **Why does `ConversationContext` connect `ConversationContext` to `Tool`, `LocalToolProvider`, `tool/__init__.py`?**
-  _High betweenness centrality (0.045) - this node is a cross-community bridge._
-- **Are the 5 inferred relationships involving `ConversationContext` (e.g. with `Agent` and `Message`) actually correct?**
-  _`ConversationContext` has 5 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 5 inferred relationships involving `ToolRegistry` (e.g. with `Agent` and `MCPToolProvider`) actually correct?**
-  _`ToolRegistry` has 5 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 5 inferred relationships involving `Tool` (e.g. with `BaseLLMClient` and `OpenAIClient`) actually correct?**
-  _`Tool` has 5 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 6 inferred relationships involving `BaseLLMClient` (e.g. with `Agent` and `Config`) actually correct?**
-  _`BaseLLMClient` has 6 INFERRED edges - model-reasoned connections that need verification._
+  _High betweenness centrality (0.052) - this node is a cross-community bridge._
+- **Why does `ConversationContext` connect `ConversationContext` to `Tool`, `LocalToolProvider`, `tool/__init__.py`, `Session`?**
+  _High betweenness centrality (0.050) - this node is a cross-community bridge._
+- **Are the 6 inferred relationships involving `ConversationContext` (e.g. with `Agent` and `Message`) actually correct?**
+  _`ConversationContext` has 6 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 5 inferred relationships involving `Session` (e.g. with `Agent` and `ConversationContext`) actually correct?**
+  _`Session` has 5 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 2 inferred relationships involving `ToolRegistry` (e.g. with `Agent` and `MCPToolProvider`) actually correct?**
+  _`ToolRegistry` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 5 inferred relationships involving `OpenAIClient` (e.g. with `Config` and `ConversationContext`) actually correct?**
+  _`OpenAIClient` has 5 INFERRED edges - model-reasoned connections that need verification._
