@@ -1,10 +1,1 @@
-{
-  "0": "Tool",
-  "1": "ToolRegistry",
-  "2": "ConversationContext",
-  "3": "LocalToolProvider",
-  "4": "tool/__init__.py",
-  "5": "graphify.js",
-  "6": "Session",
-  "7": "Design Details"
-}
+{"0": "Session", "1": "tool/__init__.py", "2": "Tool", "3": "ConversationContext", "4": "Agent", "5": "LocalToolProvider", "6": "ToolRegistry", "7": "OpenAIClient"}

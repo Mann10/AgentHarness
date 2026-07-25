@@ -1,1 +1,12 @@
-{"0": "Session", "1": "tool/__init__.py", "2": "Tool", "3": "ConversationContext", "4": "Agent", "5": "LocalToolProvider", "6": "ToolRegistry", "7": "OpenAIClient"}
+{
+  "0": "Session",
+  "1": "tool/__init__.py",
+  "2": "Tool",
+  "3": "ConversationContext",
+  "4": "Agent",
+  "5": "LocalToolProvider",
+  "6": "ToolRegistry",
+  "7": "OpenAIClient",
+  "8": "ToolProvider",
+  "9": "ToolResult"
+}
