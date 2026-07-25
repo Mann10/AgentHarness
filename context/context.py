@@ -11,7 +11,6 @@ from tool.models import ToolCall
 class ConversationContext:
     def __init__(
         self,
-        system_prompt: str | None = None,
         *,
         count_tokens: Callable[[str], int],
         token_limit: int,
@@ -26,10 +25,6 @@ class ConversationContext:
         self._keep_recent_exchanges = keep_recent_exchanges
         self._messages: list[Message] = []
         self.total_tokens: int = 0
-
-        if system_prompt:
-            self._messages.append(Message(role="system", content=system_prompt))
-            self.total_tokens += self._count_tokens(system_prompt)
 
     async def add_message(self, message: Message) -> None:
         if message.token_count == 0:
@@ -83,21 +78,20 @@ class ConversationContext:
         if self.total_tokens < self.token_limit * self._summarize_threshold:
             return
 
-        system_msgs = [m for m in self._messages if m.role == "system"]
         keep_count = self._keep_recent_exchanges * 2
         recent = self._messages[-keep_count:] if keep_count > 0 else []
 
         always_keep = []
         if not any(m in recent for m in self._messages if m.role == "user"):
             for m in reversed(self._messages):
-                if m.role == "user" and m not in system_msgs:
+                if m.role == "user":
                     always_keep.append(m)
                     break
 
         to_summarize = [
             m
             for m in self._messages
-            if m not in system_msgs and m not in recent and m not in always_keep
+            if m not in recent and m not in always_keep
         ]
         if not to_summarize:
             return

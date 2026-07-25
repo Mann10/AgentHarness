@@ -6,6 +6,7 @@ import logging
 from agent.result import AgentResult
 from context.context import ConversationContext
 from llm.base import BaseLLMClient
+from session.models import Session
 from tool.registry import ToolRegistry
 
 logger = logging.getLogger(__name__)
@@ -16,13 +17,14 @@ class Agent:
         self,
         llm_client: BaseLLMClient,
         tool_registry: ToolRegistry,
-        context: ConversationContext,
+        session: Session,
         *,
         max_tool_iterations: int = 15,
     ):
         self._llm = llm_client
         self._registry = tool_registry
-        self._context = context
+        self._session = session
+        self._context = session.context
         self._max_iterations = max_tool_iterations
 
     async def start(self) -> None:
@@ -34,6 +36,10 @@ class Agent:
     @property
     def context(self) -> ConversationContext:
         return self._context
+
+    def switch_session(self, session: Session) -> None:
+        self._session = session
+        self._context = session.context
 
     async def run(self, user_input: str) -> AgentResult:
         await self._context.add_user_message(user_input)
@@ -48,8 +54,8 @@ class Agent:
                 "LLM call #%d with %d tool(s) defined", iterations, len(tools)
             )
 
-            response = await self._llm.chat(
-                self._context, tools=tools if tools else None
+            response = await self._llm.chat_from_messages(
+                self._session.to_llm_messages(), tools=tools if tools else None
             )
 
             if not response.tool_calls:
@@ -100,7 +106,9 @@ class Agent:
             "Max tool iterations (%d) reached. Forcing text response.",
             self._max_iterations,
         )
-        response = await self._llm.chat(self._context)
+        response = await self._llm.chat_from_messages(
+            self._session.to_llm_messages()
+        )
         await self._context.add_assistant_message(response.content)
         return AgentResult(
             content=response.content,

@@ -3,3 +3,5 @@ __pycache__/
 venv
 .obsidian/
 graphify-out/cache/
+.agentharness/
+.opencode
