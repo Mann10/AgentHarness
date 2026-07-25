@@ -81,10 +81,11 @@ class ConversationContext:
         keep_count = self._keep_recent_exchanges * 2
         recent = self._messages[-keep_count:] if keep_count > 0 else []
 
+        recent_ids = {id(m) for m in recent}
         to_summarize = [
             m
             for m in self._messages
-            if m not in recent
+            if m.role != "system" and id(m) not in recent_ids
         ]
         if not to_summarize:
             return
@@ -111,8 +112,8 @@ class ConversationContext:
         )
         summary_msg.token_count = self._count_tokens(summary_msg.content)
 
-        to_summarize_set = set(to_summarize)
-        self._messages = [m for m in self._messages if m not in to_summarize_set]
+        to_summarize_ids = {id(m) for m in to_summarize}
+        self._messages = [m for m in self._messages if id(m) not in to_summarize_ids]
         self.total_tokens = sum(m.token_count for m in self._messages)
 
         self._messages.insert(0, summary_msg)
