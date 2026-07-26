@@ -142,8 +142,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "config_py_config",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "config.py"
     },
     {
@@ -153,8 +153,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "config_config",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "config"
     },
     {
@@ -494,8 +494,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "llm_openai_client_openaiclient",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "openaiclient"
     },
     {
@@ -505,8 +505,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "llm_openai_client_openaiclient_init",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": ".__init__()"
     },
     {
@@ -560,8 +560,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "main",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "main.py"
     },
     {
@@ -571,8 +571,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "main_make_summarize_fn",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "_make_summarize_fn()"
     },
     {
@@ -582,8 +582,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "main_resolve_session",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "_resolve_session()"
     },
     {
@@ -593,8 +593,8 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "main_handle_session_cmd",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "_handle_session_cmd()"
     },
     {
@@ -604,8 +604,8 @@
       "source_location": "L180",
       "_origin": "ast",
       "id": "main_main",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": "main()"
     },
     {
@@ -758,8 +758,8 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "session_models_session_create",
-      "community": 7,
-      "community_name": "OpenAIClient",
+      "community": 2,
+      "community_name": "Tool",
       "norm_label": ".create()"
     },
     {
@@ -928,6 +928,94 @@
       "norm_label": ".list_sessions()"
     },
     {
+      "label": "test_summarization.py",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_summarization",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_summarization.py"
+    },
+    {
+      "label": "test_summarization_skips_when_below_threshold()",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "tests_test_summarization_test_summarization_skips_when_below_threshold",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_summarization_skips_when_below_threshold()"
+    },
+    {
+      "label": "test_summarization_fires_at_threshold()",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "tests_test_summarization_test_summarization_fires_at_threshold",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_summarization_fires_at_threshold()"
+    },
+    {
+      "label": "test_summarization_keeps_recent_exchanges()",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "tests_test_summarization_test_summarization_keeps_recent_exchanges",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_summarization_keeps_recent_exchanges()"
+    },
+    {
+      "label": "test_summarization_preserves_system_messages()",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "id": "tests_test_summarization_test_summarization_preserves_system_messages",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_summarization_preserves_system_messages()"
+    },
+    {
+      "label": "test_summarization_soft_degrade_on_failure()",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L112",
+      "_origin": "ast",
+      "id": "tests_test_summarization_test_summarization_soft_degrade_on_failure",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_summarization_soft_degrade_on_failure()"
+    },
+    {
+      "label": "test_summarization_token_total_consistent()",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L139",
+      "_origin": "ast",
+      "id": "tests_test_summarization_test_summarization_token_total_consistent",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_summarization_token_total_consistent()"
+    },
+    {
+      "label": "test_no_summarize_fn_does_nothing()",
+      "file_type": "code",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L159",
+      "_origin": "ast",
+      "id": "tests_test_summarization_test_no_summarize_fn_does_nothing",
+      "community": 3,
+      "community_name": "ConversationContext",
+      "norm_label": "test_no_summarize_fn_does_nothing()"
+    },
+    {
       "label": "tool/__init__.py",
       "file_type": "code",
       "source_file": "tool/__init__.py",
@@ -1077,8 +1165,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "tool_local_provider_localtoolprovider_call_tool",
-      "community": 5,
-      "community_name": "LocalToolProvider",
+      "community": 9,
+      "community_name": "ToolResult",
       "norm_label": ".call_tool()"
     },
     {
@@ -1143,8 +1231,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": "mcptoolprovider"
     },
     {
@@ -1154,8 +1242,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider_init",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": ".__init__()"
     },
     {
@@ -1165,8 +1253,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider_start",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": ".start()"
     },
     {
@@ -1176,8 +1264,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider_start_stdio",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": "._start_stdio()"
     },
     {
@@ -1187,8 +1275,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider_start_http",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": "._start_http()"
     },
     {
@@ -1198,8 +1286,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider_shutdown",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": ".shutdown()"
     },
     {
@@ -1209,8 +1297,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider_fetch_tools",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": ".fetch_tools()"
     },
     {
@@ -1220,8 +1308,8 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "tool_mcp_provider_mcptoolprovider_call_tool",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 9,
+      "community_name": "ToolResult",
       "norm_label": ".call_tool()"
     },
     {
@@ -1231,8 +1319,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tool_models",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 3,
+      "community_name": "ConversationContext",
       "norm_label": "tool/models.py"
     },
     {
@@ -1242,8 +1330,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "tool_models_toolprovider",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 8,
+      "community_name": "ToolProvider",
       "norm_label": "toolprovider"
     },
     {
@@ -1253,8 +1341,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "protocol",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 8,
+      "community_name": "ToolProvider",
       "norm_label": "protocol"
     },
     {
@@ -1264,8 +1352,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "tool_models_toolprovider_start",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 8,
+      "community_name": "ToolProvider",
       "norm_label": ".start()"
     },
     {
@@ -1275,8 +1363,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "tool_models_toolprovider_shutdown",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 8,
+      "community_name": "ToolProvider",
       "norm_label": ".shutdown()"
     },
     {
@@ -1286,8 +1374,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tool_models_toolprovider_fetch_tools",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 8,
+      "community_name": "ToolProvider",
       "norm_label": ".fetch_tools()"
     },
     {
@@ -1297,8 +1385,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tool_models_toolprovider_call_tool",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 9,
+      "community_name": "ToolResult",
       "norm_label": ".call_tool()"
     },
     {
@@ -1330,8 +1418,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "tool_models_toolresult",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 9,
+      "community_name": "ToolResult",
       "norm_label": "toolresult"
     },
     {
@@ -1385,8 +1473,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "tool_registry_toolregistry_load_config",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 7,
+      "community_name": "OpenAIClient",
       "norm_label": ".load_config()"
     },
     {
@@ -1396,8 +1484,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "tool_registry_toolregistry_add_provider",
-      "community": 1,
-      "community_name": "tool/__init__.py",
+      "community": 8,
+      "community_name": "ToolProvider",
       "norm_label": ".add_provider()"
     },
     {
@@ -2216,6 +2304,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization",
+      "target": "context_context",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "context/context.py",
@@ -2479,6 +2579,102 @@
       "confidence_score": 0.5
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization_test_no_summarize_fn_does_nothing",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization_test_summarization_fires_at_threshold",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization_test_summarization_keeps_recent_exchanges",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization_test_summarization_preserves_system_messages",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization_test_summarization_skips_when_below_threshold",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization_test_summarization_soft_degrade_on_failure",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_summarization_test_summarization_token_total_consistent",
+      "target": "context_context_conversationcontext",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2603,7 +2799,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "context/context.py",
-      "source_location": "L108",
+      "source_location": "L109",
       "weight": 1.0,
       "_origin": "ast",
       "source": "context_context_conversationcontext_maybe_summarize",
@@ -4341,6 +4537,90 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "tests_test_summarization",
+      "target": "tests_test_summarization_test_no_summarize_fn_does_nothing",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "tests_test_summarization",
+      "target": "tests_test_summarization_test_summarization_fires_at_threshold",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "tests_test_summarization",
+      "target": "tests_test_summarization_test_summarization_keeps_recent_exchanges",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L179",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "tests_test_summarization",
+      "target": "tests_test_summarization_test_summarization_preserves_system_messages",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "tests_test_summarization",
+      "target": "tests_test_summarization_test_summarization_skips_when_below_threshold",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L180",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "tests_test_summarization",
+      "target": "tests_test_summarization_test_summarization_soft_degrade_on_failure",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_summarization.py",
+      "source_location": "L181",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "tests_test_summarization",
+      "target": "tests_test_summarization_test_summarization_token_total_consistent",
+      "confidence_score": 0.5
+    },
+    {
       "relation": "re_exports",
       "context": "export",
       "confidence": "EXTRACTED",
@@ -5567,5 +5847,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "eeec49eb1a2249446913cc6921f8e377c10e7f12"
+  "built_at_commit": "4bffaa658c57e5e4d86033a751794495b25ea5de"
 }

@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import argparse
 import asyncio
 import logging
+import signal
 import sys
 from datetime import datetime
 
 from agent import Agent
 from config import Config
 from llm import OpenAIClient
+from jobqueue.manager import QueueManager
 from session import JSONLSessionStore, Session
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
@@ -177,22 +180,14 @@ async def _handle_session_cmd(
     return False
 
 
-async def main() -> None:
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    config = Config()
-    client = OpenAIClient(config)
-    registry = ToolRegistry()
-    await registry.load_config(config.mcp_config_path)
-
-    local_provider = LocalToolProvider()
-    register_builtin_tools(local_provider)
-    registry.add_provider("__builtin__", local_provider)
-
-    summarize_fn = _make_summarize_fn(client)
-
-    store = JSONLSessionStore()
+async def run_repl(
+    config: Config,
+    client: OpenAIClient,
+    registry: ToolRegistry,
+    store: JSONLSessionStore,
+    summarize_fn,
+) -> None:
     session = await _resolve_session(store, config, client, summarize_fn)
-
     agent = Agent(client, registry, session)
     await agent.start()
 
@@ -244,6 +239,131 @@ async def main() -> None:
         await store.save(session)
         print(f"\nSession saved: {session.id[:8]}")
         await agent.shutdown()
+
+
+async def run_worker(
+    config: Config,
+    client: OpenAIClient,
+    registry: ToolRegistry,
+    queue_manager: QueueManager,
+    worker_count: int,
+) -> None:
+    session = Session.create(
+        system_prompt=config.system_prompt,
+        count_tokens=client.count_tokens,
+        token_limit=config.max_tokens,
+    )
+    agent = Agent(client, registry, session)
+    await agent.start()
+
+    worker_tasks = []
+    shutdown_event = asyncio.Event()
+
+    def _handle_sig() -> None:
+        shutdown_event.set()
+
+    loop = asyncio.get_event_loop()
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        try:
+            loop.add_signal_handler(sig, _handle_sig)
+        except NotImplementedError:
+            pass
+
+    async def _worker(worker_id: int) -> None:
+        logger.info("Worker %d started", worker_id)
+        while not shutdown_event.is_set():
+            try:
+                job = await queue_manager.wait_for_job()
+                if job is None:
+                    continue
+                logger.info("Worker %d processing job %s", worker_id, job.short_id)
+                result = await agent.run(job.prompt)
+                await queue_manager.complete_job(job.id, result.content)
+                logger.info(
+                    "Worker %d completed job %s (%d tokens, %d iterations)",
+                    worker_id, job.short_id, agent.context.total_tokens, result.iterations,
+                )
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.exception("Worker %d error: %s", worker_id, e)
+
+    for i in range(worker_count):
+        task = asyncio.create_task(_worker(i))
+        worker_tasks.append(task)
+
+    await shutdown_event.wait()
+    logger.info("Shutting down workers...")
+    for task in worker_tasks:
+        task.cancel()
+    await asyncio.gather(*worker_tasks, return_exceptions=True)
+    await agent.shutdown()
+
+
+async def run_tui(
+    config: Config,
+    client: OpenAIClient,
+    registry: ToolRegistry,
+    queue_manager: QueueManager,
+    worker_count: int,
+) -> None:
+    session = Session.create(
+        system_prompt=config.system_prompt,
+        count_tokens=client.count_tokens,
+        token_limit=config.max_tokens,
+    )
+    agent = Agent(client, registry, session)
+    await agent.start()
+
+    from tui.app import AgentHarnessTUI
+    app = AgentHarnessTUI(queue_manager=queue_manager)
+    app._worker_count = worker_count
+
+    async def _agent_run(prompt: str) -> str:
+        result = await agent.run(prompt)
+        return result.content
+
+    app._run_agent_job = _agent_run
+
+    async def _run() -> None:
+        await app.run_async()
+
+    await asyncio.gather(_run())
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="AgentHarness")
+    parser.add_argument("--tui", action="store_true", help="Launch Textual TUI")
+    parser.add_argument("--worker", action="store_true", help="Run in worker mode")
+    parser.add_argument("--workers", type=int, default=1, help="Number of worker tasks")
+    parser.add_argument("--queue-path", type=str, default=None, help="Path to queue SQLite db")
+    parser.add_argument("--resume", type=str, default=None, help="Session ID to resume")
+    return parser.parse_args()
+
+
+async def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    args = _parse_args()
+    config = Config()
+    client = OpenAIClient(config)
+    registry = ToolRegistry()
+    await registry.load_config(config.mcp_config_path)
+
+    local_provider = LocalToolProvider()
+    register_builtin_tools(local_provider)
+    registry.add_provider("__builtin__", local_provider)
+
+    summarize_fn = _make_summarize_fn(client)
+    store = JSONLSessionStore()
+    queue_manager = QueueManager()
+    await queue_manager.start()
+
+    if args.tui:
+        await run_tui(config, client, registry, queue_manager, args.workers)
+    elif args.worker:
+        await run_worker(config, client, registry, queue_manager, args.workers)
+    else:
+        await run_repl(config, client, registry, store, summarize_fn)
 
 
 if __name__ == "__main__":
