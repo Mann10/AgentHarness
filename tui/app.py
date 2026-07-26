@@ -8,8 +8,22 @@ from textual.app import App, ComposeResult
 from textual.containers import Vertical
 from textual.widgets import Header
 
-from jobqueue.manager import QueueManager
-from jobqueue.models import JobPriority
+from harness import RuntimeAPI
+from harness.event_bus import EventBus
+from harness.events import (
+    EVENT_TURN_STARTED,
+    EVENT_TOOL_CALL,
+    EVENT_TOOL_RESULT,
+    EVENT_RESPONSE_COMPLETE,
+    EVENT_ERROR,
+    EVENT_CANCELLED,
+    TurnStarted,
+    ToolCallEvent,
+    ToolResultEvent,
+    ResponseComplete,
+    ErrorEvent,
+    CancelledEvent,
+)
 from tui.screens.result_screen import ResultScreen
 from tui.widgets.input_bar import InputBar
 from tui.widgets.job_grid import JobGrid
@@ -33,11 +47,9 @@ class AgentHarnessTUI(App):
     }
     """
 
-    def __init__(self, queue_manager: QueueManager | None = None) -> None:
+    def __init__(self, runtime: RuntimeAPI) -> None:
         super().__init__()
-        self._manager = queue_manager or QueueManager()
-        self._worker_tasks: list[asyncio.Task] = []
-        self._worker_count = 1
+        self._runtime = runtime
         self._last_result: str | None = None
 
     def compose(self) -> ComposeResult:
@@ -50,52 +62,69 @@ class AgentHarnessTUI(App):
         yield StatusBar()
 
     def on_mount(self) -> None:
-        asyncio.get_event_loop().create_task(self._start_manager())
-        self.set_interval(2, self._refresh)
+        """Subscribe to Runtime EventBus events (D-14).
 
-    async def _start_manager(self) -> None:
-        await self._manager.start()
-        for i in range(self._worker_count):
-            task = asyncio.get_event_loop().create_task(self._worker_loop(i))
-            self._worker_tasks.append(task)
+        Event handlers update the UI reactively as events arrive.
+        All handlers run on the same asyncio loop as the Runtime,
+        so no thread bridging is needed.
+        """
+        bus = self._runtime.event_bus
+        asyncio.create_task(self._subscribe_to_events(bus))
 
-    async def _worker_loop(self, worker_id: int) -> None:
-        logger.info("Worker %d started", worker_id)
-        while True:
-            try:
-                job = await self._manager.wait_for_job()
-                result = await self._run_agent_job(job.prompt)
-                await self._manager.complete_job(job.id, result)
-                self._last_result = result
-                logger.info("Worker %d completed job %s", worker_id, job.short_id)
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.exception("Worker %d error", worker_id)
+    async def _subscribe_to_events(self, bus: EventBus) -> None:
+        """Register event handlers for Runtime events."""
+        await bus.subscribe(EVENT_TURN_STARTED, self._on_turn_started)
+        await bus.subscribe(EVENT_TOOL_CALL, self._on_tool_call)
+        await bus.subscribe(EVENT_TOOL_RESULT, self._on_tool_result)
+        await bus.subscribe(EVENT_RESPONSE_COMPLETE, self._on_response_complete)
+        await bus.subscribe(EVENT_ERROR, self._on_error)
+        await bus.subscribe(EVENT_CANCELLED, self._on_cancelled)
 
-    async def _run_agent_job(self, prompt: str) -> str:
-        await asyncio.sleep(0)
-        return f"Processed: {prompt}"
-
-    async def _refresh(self) -> None:
-        jobs = self._manager.list_jobs(limit=100)
-        grid = self.query_one(JobGrid)
-        grid.refresh_jobs(jobs)
+    async def _on_turn_started(self, event: TurnStarted) -> None:
+        """Show that processing has started."""
         bar = self.query_one(StatusBar)
-        bar.update_status(self._manager.pending_count, self._worker_count, self._last_result)
+        bar.update_processing(True)
+        logger.info("Turn started: %.50s", event.prompt)
+
+    async def _on_tool_call(self, event: ToolCallEvent) -> None:
+        """Log tool calls — UI could show inline card in future."""
+        logger.debug("Tool call: %s", event.tool_name)
+
+    async def _on_tool_result(self, event: ToolResultEvent) -> None:
+        """Log tool results."""
+        logger.debug("Tool result: %s = %s", event.tool_name, event.result[:60])
+
+    async def _on_response_complete(self, event: ResponseComplete) -> None:
+        """Update status bar with completion info."""
+        self._last_result = event.content[:60]
+        bar = self.query_one(StatusBar)
+        bar.update_processing(False)
+        bar.update_last_result(self._last_result)
+
+    async def _on_error(self, event: ErrorEvent) -> None:
+        """Log errors from agent execution."""
+        bar = self.query_one(StatusBar)
+        bar.update_processing(False)
+        logger.error("Runtime error: %s", event.error)
+
+    async def _on_cancelled(self, event: CancelledEvent) -> None:
+        """Handle turn cancellation."""
+        bar = self.query_one(StatusBar)
+        bar.update_processing(False)
+        logger.info("Turn cancelled")
 
     @on(InputBar.Submitted)
     async def on_submit(self, event: InputBar.Submitted) -> None:
+        """Submit prompt via Runtime instead of queue."""
         prompt = event.value.strip()
         if not prompt:
             return
-        await self._manager.enqueue(prompt, priority=JobPriority.NORMAL)
+        await self._runtime.submit_prompt(prompt)
         event.input.clear()
 
     @on(JobGrid.RowSelected)
     def on_row_selected(self, event: JobGrid.RowSelected) -> None:
+        """Show job detail screen from grid row data."""
         job_id = event.row.get_value(0)
-        job = self._manager.get_job(job_id)
-        if job is None:
-            return
-        self.push_screen(ResultScreen(job.id, job.prompt, job.result, job.error))
+        prompt = event.row.get_value(1)
+        self.push_screen(ResultScreen(job_id, prompt, None, None))
