@@ -90,13 +90,14 @@ class Scheduler:
             self._current_task.cancel()
 
         # Wait briefly for CancelledError to propagate so the event fires
-        try:
-            await asyncio.wait_for(self._current_task, timeout=3.0)
-        except (asyncio.CancelledError, asyncio.TimeoutError):
-            pass
-        if self._current_task and not self._current_task.done():
-            self._current_task.cancel()
-            logger.info("Cancel requested for current turn")
+        if self._current_task is not None:
+            try:
+                await asyncio.wait_for(self._current_task, timeout=3.0)
+            except (asyncio.CancelledError, asyncio.TimeoutError):
+                pass
+            if self._current_task and not self._current_task.done():
+                self._current_task.cancel()
+                logger.info("Cancel requested for current turn")
 
     @property
     def is_busy(self) -> bool:
