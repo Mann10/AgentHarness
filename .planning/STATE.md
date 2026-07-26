@@ -1,11 +1,11 @@
 # Project State
 
-**Updated:** 2026-07-26
+**Updated:** 2026-07-26T21:22Z
 **Status:** active
 
 ## Current Phase
 
-**Phase 5: Harness Runtime** — In progress (Plan 05 complete, Plans 06-07 remaining)
+**Phase 5: Harness Runtime** — In progress (Plans 00-06 complete, Plan 07 remaining)
 
 ## Progress
 
@@ -23,7 +23,8 @@
 - [x] **Plan 03: Agent event emission hooks** — emit callback on Agent, 5 lifecycle emission points, 5-test suite
 - [x] **Plan 04: Scheduler** — one-turn dispatch, backlog, cancel, 7-test suite
 - [x] **Plan 05: RuntimeAPI** — orchestrator owning all subsystems, 4 public API methods, 7-test suite
-- [ ] Plan 06-07: Remaining plans
+- [x] **Plan 06: TUI as Pure View Layer** — refactored from QueueManager to RuntimeAPI event consumer with StatusBar processing indicator (2 tasks, 2 commits)
+- [ ] Plan 07: Remaining plans
 
 ## Notes
 
@@ -42,3 +43,4 @@
 - RuntimeAPI orchestrates EventBus, Scheduler, SessionManager, Agent with 4 public API methods
 - 7 tests in tests/test_runtime.py cover API surface, lifecycle, submit/cancel, event_bus property
 - Circular import (agent→harness.events→harness→agent) resolved via lazy __getattr__ in harness/__init__.py
+- Plan 06: TUI refactored to pure view layer -- RuntimeAPI dependency, EventBus subscription on mount with 6 event handlers, StatusBar processing indicator
