@@ -1,6 +1,6 @@
 # AgentHarness Roadmap
 
-**Updated:** 2026-07-25
+**Updated:** 2026-07-26
 
 ## Phases
 
@@ -45,12 +45,12 @@
 **Plans:** 8 plans in 5 waves
 
 Plans:
-- [ ] 05-00-PLAN.md — Test infrastructure (pytest.ini, conftest.py)
-- [ ] 05-01-PLAN.md — EventBus + Events + Cancellation
-- [ ] 05-02-PLAN.md — SessionManager
+- [x] 05-00-PLAN.md — Test infrastructure (pytest.ini, conftest.py)
+- [x] 05-01-PLAN.md — EventBus + Events + Cancellation
+- [x] 05-02-PLAN.md — SessionManager
 - [x] 05-03-PLAN.md — Agent event emission hooks
-- [ ] 05-04-PLAN.md — Scheduler (one-turn dispatch + backlog)
-- [ ] 05-05-PLAN.md — RuntimeAPI + harness/__init__.py
+- [x] 05-04-PLAN.md — Scheduler (one-turn dispatch + backlog)
+- [x] 05-05-PLAN.md — RuntimeAPI + harness/__init__.py
 - [ ] 05-06-PLAN.md — TUI refactor to pure view layer
 - [ ] 05-07-PLAN.md — main.py Runtime wiring
 
