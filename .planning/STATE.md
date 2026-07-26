@@ -5,7 +5,7 @@
 
 ## Current Phase
 
-**Phase 5: Harness Runtime** — In progress (Plans 00-06 complete, Plan 07 remaining)
+**Phase 5: Harness Runtime** — Complete (All 8 plans finished)
 
 ## Progress
 
@@ -13,7 +13,7 @@
 - [x] Phase 2: Session Module — Complete
 - [x] Phase 3: Fix Summarization — Complete
 - [x] Phase 4: Textual TUI + Queue + Worker — Complete
-- [ ] Phase 5: Harness Runtime — Plans 00-05 complete, 06-07 remaining
+- [x] Phase 5: Harness Runtime — Complete (8 plans)
 
 ## Phase 5 Progress
 
@@ -24,7 +24,7 @@
 - [x] **Plan 04: Scheduler** — one-turn dispatch, backlog, cancel, 7-test suite
 - [x] **Plan 05: RuntimeAPI** — orchestrator owning all subsystems, 4 public API methods, 7-test suite
 - [x] **Plan 06: TUI as Pure View Layer** — refactored from QueueManager to RuntimeAPI event consumer with StatusBar processing indicator (2 tasks, 2 commits)
-- [ ] Plan 07: Remaining plans
+- [x] **Plan 07: main.py RuntimeAPI Integration** — refactored from inline wiring to RuntimeAPI orchestrator (1 task, 1 commit)
 
 ## Notes
 
@@ -44,3 +44,4 @@
 - 7 tests in tests/test_runtime.py cover API surface, lifecycle, submit/cancel, event_bus property
 - Circular import (agent→harness.events→harness→agent) resolved via lazy __getattr__ in harness/__init__.py
 - Plan 06: TUI refactored to pure view layer -- RuntimeAPI dependency, EventBus subscription on mount with 6 event handlers, StatusBar processing indicator
+- Plan 07: main.py refactored to use RuntimeAPI as central orchestrator — no inline QueueManager/store wiring, all 3 CLI modes (REPL/TUI/worker) share unified lifecycle
