@@ -1,15 +1,16 @@
-# Graph Report - .  (2026-07-25)
+# Graph Report - AgentHarness  (2026-07-25)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 23 files · ~4,688 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 136 nodes · 350 edges · 8 communities (7 shown, 1 thin omitted)
-- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 26 edges (avg confidence: 0.51)
+- 144 nodes · 366 edges · 10 communities (5 shown, 5 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 33 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eeec49eb`
+- Built from commit: `4bffaa65`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,9 +23,11 @@
 - LocalToolProvider
 - ToolRegistry
 - OpenAIClient
+- ToolProvider
+- ToolResult
 
 ## God Nodes (most connected - your core abstractions)
-1. `ConversationContext` - 28 edges
+1. `ConversationContext` - 36 edges
 2. `Session` - 27 edges
 3. `ToolRegistry` - 19 edges
 4. `OpenAIClient` - 17 edges
@@ -44,54 +47,46 @@
   agent/core.py → session/models.py
 - `Agent` --uses--> `ToolRegistry`  [INFERRED]
   agent/core.py → tool/registry.py
-- `BaseLLMClient` --uses--> `Config`  [INFERRED]
-  llm/base.py → config.py
+- `BaseLLMClient` --uses--> `ConversationContext`  [INFERRED]
+  llm/base.py → context/context.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (8 total, 1 thin omitted)
+## Communities (10 total, 5 thin omitted)
 
 ### Community 0 - "Session"
 Cohesion: 0.15
 Nodes (6): Path, Session, SessionSummary, JSONLSessionStore, ABC, SessionStore
 
-### Community 1 - "tool/__init__.py"
-Cohesion: 0.15
-Nodes (6): Protocol, MCPConfig, MCPServerConfig, MCPToolProvider, ToolProvider, ToolResult
-
 ### Community 2 - "Tool"
-Cohesion: 0.23
-Nodes (8): Exception, BaseLLMClient, ABC, LLMConnectionError, LLMError, LLMResponseError, LLMResponse, Tool
+Cohesion: 0.18
+Nodes (14): Config, Exception, BaseLLMClient, ABC, LLMConnectionError, LLMError, LLMResponseError, OpenAIClient (+6 more)
 
 ### Community 3 - "ConversationContext"
-Cohesion: 0.24
-Nodes (3): ConversationContext, Message, ToolCall
+Cohesion: 0.16
+Nodes (10): ConversationContext, Message, test_no_summarize_fn_does_nothing(), test_summarization_fires_at_threshold(), test_summarization_keeps_recent_exchanges(), test_summarization_preserves_system_messages(), test_summarization_skips_when_below_threshold(), test_summarization_soft_degrade_on_failure() (+2 more)
 
 ### Community 4 - "Agent"
 Cohesion: 0.27
 Nodes (3): Agent, _arg_summary(), AgentResult
 
 ### Community 5 - "LocalToolProvider"
-Cohesion: 0.24
+Cohesion: 0.27
 Nodes (5): _list_dir(), LocalToolProvider, _read_file(), register_builtin_tools(), _write_file()
 
-### Community 7 - "OpenAIClient"
-Cohesion: 0.49
-Nodes (6): Config, OpenAIClient, _handle_session_cmd(), main(), _make_summarize_fn(), _resolve_session()
-
 ## Knowledge Gaps
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Session` connect `Session` to `ConversationContext`, `Agent`, `OpenAIClient`?**
-  _High betweenness centrality (0.228) - this node is a cross-community bridge._
-- **Why does `ToolRegistry` connect `ToolRegistry` to `tool/__init__.py`, `Agent`, `OpenAIClient`?**
-  _High betweenness centrality (0.202) - this node is a cross-community bridge._
-- **Why does `ConversationContext` connect `ConversationContext` to `Session`, `Tool`, `Agent`, `OpenAIClient`?**
-  _High betweenness centrality (0.195) - this node is a cross-community bridge._
+- **Why does `ConversationContext` connect `ConversationContext` to `Session`, `Tool`, `Agent`?**
+  _High betweenness centrality (0.274) - this node is a cross-community bridge._
+- **Why does `Session` connect `Session` to `Tool`, `ConversationContext`, `Agent`?**
+  _High betweenness centrality (0.218) - this node is a cross-community bridge._
+- **Why does `ToolRegistry` connect `ToolRegistry` to `tool/__init__.py`, `Tool`, `Agent`, `OpenAIClient`, `ToolProvider`?**
+  _High betweenness centrality (0.191) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `ConversationContext` (e.g. with `Agent` and `Message`) actually correct?**
   _`ConversationContext` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 5 inferred relationships involving `Session` (e.g. with `Agent` and `ConversationContext`) actually correct?**

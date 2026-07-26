@@ -10,7 +10,7 @@
     "semantic_hash": "7b49fa0b1b1eb479437e8c59ff514f6c"
   },
   "context/context.py": {
-    "mtime": 1784987364.3248856,
+    "mtime": 1784988067.052893,
     "ast_hash": "9adfd4269e086d672de2c321e8b568b1",
     "semantic_hash": ""
   },
@@ -40,9 +40,9 @@
     "semantic_hash": "025f507aa9417d895f65dbcce948f05f"
   },
   "main.py": {
-    "mtime": 1784986612.8854551,
-    "ast_hash": "82449a11f454781594a8c12b33a62109",
-    "semantic_hash": "82449a11f454781594a8c12b33a62109"
+    "mtime": 1784995393.4510448,
+    "ast_hash": "9fb73d58a3b9d9ffded6c51279cff39f",
+    "semantic_hash": ""
   },
   "mcp_servers.json": {
     "mtime": 1784913888.5921526,
@@ -95,8 +95,8 @@
     "semantic_hash": "97c1bad6b75ec717a048f1ced70289ac"
   },
   "requirements.txt": {
-    "mtime": 1784970057.252798,
-    "ast_hash": "10f5ce3d697e68c73d51625f8dcb5db0",
+    "mtime": 1784995182.2344298,
+    "ast_hash": "cf681fa6f7f1ec7df463b3e837ef11c9",
     "semantic_hash": ""
   },
   "session/__init__.py": {
@@ -115,8 +115,68 @@
     "semantic_hash": "0095a7c670f1dc04b5ace442610175f3"
   },
   "tests/test_summarization.py": {
-    "mtime": 1784987533.4466274,
-    "ast_hash": "2719ce2623873765656f959b48747405",
+    "mtime": 1784988067.0659664,
+    "ast_hash": "74e73cef27a8d880bf73260f100b5b7d",
+    "semantic_hash": ""
+  },
+  "jobqueue/__init__.py": {
+    "mtime": 1784995342.548362,
+    "ast_hash": "a7f3d2304d473cd960cbd5d1444a2f1c",
+    "semantic_hash": ""
+  },
+  "jobqueue/manager.py": {
+    "mtime": 1784995343.364859,
+    "ast_hash": "65c54bf23da1d6d598f1d9e2a5165629",
+    "semantic_hash": ""
+  },
+  "jobqueue/models.py": {
+    "mtime": 1784995218.275821,
+    "ast_hash": "ad7f237f94645c7e0ae68be8d1ee91c4",
+    "semantic_hash": ""
+  },
+  "jobqueue/store.py": {
+    "mtime": 1784995342.901873,
+    "ast_hash": "a4348e432ad35c4de98d111ae3366255",
+    "semantic_hash": ""
+  },
+  "tui/__init__.py": {
+    "mtime": 1784995132.9213226,
+    "ast_hash": "e8a8f6a137895b42e38314e38f35dbd6",
+    "semantic_hash": ""
+  },
+  "tui/app.py": {
+    "mtime": 1784995344.3930748,
+    "ast_hash": "27c1d008a9e8ec91e2c24d68c286d912",
+    "semantic_hash": ""
+  },
+  "tui/screens/__init__.py": {
+    "mtime": 1784995133.8996446,
+    "ast_hash": "c8436f8437b4f8ed784f667ed5bfecf9",
+    "semantic_hash": ""
+  },
+  "tui/screens/result_screen.py": {
+    "mtime": 1784995366.0880294,
+    "ast_hash": "2718e94102c8429855102f74617f9d32",
+    "semantic_hash": ""
+  },
+  "tui/widgets/__init__.py": {
+    "mtime": 1784995133.4835567,
+    "ast_hash": "79fd5c84bcbf2501534944683f55aaf8",
+    "semantic_hash": ""
+  },
+  "tui/widgets/input_bar.py": {
+    "mtime": 1784995356.2376344,
+    "ast_hash": "e8be6d16a297c8f98243bb23ec1a68a2",
+    "semantic_hash": ""
+  },
+  "tui/widgets/job_grid.py": {
+    "mtime": 1784995361.476792,
+    "ast_hash": "0bf35e30b40d53734cefff9672ebd1f7",
+    "semantic_hash": ""
+  },
+  "tui/widgets/status_bar.py": {
+    "mtime": 1784995356.8711777,
+    "ast_hash": "d164e2ee1497f22e420e42d96dbd0623",
     "semantic_hash": ""
   }
 }

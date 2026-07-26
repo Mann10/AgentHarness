@@ -6,7 +6,5 @@
   "4": "Agent",
   "5": "LocalToolProvider",
   "6": "ToolRegistry",
-  "7": "OpenAIClient",
-  "8": "ToolProvider",
-  "9": "ToolResult"
+  "7": "OpenAIClient"
 }

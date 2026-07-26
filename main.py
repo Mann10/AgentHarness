@@ -1,69 +1,30 @@
 from __future__ import annotations
 
+import argparse
 import asyncio
 import logging
+import signal
 import sys
 from datetime import datetime
 
-from agent import Agent
 from config import Config
+from harness import RuntimeAPI
 from llm import OpenAIClient
-from session import JSONLSessionStore, Session
+from session import Session
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
-SUMMARIZATION_PROMPT = """\
-You are summarizing a conversation between a user and an AI coding assistant \
-for the purpose of preserving context in a long-running session.
-
-Read the following conversation history and produce a concise summary that captures:
-
-1. **Current goal** — What the user is working on
-2. **Key decisions** — Important choices made and why
-3. **Progress made** — What has been accomplished so far
-4. **Files/tools touched** — Which files were created/modified, tools invoked
-5. **Open questions** — Any unresolved issues or next steps discussed
-6. **Technical context** — Important technical details the assistant needs to know
-
-Write this as a structured report (not a narrative). Use bullet points.
-The summary will be read by an AI assistant to continue the conversation,
-so include everything necessary to maintain continuity.
-"""
-
-
-def _make_summarize_fn(client: OpenAIClient):
-    async def _summarize(msgs: list[dict]) -> str:
-        response = await client.chat_from_messages(
-            [
-                {
-                    "role": "system",
-                    "content": SUMMARIZATION_PROMPT,
-                },
-                *msgs,
-            ],
-            temperature=0.3,
-        )
-        return response.content
-    return _summarize
-
-
 async def _resolve_session(
-    store: JSONLSessionStore,
+    runtime: RuntimeAPI,
     config: Config,
     client: OpenAIClient,
-    summarize_fn,
-) -> Session:
-    sessions = await store.list_sessions()
+) -> Session | None:
+    sessions = await runtime.list_sessions()
     if not sessions:
-        return Session.create(
-            system_prompt=config.system_prompt,
-            count_tokens=client.count_tokens,
-            token_limit=config.max_tokens,
-            summarize_fn=summarize_fn,
-        )
+        return None  # RuntimeAPI will auto-create on first submit
 
     sorted_sessions = sorted(sessions, key=lambda s: s.updated_at, reverse=True)
     print("\nSaved sessions:")
@@ -75,12 +36,7 @@ async def _resolve_session(
     while True:
         choice = (await asyncio.to_thread(input, "Choose session [1/n]: ")).strip().lower()
         if choice == "n":
-            return Session.create(
-                system_prompt=config.system_prompt,
-                count_tokens=client.count_tokens,
-                token_limit=config.max_tokens,
-                summarize_fn=summarize_fn,
-            )
+            return None  # RuntimeAPI auto-creates
         try:
             idx = int(choice) - 1
             selected = sorted_sessions[idx]
@@ -88,34 +44,28 @@ async def _resolve_session(
             print(f"Invalid. Enter a number 1-{len(sessions)} or 'n'.")
             continue
 
-        saved = await store.load(selected.id)
-        if saved is None:
-            print(f"Session '{selected.id[:8]}' could not be loaded. Try another.")
+        success = await runtime.switch_session(selected.id)
+        if success:
+            label = runtime.active_session.title or "untitled"
+            print(f"Resumed \"{label}\" ({runtime.active_session.id[:8]})")
+            return runtime.active_session
+        else:
+            print(f"Session '{selected.id[:8]}' could not be loaded.")
             continue
-        await saved.restore_context(
-            count_tokens=client.count_tokens,
-            token_limit=config.max_tokens,
-            summarize_fn=summarize_fn,
-        )
-        label = saved.title or "untitled"
-        print(f"Resumed \"{label}\" ({saved.id[:8]}, {len(saved.context._messages)} messages)")
-        return saved
 
 
 async def _handle_session_cmd(
     line: str,
     current: dict,
-    store: JSONLSessionStore,
+    runtime: RuntimeAPI,
     config: Config,
     client: OpenAIClient,
-    agent: Agent,
-    summarize_fn,
 ) -> bool:
     parts = line.split(maxsplit=1)
     cmd = parts[0].lower()
 
     if cmd == "/sessions":
-        summaries = await store.list_sessions()
+        summaries = await runtime.list_sessions()
         if not summaries:
             print("No saved sessions.")
             return True
@@ -127,19 +77,19 @@ async def _handle_session_cmd(
         return True
 
     if cmd == "/new":
-        session = current["session"]
-        session.updated_at = datetime.now()
-        await store.save(session)
-        old_id = session.id[:8]
-        new_session = Session.create(
+        session = runtime.active_session
+        if session:
+            await runtime._session_manager.save_session()
+            print(f"Session {session.id[:8]} saved.")
+        await runtime._session_manager.create_session(
             system_prompt=config.system_prompt,
             count_tokens=client.count_tokens,
             token_limit=config.max_tokens,
-            summarize_fn=summarize_fn,
         )
-        agent.switch_session(new_session)
-        current["session"] = new_session
-        print(f"Session {old_id} saved. New session {new_session.id[:8]} started.")
+        # Recreate agent for the new session
+        await runtime._create_agent()
+        current["session"] = runtime.active_session
+        print(f"New session {runtime.active_session.id[:8]} started.")
         return True
 
     if cmd == "/resume":
@@ -147,22 +97,16 @@ async def _handle_session_cmd(
         if not target:
             print("Usage: /resume <session_id>")
             return True
-        session = current["session"]
-        session.updated_at = datetime.now()
-        await store.save(session)
-        old_id = session.id[:8]
-        saved = await store.load(target)
-        if saved is None:
+        session = runtime.active_session
+        if session:
+            await runtime._session_manager.save_session()
+            print(f"Session {session.id[:8]} saved.")
+        success = await runtime.switch_session(target)
+        if not success:
             print(f"Session '{target}' not found.")
             return True
-        await saved.restore_context(
-            count_tokens=client.count_tokens,
-            token_limit=config.max_tokens,
-            summarize_fn=summarize_fn,
-        )
-        agent.switch_session(saved)
-        current["session"] = saved
-        print(f"Session {old_id} saved. Resumed session {target[:8]}.")
+        current["session"] = runtime.active_session
+        print(f"Resumed session {target[:8]}.")
         return True
 
     if cmd in ("/title", "/name"):
@@ -170,31 +114,26 @@ async def _handle_session_cmd(
         if not title:
             print("Usage: /title <name>")
             return True
-        current["session"].title = title
+        runtime.active_session.title = title
         print(f"Session renamed to \"{title}\".")
         return True
 
     return False
 
 
-async def main() -> None:
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    config = Config()
-    client = OpenAIClient(config)
-    registry = ToolRegistry()
-    await registry.load_config(config.mcp_config_path)
+async def run_repl(
+    config: Config,
+    client: OpenAIClient,
+    registry: ToolRegistry,
+    runtime: RuntimeAPI,
+) -> None:
+    await _resolve_session(runtime, config, client)
 
-    local_provider = LocalToolProvider()
-    register_builtin_tools(local_provider)
-    registry.add_provider("__builtin__", local_provider)
-
-    summarize_fn = _make_summarize_fn(client)
-
-    store = JSONLSessionStore()
-    session = await _resolve_session(store, config, client, summarize_fn)
-
-    agent = Agent(client, registry, session)
-    await agent.start()
+    session = runtime.active_session
+    if session and session.title:
+        print(f"Agent Harness v2 — session \"{session.title}\" ({session.id[:8]})")
+    else:
+        print("Agent Harness v2 — type 'exit' or 'quit' to stop.")
 
     all_tools = registry.list_tools()
     if all_tools:
@@ -206,12 +145,7 @@ async def main() -> None:
     else:
         logger.warning("No tools available.")
 
-    if session.title:
-        print(f"Agent Harness v2 — session \"{session.title}\" ({session.id[:8]})")
-    else:
-        print("Agent Harness v2 — type 'exit' or 'quit' to stop.")
-
-    current = {"session": session}
+    current = {"session": runtime.active_session}
 
     try:
         while True:
@@ -225,25 +159,155 @@ async def main() -> None:
                 continue
             if line.lower() in ("exit", "quit"):
                 break
-            if await _handle_session_cmd(line, current, store, config, client, agent, summarize_fn):
+
+            # Session commands still handled locally
+            if await _handle_session_cmd(line, current, runtime, config, client):
                 continue
 
-            result = await agent.run(line)
+            # Submit through RuntimeAPI (non-blocking)
+            await runtime.submit_prompt(line)
 
-            s = current["session"]
-            if s.title is None and result.content:
-                s.title = line[:50] + ("..." if len(line) > 50 else "")
+            # For REPL: wait for result by subscribing to EventBus
+            result_event = asyncio.Event()
+            result_content = []
 
-            print(result.content)
-            if result.forced:
-                print(f"\n[Max tool iterations ({result.iterations}) reached. Forced response.]")
-            print(f"[{agent.context.total_tokens}/{config.max_tokens} tokens]")
+            async def _on_complete(event):
+                result_content.append(event.content)
+                result_event.set()
+
+            await runtime.event_bus.subscribe("ResponseComplete", _on_complete)
+
+            try:
+                await asyncio.wait_for(result_event.wait(), timeout=300.0)
+                if result_content:
+                    print(result_content[0])
+                    s = runtime.active_session
+                    if s and s.title is None:
+                        s.title = line[:50] + ("..." if len(line) > 50 else "")
+            except asyncio.TimeoutError:
+                print("[Timeout waiting for response]")
+            finally:
+                await runtime.event_bus.unsubscribe("ResponseComplete", _on_complete)
     finally:
-        session = current["session"]
-        session.updated_at = datetime.now()
-        await store.save(session)
-        print(f"\nSession saved: {session.id[:8]}")
-        await agent.shutdown()
+        await runtime.shutdown()
+
+
+async def run_worker(
+    config: Config,
+    client: OpenAIClient,
+    registry: ToolRegistry,
+    worker_count: int,
+) -> None:
+    runtime = RuntimeAPI(config, client, registry)
+    await runtime.start()
+
+    from jobqueue.manager import QueueManager
+    queue_manager = QueueManager()
+    await queue_manager.start()
+
+    worker_tasks = []
+    shutdown_event = asyncio.Event()
+
+    def _handle_sig() -> None:
+        shutdown_event.set()
+
+    loop = asyncio.get_event_loop()
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        try:
+            loop.add_signal_handler(sig, _handle_sig)
+        except NotImplementedError:
+            pass
+
+    async def _worker(worker_id: int) -> None:
+        logger.info("Worker %d started", worker_id)
+        while not shutdown_event.is_set():
+            try:
+                job = await queue_manager.wait_for_job()
+                if job is None:
+                    continue
+                logger.info("Worker %d processing job %s", worker_id, job.short_id)
+                await runtime.submit_prompt(job.prompt)
+                # Worker mode needs to wait for completion
+                # Poll the scheduler until turn completes
+                while runtime.is_busy:
+                    await asyncio.sleep(0.5)
+                await queue_manager.complete_job(
+                    job.id,
+                    runtime.active_session.context._messages[-1].content
+                    if runtime.active_session else "",
+                )
+                logger.info(
+                    "Worker %d completed job %s",
+                    worker_id, job.short_id,
+                )
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.exception("Worker %d error: %s", worker_id, e)
+
+    for i in range(worker_count):
+        task = asyncio.create_task(_worker(i))
+        worker_tasks.append(task)
+
+    await shutdown_event.wait()
+    logger.info("Shutting down workers...")
+    for task in worker_tasks:
+        task.cancel()
+    await asyncio.gather(*worker_tasks, return_exceptions=True)
+    await queue_manager.shutdown()
+    await runtime.shutdown()
+
+
+async def run_tui(
+    config: Config,
+    client: OpenAIClient,
+    registry: ToolRegistry,
+) -> None:
+    runtime = RuntimeAPI(config, client, registry)
+    await runtime.start()
+
+    from tui.app import AgentHarnessTUI
+    app = AgentHarnessTUI(runtime=runtime)
+
+    try:
+        await app.run_async()
+    finally:
+        await runtime.shutdown()
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="AgentHarness")
+    parser.add_argument("--tui", action="store_true", help="Launch Textual TUI")
+    parser.add_argument("--worker", action="store_true", help="Run in worker mode")
+    parser.add_argument("--workers", type=int, default=1, help="Number of worker tasks")
+    parser.add_argument("--queue-path", type=str, default=None, help="Path to queue SQLite db")
+    parser.add_argument("--resume", type=str, default=None, help="Session ID to resume")
+    return parser.parse_args()
+
+
+async def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    args = _parse_args()
+    config = Config()
+    client = OpenAIClient(config)
+    registry = ToolRegistry()
+    await registry.load_config(config.mcp_config_path)
+
+    local_provider = LocalToolProvider()
+    register_builtin_tools(local_provider)
+    registry.add_provider("__builtin__", local_provider)
+
+    if args.worker:
+        await run_worker(config, client, registry, args.workers)
+    elif args.tui:
+        await run_tui(config, client, registry)
+    else:
+        runtime = RuntimeAPI(config, client, registry)
+        await runtime.start()
+        try:
+            await run_repl(config, client, registry, runtime)
+        finally:
+            await runtime.shutdown()
 
 
 if __name__ == "__main__":
