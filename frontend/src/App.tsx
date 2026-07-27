@@ -1,5 +1,7 @@
 import { Box, Text, useInput } from 'ink';
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 import { RpcClient } from './rpc/client.js';
 import { createStore } from './state/store.js';
 import { handleEvent } from './state/reducers.js';
@@ -9,10 +11,11 @@ import StatsBar from './ui/components/StatsBar.js';
 import ErrorBar from './ui/components/ErrorBar.js';
 
 const PYTHON_COMMAND = process.platform === 'win32' ? 'python' : 'python3';
+const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 export default function App() {
   const [store] = useState(() => createStore());
-  const [client] = useState(() => new RpcClient(PYTHON_COMMAND, ['main.py', '--rpc']));
+  const [client] = useState(() => new RpcClient(PYTHON_COMMAND, [resolve(PROJECT_ROOT, 'main.py'), '--rpc']));
   const [connected, setConnected] = useState(false);
   const [showSessionPicker, setShowSessionPicker] = useState(false);
   const stateRef = useRef(store.getState());
