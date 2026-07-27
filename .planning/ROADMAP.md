@@ -97,7 +97,7 @@ Plans:
 **Cross-cutting constraints:** "StatsPanel is visible and shows data", "Messages are visually distinct by type"
 
 Plans:
-- [ ] 08-01-PLAN.md — StatsPanel Widget + Theme Foundation (Wave 1)
+- [x] 08-01-PLAN.md — StatsPanel Widget + Theme Foundation (Wave 1)
 - [x] 08-02-PLAN.md — Message Card Bifurcation (Wave 1) — Subtle dark bg on assistant messages
 - [ ] 08-03-PLAN.md — Layout Restructure + Stats Wiring (Wave 2)
 
