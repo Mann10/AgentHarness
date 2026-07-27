@@ -91,6 +91,25 @@ class RuntimeAPI:
         """List all saved sessions."""
         return await self._session_manager.list_sessions()
 
+    async def create_session(self) -> Session:
+        """Create a new session and set it as active. Delegates to SessionManager."""
+        session = await self._session_manager.create_session(
+            system_prompt=self._config.system_prompt,
+            count_tokens=self._client.count_tokens,
+            token_limit=self._config.max_tokens,
+            summarize_fn=self._summarize_fn,
+        )
+        await self._create_agent()
+        return session
+
+    async def delete_session(self, session_id: str) -> bool:
+        """Delete a session. Returns True if deleted. Delegates to SessionManager."""
+        summaries = await self._session_manager.list_sessions()
+        if not any(s.id == session_id for s in summaries):
+            return False
+        await self._session_manager.delete_session(session_id)
+        return True
+
     async def switch_session(self, session_id: str) -> bool:
         """Switch to a different session by ID.
 

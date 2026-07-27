@@ -25,6 +25,7 @@ class ToolCallEvent(HarnessEvent):
     session_id: str = ""
     tool_name: str = ""
     arguments: dict | None = None
+    tool_call_id: str = ""
 
 
 @dataclass
@@ -33,6 +34,7 @@ class ToolResultEvent(HarnessEvent):
     session_id: str = ""
     tool_name: str = ""
     result: str = ""
+    tool_call_id: str = ""
 
 
 @dataclass
@@ -58,10 +60,19 @@ class CancelledEvent(HarnessEvent):
     session_id: str = ""
 
 
+@dataclass
+class TokenProduced(HarnessEvent):
+    """Emitted for each chunk of token output during streaming."""
+    session_id: str = ""
+    chunk: str = ""
+    request_id: str = ""
+
+
 # Event type name constants (for subscriber registration)
 EVENT_TURN_STARTED = "TurnStarted"
 EVENT_TOOL_CALL = "ToolCallEvent"
 EVENT_TOOL_RESULT = "ToolResultEvent"
+EVENT_TOKEN_PRODUCED = "TokenProduced"
 EVENT_RESPONSE_COMPLETE = "ResponseComplete"
 EVENT_ERROR = "ErrorEvent"
 EVENT_CANCELLED = "CancelledEvent"
