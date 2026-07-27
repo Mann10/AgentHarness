@@ -12,7 +12,7 @@ const PYTHON_COMMAND = process.platform === 'win32' ? 'python' : 'python3';
 
 export default function App() {
   const [store] = useState(() => createStore());
-  const [client] = useState(() => new RpcClient(PYTHON_COMMAND, ['-m', 'agentharness', '--rpc']));
+  const [client] = useState(() => new RpcClient(PYTHON_COMMAND, ['main.py', '--rpc']));
   const [connected, setConnected] = useState(false);
   const [showSessionPicker, setShowSessionPicker] = useState(false);
   const stateRef = useRef(store.getState());
