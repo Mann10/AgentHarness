@@ -125,7 +125,9 @@ _PAYLOAD_EXTRACTORS: dict[str, callable] = {
 
 def _write_json(obj: Any) -> None:
     """Serialize object to JSON and write as NDJSON to stdout, then flush."""
-    sys.stdout.write(json.dumps(obj, default=str) + "\n")
+    from dataclasses import asdict, is_dataclass
+    data = asdict(obj) if is_dataclass(obj) else obj
+    sys.stdout.write(json.dumps(data, default=str) + "\n")
     sys.stdout.flush()
 
 
