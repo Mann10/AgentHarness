@@ -1,11 +1,25 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+last_updated: "2026-07-27T18:08:35.000Z"
+progress:
+  total_phases: 8
+  completed_phases: 2
+  total_plans: 17
+  completed_plans: 12
+  percent: 71
+---
+
 # Project State
 
-**Updated:** 2026-07-27
-**Status:** active
+**Updated:** 2026-07-27 (18:08)
+**Status:** Executing Phase 08
 
 ## Current Phase
 
-**Phase 7: TUI Visual Overhaul** — Context gathered
+**Phase 8: TUI Conversation Layout** — Planned (3 plans, 2 waves)
 
 ## Progress
 
@@ -15,15 +29,21 @@
 - [x] Phase 4: Textual TUI + Queue + Worker — Complete
 - [x] Phase 5: Harness Runtime — Complete (8 plans)
 - [x] Phase 6: Rich Textual TUI — Complete (3 plans)
-- [ ] Phase 7: TUI Visual Overhaul — Context gathered
+- [x] Phase 7: TUI Visual Overhaul — Complete (3 plans)
+- [ ] Phase 8: TUI Conversation Layout — Planned (3 plans in 2 waves)
 
 ## Phase 7 Progress
 
-- [x] Context gathered — ready for planning
-- [x] Plans created — 3 plans in 2 waves
-- [ ] 07-01-PLAN.md — Theme + Layout Foundation (Wave 1)
-- [ ] 07-02-PLAN.md — Inline Tool Calls (Wave 1)
-- [ ] 07-03-PLAN.md — Input Bar + Indicators + Wiring (Wave 2)
+- [x] 07-01-PLAN.md — Theme + Layout Foundation — Claude Code-inspired theme, minimal layout, removed sidebar/statusbar
+- [x] 07-02-PLAN.md — Inline Tool Calls — InlineToolCall widget replacing ToolCallCard, compact inline rendering
+- [x] 07-03-PLAN.md — Input Bar + Indicators + Wiring — Minimal input bar, tool/job indicators, obsolete file removal
+
+## Phase 8 Progress
+
+- [x] Context gathered (6 decisions) — Ready for planning
+- [ ] 08-01-PLAN.md — StatsPanel Widget + Theme Foundation (Wave 1)
+- [x] 08-02-PLAN.md — Message Card Bifurcation (Wave 1) — Subtle dark bg on assistant messages via --assistant-bg CSS class
+- [ ] 08-03-PLAN.md — Layout Restructure + Stats Wiring (Wave 2)
 
 ## Phase 6 Progress
 
@@ -43,6 +63,9 @@
 - [x] **Plan 07: main.py RuntimeAPI Integration** — refactored from inline wiring to RuntimeAPI orchestrator (1 task, 1 commit)
 
 ## Notes
+
+- Phase 8 context captured: 6 decisions covering header removal, launch behavior, right stats panel, message bifurcation, tool calls, and window background
+- Phase 8 does not need research — scope is layout-only, no new libraries or APIs
 
 - Session store uses project-local `.agentharness/` dir
 - Queue uses `.agentharness/queue.db` for SQLite-backed persistence

@@ -1,6 +1,6 @@
 # AgentHarness Roadmap
 
-**Updated:** 2026-07-26
+**Updated:** 2026-07-27
 
 ## Phases
 
@@ -81,6 +81,25 @@ Plans:
 - [ ] 07-01-PLAN.md — Theme + Layout Foundation (Wave 1)
 - [ ] 07-02-PLAN.md — Inline Tool Calls (Wave 1)
 - [ ] 07-03-PLAN.md — Input Bar + Indicators + Wiring (Wave 2)
+
+---
+
+### Phase 8: TUI Conversation Layout ◆
+
+**Goal:** Transform the conversation area so user prompts and AI responses are visually distinct in a clear chronological sequence. Add a right-side stats panel (tokens/time/model). Remove the header. Soften the window background.
+
+**Key decisions:** No header, straight to conversation, always-visible right panel, message separation via background color, inline tool calls kept from Phase 7, softer dark background.
+
+**Plans:** 3 plans in 2 waves
+
+**Wave 2 *(blocked on Wave 1 completion)***
+
+**Cross-cutting constraints:** "StatsPanel is visible and shows data", "Messages are visually distinct by type"
+
+Plans:
+- [ ] 08-01-PLAN.md — StatsPanel Widget + Theme Foundation (Wave 1)
+- [x] 08-02-PLAN.md — Message Card Bifurcation (Wave 1) — Subtle dark bg on assistant messages
+- [ ] 08-03-PLAN.md — Layout Restructure + Stats Wiring (Wave 2)
 
 ---
 
