@@ -122,6 +122,7 @@ class AgentHarnessTUI(App):
     async def _on_turn_started(self, event: TurnStarted) -> None:
         _tui_log.debug("_on_turn_started fired: prompt=%s", event.prompt[:60])
         self._tool_call_count = 0
+        self._turn_start_time = event.timestamp  # record turn start time for response timing
         try:
             conv = self.query_one(ConversationView)
             conv.add_user_message(event.prompt)
@@ -131,6 +132,8 @@ class AgentHarnessTUI(App):
             tool_indicator.update("")
             job_indicator = self.query_one("#job-indicator", Static)
             job_indicator.update("")
+            # Update stats on each turn (session name, model)
+            self._update_stats_panel_session()
         except Exception:
             _tui_log.exception("_on_turn_started failed")
             raise
@@ -159,6 +162,8 @@ class AgentHarnessTUI(App):
             inp.update_processing(False)
             indicator = self.query_one("#tool-indicator", Static)
             indicator.update("")
+            # Update stats after response (token count, response time)
+            self._update_stats_panel_after_response()
 
     async def _on_error(self, event: ErrorEvent) -> None:
         _tui_log.debug("_on_error fired: error=%s", event.error[:200])
