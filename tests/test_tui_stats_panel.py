@@ -46,7 +46,7 @@ async def test_stats_panel_updates_token_count():
         panel.update_token_count(1234)
         rendered = panel.render()
         text = rendered.plain if hasattr(rendered, "plain") else str(rendered)
-        assert "1234" in text
+        assert "1,234" in text
 
 
 @pytest.mark.asyncio
