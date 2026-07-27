@@ -56,6 +56,34 @@ Plans:
 
 ---
 
+### Phase 6: Rich Textual TUI
+
+**Goal:** Transform the minimal Textual TUI into a professional-grade terminal interface with rich components — conversation view with Markdown rendering, inline collapsible tool call cards, job queue sidebar, tool call timeline, session picker modal, and enhanced status/input bars. All widgets driven by the existing EventBus.
+
+**Deliverables:** `tui/widgets/conversation_view.py`, `tui/widgets/message_card.py`, `tui/widgets/tool_call_card.py`, `tui/widgets/job_queue_sidebar.py`, `tui/widgets/tool_timeline.py`, `tui/screens/session_picker.py`, enhanced `status_bar.py`/`input_bar.py`, updated `app.py`
+
+**Plans:** 3 plans in 3 waves
+
+Plans:
+- [x] 06-01-PLAN.md — Conversation Core (events, MessageCard, ToolCallCard, ConversationView)
+- [x] 06-02-PLAN.md — Sidebar, Timeline, Enhanced Bars
+- [x] 06-03-PLAN.md — Session Picker + Cleanup
+
+---
+
+### Phase 7: TUI Visual Overhaul
+
+**Goal:** Transform the existing Textual TUI (Phase 6) from functional-but-minimal to professional-grade, Claude Code-inspired terminal interface. Focus is on visual design, layout simplification, and inline content rendering.
+
+**Plans:** 3 plans in 2 waves
+
+Plans:
+- [ ] 07-01-PLAN.md — Theme + Layout Foundation (Wave 1)
+- [ ] 07-02-PLAN.md — Inline Tool Calls (Wave 1)
+- [ ] 07-03-PLAN.md — Input Bar + Indicators + Wiring (Wave 2)
+
+---
+
 ### Future (backlog)
 
 - Tool system hardening (remove_provider, health-check, reconnect)

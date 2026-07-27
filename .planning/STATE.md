@@ -1,11 +1,11 @@
 # Project State
 
-**Updated:** 2026-07-26T21:22Z
+**Updated:** 2026-07-27
 **Status:** active
 
 ## Current Phase
 
-**Phase 5: Harness Runtime** — Complete (All 8 plans finished)
+**Phase 7: TUI Visual Overhaul** — Context gathered
 
 ## Progress
 
@@ -14,6 +14,22 @@
 - [x] Phase 3: Fix Summarization — Complete
 - [x] Phase 4: Textual TUI + Queue + Worker — Complete
 - [x] Phase 5: Harness Runtime — Complete (8 plans)
+- [x] Phase 6: Rich Textual TUI — Complete (3 plans)
+- [ ] Phase 7: TUI Visual Overhaul — Context gathered
+
+## Phase 7 Progress
+
+- [x] Context gathered — ready for planning
+- [x] Plans created — 3 plans in 2 waves
+- [ ] 07-01-PLAN.md — Theme + Layout Foundation (Wave 1)
+- [ ] 07-02-PLAN.md — Inline Tool Calls (Wave 1)
+- [ ] 07-03-PLAN.md — Input Bar + Indicators + Wiring (Wave 2)
+
+## Phase 6 Progress
+
+- [x] Plan 01: Conversation Core — events, MessageCard, ToolCallCard, ConversationView, app.py layout
+- [x] Plan 02: Sidebar, Timeline, Enhanced Bars — JobQueueSidebar, ToolTimeline, enhanced StatusBar/InputBar
+- [x] Plan 03: Session Picker + Cleanup — SessionPicker screen, old widget removal
 
 ## Phase 5 Progress
 
