@@ -3,18 +3,18 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-07-27T12:40:44.845Z"
+last_updated: "2026-07-27T18:14:17.000Z"
 progress:
   total_phases: 8
   completed_phases: 2
   total_plans: 17
-  completed_plans: 13
-  percent: 76
+  completed_plans: 14
+  percent: 82
 ---
 
 # Project State
 
-**Updated:** 2026-07-27 (18:08)
+**Updated:** 2026-07-27 (18:14)
 **Status:** Executing Phase 08
 
 ## Current Phase
@@ -43,7 +43,7 @@ progress:
 - [x] Context gathered (6 decisions) — Ready for planning
 - [x] 08-01-PLAN.md — StatsPanel Widget + Theme Foundation (Wave 1) — StatsPanel widget, softer dark theme, StatsPanel CSS, MessageCard background CSS
 - [x] 08-02-PLAN.md — Message Card Bifurcation (Wave 1) — Subtle dark bg on assistant messages via --assistant-bg CSS class
-- [ ] 08-03-PLAN.md — Layout Restructure + Stats Wiring (Wave 2)
+- [x] 08-03-PLAN.md — Layout Restructure + Stats Wiring (Wave 2) — Header removed, split layout with StatsPanel, stats tracking wired
 
 ## Phase 6 Progress
 
@@ -66,6 +66,8 @@ progress:
 
 - Phase 8 context captured: 6 decisions covering header removal, launch behavior, right stats panel, message bifurcation, tool calls, and window background
 - Phase 8 does not need research — scope is layout-only, no new libraries or APIs
+- [D-01] Header removed — no Header widget in compose(), maximizes conversation space
+- [D-03] StatsPanel wired — session name, token count, response time, model name displayed in right-side panel
 
 - Session store uses project-local `.agentharness/` dir
 - Queue uses `.agentharness/queue.db` for SQLite-backed persistence
