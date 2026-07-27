@@ -11,7 +11,7 @@ import StatsBar from './ui/components/StatsBar.js';
 import ErrorBar from './ui/components/ErrorBar.js';
 
 const PYTHON_COMMAND = process.platform === 'win32' ? 'python' : 'python3';
-const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 export default function App() {
   const [store] = useState(() => createStore());
