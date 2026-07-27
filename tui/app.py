@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from datetime import datetime
 
 from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal
-from textual.widgets import Header, Static
+from textual.widgets import Static
 
 from harness import RuntimeAPI
 from harness.event_bus import EventBus
@@ -27,6 +28,7 @@ from harness.events import (
 from tui.screens.session_picker import SessionPicker
 from tui.widgets.conversation_view import ConversationView
 from tui.widgets.input_bar import InputBar
+from tui.widgets.stats_panel import StatsPanel
 
 logger = logging.getLogger(__name__)
 
@@ -43,15 +45,18 @@ class AgentHarnessTUI(App):
     BINDINGS = [("ctrl+s", "open_sessions", "Sessions")]
     CSS_PATH = "theme.tcss"
 
-    def __init__(self, runtime: RuntimeAPI) -> None:
+    def __init__(self, runtime: RuntimeAPI, model_name: str = "") -> None:
         super().__init__()
         self._runtime = runtime
+        self._model_name = model_name or "unknown"
         self._last_result: str | None = None
         self._tool_call_count: int = 0
+        self._turn_start_time: datetime | None = None
 
     def compose(self) -> ComposeResult:
-        yield Header(show_clock=True)
-        yield ConversationView(id="conversation-panel")
+        with Horizontal(id="main-content"):
+            yield ConversationView(id="conversation-panel")
+            yield StatsPanel(id="stats-panel")
         with Horizontal(id="bottom-bar"):
             yield Static(id="tool-indicator")
             yield Static(id="job-indicator")
@@ -81,6 +86,30 @@ class AgentHarnessTUI(App):
         bus = self._runtime.event_bus
         await self._subscribe_to_events(bus)
         self.query_one(InputBar).focus()
+        # Initialize StatsPanel with session name and model
+        self._update_stats_panel_session()
+
+    def _update_stats_panel_session(self) -> None:
+        """Update StatsPanel with current session name and model."""
+        panel = self.query_one("#stats-panel", StatsPanel)
+        session = self._runtime.active_session
+        name = session.title if session and session.title else "Untitled"
+        panel.update_session_name(name)
+        panel.update_model_name(self._model_name)
+
+    def _update_stats_panel_after_response(self) -> None:
+        """Update StatsPanel with token count and response time after a response completes."""
+        panel = self.query_one("#stats-panel", StatsPanel)
+        session = self._runtime.active_session
+        if session:
+            panel.update_token_count(session.context.total_tokens)
+        if self._turn_start_time:
+            from datetime import datetime, timezone
+
+            now = datetime.now(timezone.utc)
+            elapsed = (now - self._turn_start_time).total_seconds()
+            panel.update_response_time(f"{elapsed:.1f}s")
+            self._turn_start_time = None
 
     async def _subscribe_to_events(self, bus: EventBus) -> None:
         await bus.subscribe(EVENT_TURN_STARTED, self._on_turn_started)
