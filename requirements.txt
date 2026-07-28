@@ -3,4 +3,3 @@ python-dotenv>=1.0.0
 tiktoken>=0.7.0
 mcp>=1.27,<2
 graphifyy>=0.9
-textual>=1.0.0

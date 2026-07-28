@@ -258,23 +258,6 @@ async def run_worker(
     await runtime.shutdown()
 
 
-async def run_tui(
-    config: Config,
-    client: OpenAIClient,
-    registry: ToolRegistry,
-) -> None:
-    runtime = RuntimeAPI(config, client, registry)
-    await runtime.start()
-
-    from tui.app import AgentHarnessTUI
-    app = AgentHarnessTUI(runtime=runtime, model_name=config.model)
-
-    try:
-        await app.run_async()
-    finally:
-        await runtime.shutdown()
-
-
 async def run_rpc(config: Config, client: OpenAIClient, registry: ToolRegistry) -> None:
     """Start RuntimeAPI and enter JSON-RPC server mode over stdin/stdout.
 
@@ -299,7 +282,6 @@ async def run_rpc(config: Config, client: OpenAIClient, registry: ToolRegistry) 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="AgentHarness")
-    parser.add_argument("--tui", action="store_true", help="Launch Textual TUI")
     parser.add_argument("--rpc", action="store_true", help="Start in JSON-RPC server mode")
     parser.add_argument("--worker", action="store_true", help="Run in worker mode")
     parser.add_argument("--workers", type=int, default=1, help="Number of worker tasks")
@@ -324,8 +306,6 @@ async def main() -> None:
         await run_worker(config, client, registry, args.workers)
     elif args.rpc:
         await run_rpc(config, client, registry)
-    elif args.tui:
-        await run_tui(config, client, registry)
     else:
         runtime = RuntimeAPI(config, client, registry)
         await runtime.start()

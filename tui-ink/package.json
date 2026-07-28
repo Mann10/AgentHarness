@@ -1,0 +1,27 @@
+{
+  "name": "agent-harness-tui",
+  "version": "0.1.0",
+  "description": "AgentHarness TUI — Ink-based terminal UI for agent orchestration",
+  "type": "module",
+  "bin": {
+    "ah-tui": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm --outDir dist --external react --external ink",
+    "dev": "tsup src/index.tsx --format esm --outDir dist --external react --external ink --watch",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ink": "^7.1.0",
+    "react": "^19.0.0",
+    "undici": "^7.0.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.6.0"
+  }
+}
