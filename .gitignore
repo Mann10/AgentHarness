@@ -6,3 +6,5 @@ graphify-out/cache/
 .agentharness/
 .opencode
 .planning
+.vscode/
+agent_harness_debug.log

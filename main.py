@@ -258,26 +258,31 @@ async def run_worker(
     await runtime.shutdown()
 
 
-async def run_tui(
-    config: Config,
-    client: OpenAIClient,
-    registry: ToolRegistry,
-) -> None:
+async def run_rpc(config: Config, client: OpenAIClient, registry: ToolRegistry) -> None:
+    """Start RuntimeAPI and enter JSON-RPC server mode over stdin/stdout.
+
+    RPC mode is designed for the TypeScript TUI subprocess workflow (D-16, D-17).
+    All output must be NDJSON on stdout — stderr for logging only.
+    """
     runtime = RuntimeAPI(config, client, registry)
     await runtime.start()
 
-    from tui.app import AgentHarnessTUI
-    app = AgentHarnessTUI(runtime=runtime)
+    from backend.rpc.server import RPCServer
+    server = RPCServer(runtime)
 
     try:
-        await app.run_async()
+        await server.start()
+        # Keep running until stdin closes or shutdown is requested
+        while server._running:
+            await asyncio.sleep(1.0)
     finally:
+        await server.shutdown()
         await runtime.shutdown()
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="AgentHarness")
-    parser.add_argument("--tui", action="store_true", help="Launch Textual TUI")
+    parser.add_argument("--rpc", action="store_true", help="Start in JSON-RPC server mode")
     parser.add_argument("--worker", action="store_true", help="Run in worker mode")
     parser.add_argument("--workers", type=int, default=1, help="Number of worker tasks")
     parser.add_argument("--queue-path", type=str, default=None, help="Path to queue SQLite db")
@@ -299,8 +304,8 @@ async def main() -> None:
 
     if args.worker:
         await run_worker(config, client, registry, args.workers)
-    elif args.tui:
-        await run_tui(config, client, registry)
+    elif args.rpc:
+        await run_rpc(config, client, registry)
     else:
         runtime = RuntimeAPI(config, client, registry)
         await runtime.start()
@@ -311,4 +316,10 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    # File logger to capture all debug output (hidden by TUI)
+    _root_logger = logging.getLogger()
+    _root_logger.setLevel(logging.DEBUG)
+    _fh = logging.FileHandler("agent_harness_debug.log", mode="w", encoding="utf-8")
+    _fh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s"))
+    _root_logger.addHandler(_fh)
     asyncio.run(main())

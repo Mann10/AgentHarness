@@ -1,6 +1,6 @@
 # AgentHarness Roadmap
 
-**Updated:** 2026-07-26
+**Updated:** 2026-07-27
 
 ## Phases
 
@@ -53,6 +53,53 @@ Plans:
 - [x] 05-05-PLAN.md — RuntimeAPI + harness/__init__.py
 - [ ] 05-06-PLAN.md — TUI refactor to pure view layer
 - [ ] 05-07-PLAN.md — main.py Runtime wiring
+
+---
+
+### Phase 6: Rich Textual TUI
+
+**Goal:** Transform the minimal Textual TUI into a professional-grade terminal interface with rich components — conversation view with Markdown rendering, inline collapsible tool call cards, job queue sidebar, tool call timeline, session picker modal, and enhanced status/input bars. All widgets driven by the existing EventBus.
+
+**Deliverables:** `tui/widgets/conversation_view.py`, `tui/widgets/message_card.py`, `tui/widgets/tool_call_card.py`, `tui/widgets/job_queue_sidebar.py`, `tui/widgets/tool_timeline.py`, `tui/screens/session_picker.py`, enhanced `status_bar.py`/`input_bar.py`, updated `app.py`
+
+**Plans:** 3 plans in 3 waves
+
+Plans:
+- [x] 06-01-PLAN.md — Conversation Core (events, MessageCard, ToolCallCard, ConversationView)
+- [x] 06-02-PLAN.md — Sidebar, Timeline, Enhanced Bars
+- [x] 06-03-PLAN.md — Session Picker + Cleanup
+
+---
+
+### Phase 7: TUI Visual Overhaul
+
+**Goal:** Transform the existing Textual TUI (Phase 6) from functional-but-minimal to professional-grade, Claude Code-inspired terminal interface. Focus is on visual design, layout simplification, and inline content rendering.
+
+**Plans:** 3 plans in 2 waves
+
+Plans:
+- [ ] 07-01-PLAN.md — Theme + Layout Foundation (Wave 1)
+- [ ] 07-02-PLAN.md — Inline Tool Calls (Wave 1)
+- [ ] 07-03-PLAN.md — Input Bar + Indicators + Wiring (Wave 2)
+
+---
+
+### Phase 8: TUI Conversation Layout ◆
+
+**Goal:** Transform the conversation area so user prompts and AI responses are visually distinct in a clear chronological sequence. Add a right-side stats panel (tokens/time/model). Remove the header. Soften the window background.
+
+**Key decisions:** No header, straight to conversation, always-visible right panel, message separation via background color, inline tool calls kept from Phase 7, softer dark background.
+
+**Plans:** 3 plans in 2 waves
+
+**Wave 2 *(blocked on Wave 1 completion)***
+
+**Cross-cutting constraints:** "StatsPanel is visible and shows data", "Messages are visually distinct by type"
+
+Plans:
+- [x] 08-01-PLAN.md — StatsPanel Widget + Theme Foundation (Wave 1)
+- [x] 08-02-PLAN.md — Message Card Bifurcation (Wave 1) — Subtle dark bg on assistant messages
+- [x] 08-03-PLAN.md — Layout Restructure + Stats Wiring (Wave 2)
 
 ---
 
