@@ -2,9 +2,14 @@
 __pycache__/
 venv
 .obsidian/
-graphify-out/cache/
 .agentharness/
-.opencode
-.planning
+.opencode/
+.planning/
 .vscode/
+.pytest_cache/
+plans/
+graphify-out/
 agent_harness_debug.log
+dist/
+*.pyc
+*.log
