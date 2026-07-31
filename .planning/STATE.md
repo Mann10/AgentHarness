@@ -2,7 +2,7 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 11 context gathered
+status: Phase 11 UI-SPEC approved
 last_updated: "2026-07-31T17:13:07.669Z"
 progress:
   total_phases: 11
@@ -15,15 +15,18 @@ progress:
 # Project State
 
 **Updated:** 2026-07-31
-**Status:** Phase 11 context gathered
+**Status:** Phase 11 UI-SPEC approved
 
 ## Current Phase
 
-**Phase 11: Session Popup & Panel Layout** — Context gathered (16 decisions D-01..D-16)
+**Phase 11: Session Popup & Panel Layout** — UI-SPEC approved
 
 ## Phase 11 Progress
 
 - [x] Context gathered (16 decisions D-01..D-16) — Ready for planning
+- [x] Research complete — 11-RESEARCH.md
+- [x] Validation strategy — 11-VALIDATION.md
+- [x] UI design contract approved (6/6 dimensions) — 11-UI-SPEC.md
 - [x] Phase 11 added to roadmap
 
 ## Progress
