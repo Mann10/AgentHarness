@@ -103,19 +103,19 @@ Plans:
 
 ---
 
-### Phase 10: Token Streaming
+### Phase 10: Token Streaming ✓
 
 **Goal:** Complete the token streaming pipeline built in Phase 9 — implement `stream_chat()` in the LLM client and emit `TokenProduced` events from the agent so the TUI streams tokens live. Tool-call turns stay non-streaming; partial output on cancel/error is kept in the TUI only, marked truncated.
 
 **Canonical refs:** `.planning/phases/10-token-streaming/10-CONTEXT.md`
 
-**Plans:** 4 plans in 4 waves
+**Plans:** 4 plans in 4 waves — Complete 2026-07-31
 
 Plans:
-- [ ] 10-01-PLAN.md — LLM client streaming (StreamChunk contract + stream_chat implementation) — Wave 1
-- [ ] 10-02-PLAN.md — Agent TokenProduced emission (streaming loop, no partial persistence) — Wave 2
-- [ ] 10-03-PLAN.md — TUI truncation marker + auto-scroll (D-04/D-06, D-07 verified) — Wave 3
-- [ ] 10-04-PLAN.md — End-to-end human verification (checkpoint) — Wave 4
+- [x] 10-01-PLAN.md — LLM client streaming (StreamChunk contract + stream_chat implementation) — Wave 1
+- [x] 10-02-PLAN.md — Agent TokenProduced emission (streaming loop, no partial persistence) — Wave 2
+- [x] 10-03-PLAN.md — TUI truncation marker + auto-scroll (D-04/D-06, D-07 verified) — Wave 3
+- [x] 10-04-PLAN.md — End-to-end human verification (checkpoint) — Wave 4
 
 ---
 

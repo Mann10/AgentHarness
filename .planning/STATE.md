@@ -14,12 +14,12 @@ progress:
 
 # Project State
 
-**Updated:** 2026-07-27 (18:14)
-**Status:** Executing Phase 08
+**Updated:** 2026-07-31
+**Status:** Phase 10 complete
 
 ## Current Phase
 
-**Phase 8: TUI Conversation Layout** — Planned (3 plans, 2 waves)
+**Phase 10: Token Streaming** — Complete (4 plans, 4 waves, verified 2026-07-31)
 
 ## Progress
 
@@ -31,6 +31,15 @@ progress:
 - [x] Phase 6: Rich Textual TUI — Complete (3 plans)
 - [x] Phase 7: TUI Visual Overhaul — Complete (3 plans)
 - [ ] Phase 8: TUI Conversation Layout — Planned (3 plans in 2 waves)
+- [x] Phase 10: Token Streaming — Complete (4 plans in 4 waves)
+
+## Phase 10 Progress
+
+- [x] Context gathered (8 decisions D-01..D-08) — Ready for planning
+- [x] 10-01-PLAN.md — LLM client streaming (StreamChunk contract + stream_chat implementation) (Wave 1)
+- [x] 10-02-PLAN.md — Agent TokenProduced emission (streaming loop, no partial persistence) (Wave 2)
+- [x] 10-03-PLAN.md — TUI truncation marker + auto-scroll (D-04/D-06, D-07 verified) (Wave 3)
+- [x] 10-04-PLAN.md — End-to-end human verification (checkpoint) (Wave 4)
 
 ## Phase 7 Progress
 
@@ -64,7 +73,8 @@ progress:
 
 ## Notes
 
-- Phase 10 (Token Streaming) planning ran with `--skip-research`: no RESEARCH.md / VALIDATION.md produced by design. Nyquist validation skipped deliberately — gap is fully documented in 09-VERIFICATION.md (Phase 9 gap 1) and no new libraries/APIs are introduced (openai SDK streaming is already a dependency). 10-04's human end-to-end checkpoint is the functional validation substitute.
+- Phase 10 (Token Streaming) complete 2026-07-31: stream_chat() implemented, agent emits TokenProduced, TUI streams live tokens with truncation marker + auto-scroll, REPL batch unchanged (D-08). 43 pytest, typecheck 0 errors, human E2E verified. Closes 09-VERIFICATION Gap 1.
+- Phase 10 planning ran with `--skip-research`: no RESEARCH.md / VALIDATION.md produced by design. Nyquist validation skipped deliberately — gap is fully documented in 09-VERIFICATION.md (Phase 9 gap 1) and no new libraries/APIs are introduced (openai SDK streaming is already a dependency). 10-04's human end-to-end checkpoint is the functional validation substitute.
 - Phase 10 context captured (8 decisions D-01..D-08) in .planning/phases/10-token-streaming/10-CONTEXT.md
 
 - Phase 8 context captured: 6 decisions covering header removal, launch behavior, right stats panel, message bifurcation, tool calls, and window background
