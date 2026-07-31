@@ -20,6 +20,7 @@ interface AgentActions {
   appendToken: (chunk: string) => void
   addAssistantMessage: (content: string) => void
   completeAssistantMessage: (content: string) => void
+  truncateStreamingMessage: () => void
   addToolCall: (name: string, args: Record<string, unknown> | null, callId: string) => void
   updateToolResult: (callId: string, result: string) => void
   setToolCallError: (callId: string) => void
@@ -109,6 +110,17 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
         }
       }
       return { conversation: msgs, status: content ? "idle" : "idle" }
+    }),
+
+  truncateStreamingMessage: () =>
+    set((s) => {
+      const msgs = [...s.conversation]
+      const last = msgs[msgs.length - 1]
+      if (last && last.role === "assistant" && last.isStreaming) {
+        msgs[msgs.length - 1] = { ...last, isStreaming: false, truncated: true }
+        return { conversation: msgs, status: "idle" }
+      }
+      return { conversation: msgs }
     }),
 
   addToolCall: (name, args, callId) =>

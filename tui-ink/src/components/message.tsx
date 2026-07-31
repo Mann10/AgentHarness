@@ -30,6 +30,11 @@ export function MessageCard({ message }: MessageProps) {
           ) : (
             <Text color="white">{message.content}</Text>
           )}
+          {message.truncated && (
+            <Text color="yellow" dimColor italic>
+              {" "}(truncated)
+            </Text>
+          )}
         </Box>
       </Box>
     )

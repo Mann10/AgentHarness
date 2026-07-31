@@ -75,6 +75,7 @@ export interface Message {
   content: string
   timestamp: number
   isStreaming?: boolean
+  truncated?: boolean
 }
 
 export interface AgentState {

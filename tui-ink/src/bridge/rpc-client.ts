@@ -246,12 +246,14 @@ export class RpcClient {
       }
       case "error": {
         const p = payload as { session_id: string; error: string }
+        store.truncateStreamingMessage()
         store.addError(p.error)
         store.setStatus("idle")
         store.setBusy(false)
         break
       }
       case "cancelled": {
+        store.truncateStreamingMessage()
         store.addNotice("Cancelled")
         store.setStatus("idle")
         store.setBusy(false)
