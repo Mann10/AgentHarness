@@ -22,15 +22,7 @@ export function ConversationPanel({ focused }: ConversationPanelProps) {
       <Text bold underline>
         Conversation
       </Text>
-      <Box flexDirection="column" marginY={1}>
-        {conversation.length === 0 && (
-          <Text dimColor italic>
-            Type a message to start a conversation
-          </Text>
-        )}
-        {conversation.map((msg) => (
-          <MessageCard key={msg.id} message={msg} />
-        ))}
+      <Box flexDirection="column-reverse" flexGrow={1} marginY={1}>
         {status === "thinking" && conversation.length > 0 && (
           <Box>
             <Text color="yellow" dimColor>
@@ -44,6 +36,14 @@ export function ConversationPanel({ focused }: ConversationPanelProps) {
               ● processing...
             </Text>
           </Box>
+        )}
+        {[...conversation].reverse().map((msg) => (
+          <MessageCard key={msg.id} message={msg} />
+        ))}
+        {conversation.length === 0 && (
+          <Text dimColor italic>
+            Type a message to start a conversation
+          </Text>
         )}
       </Box>
     </Box>
