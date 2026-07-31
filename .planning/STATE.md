@@ -2,24 +2,29 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-last_updated: "2026-07-27T18:14:17.000Z"
+status: Phase 11 context gathered
+last_updated: "2026-07-31T17:13:07.669Z"
 progress:
-  total_phases: 8
-  completed_phases: 2
-  total_plans: 17
-  completed_plans: 14
+  total_phases: 11
+  completed_phases: 4
+  total_plans: 21
+  completed_plans: 18
   percent: 82
 ---
 
 # Project State
 
 **Updated:** 2026-07-31
-**Status:** Phase 10 complete
+**Status:** Phase 11 context gathered
 
 ## Current Phase
 
-**Phase 10: Token Streaming** — Complete (4 plans, 4 waves, verified 2026-07-31)
+**Phase 11: Session Popup & Panel Layout** — Context gathered (16 decisions D-01..D-16)
+
+## Phase 11 Progress
+
+- [x] Context gathered (16 decisions D-01..D-16) — Ready for planning
+- [x] Phase 11 added to roadmap
 
 ## Progress
 
@@ -32,6 +37,7 @@ progress:
 - [x] Phase 7: TUI Visual Overhaul — Complete (3 plans)
 - [ ] Phase 8: TUI Conversation Layout — Planned (3 plans in 2 waves)
 - [x] Phase 10: Token Streaming — Complete (4 plans in 4 waves)
+- [ ] Phase 11: Session Popup & Panel Layout — Context gathered (16 decisions D-01..D-16)
 
 ## Phase 10 Progress
 
@@ -73,6 +79,7 @@ progress:
 
 ## Notes
 
+- Phase 11 (Session Popup & Panel Layout) context captured 2026-07-31: 16 decisions D-01..D-16 in .planning/phases/11-session-popup-and-panel-layout/11-CONTEXT.md. Conversation becomes main panel, date/time panel on right (reverses 09-CONTEXT D-29), /session full-screen keyboard overlay to switch sessions (loads history — needs new backend sessions.get RPC), /new starts fresh via sessions.create with auto-title. Phase added to roadmap.
 - Phase 10 (Token Streaming) complete 2026-07-31: stream_chat() implemented, agent emits TokenProduced, TUI streams live tokens with truncation marker + auto-scroll, REPL batch unchanged (D-08). 43 pytest, typecheck 0 errors, human E2E verified. Closes 09-VERIFICATION Gap 1.
 - Phase 10 planning ran with `--skip-research`: no RESEARCH.md / VALIDATION.md produced by design. Nyquist validation skipped deliberately — gap is fully documented in 09-VERIFICATION.md (Phase 9 gap 1) and no new libraries/APIs are introduced (openai SDK streaming is already a dependency). 10-04's human end-to-end checkpoint is the functional validation substitute.
 - Phase 10 context captured (8 decisions D-01..D-08) in .planning/phases/10-token-streaming/10-CONTEXT.md

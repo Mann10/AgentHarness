@@ -117,6 +117,21 @@ Plans:
 - [x] 10-03-PLAN.md — TUI truncation marker + auto-scroll (D-04/D-06, D-07 verified) — Wave 3
 - [x] 10-04-PLAN.md — End-to-end human verification (checkpoint) — Wave 4
 
+### Phase 11: Session Popup & Panel Layout ◆
+
+**Goal:** Reorganize the TUI so the conversation is the main panel with date/time shown in the other panel. Add `/session` (opens a small popup listing all sessions — click one to continue it) and `/new` (starts a fresh conversation) as prompt-input commands.
+
+**Key decisions:** Conversation-first layout, date/time companion panel, `/session` popup picker, `/new` fresh conversation.
+
+**Canonical refs:** `.planning/phases/09-ts-tui-json-rpc/09-UI-SPEC.md`, `.planning/phases/09-ts-tui-json-rpc/09-CONTEXT.md`
+
+**Requirements**: TBD
+**Depends on:** Phase 10
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 11 to break down)
+
 ---
 
 ### Future (backlog)
