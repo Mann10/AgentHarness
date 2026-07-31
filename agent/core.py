@@ -11,12 +11,14 @@ from context.context import ConversationContext
 from harness.events import (
     ErrorEvent,
     ResponseComplete,
+    TokenProduced,
     ToolCallEvent,
     ToolResultEvent,
     TurnStarted,
 )
 from llm.base import BaseLLMClient
 from session.models import Session
+from tool.models import LLMResponse, ToolCall
 from tool.registry import ToolRegistry
 
 logger = logging.getLogger(__name__)
@@ -58,6 +60,38 @@ class Agent:
         self._session = session
         self._context = session.context
 
+    async def _stream_llm_call(
+        self,
+        messages: list[dict],
+        *,
+        tools: list | None = None,
+    ) -> LLMResponse:
+        """Run one LLM call through the streaming path (D-01).
+
+        Emits TokenProduced for each text chunk (D-02 — tool-call turns
+        produce no token events; their content is null anyway). Turn type
+        is decided by the client inspecting deltas (D-03), never here.
+        Partial content is never persisted here — the caller only adds a
+        complete assistant message after the full response (D-05).
+        """
+        content_parts: list[str] = []
+        tool_calls: list[ToolCall] | None = None
+        async for chunk in self._llm.stream_chat(
+            messages, tools=tools if tools else None
+        ):
+            if chunk.content:
+                await self._emit(TokenProduced(
+                    session_id=self._session.id,
+                    chunk=chunk.content,
+                ))
+                content_parts.append(chunk.content)
+            if chunk.tool_calls is not None:
+                tool_calls = chunk.tool_calls
+        content = "".join(content_parts)
+        if tool_calls is not None:
+            return LLMResponse(content=None, tool_calls=tool_calls)
+        return LLMResponse(content=content, tool_calls=None)
+
     async def run(self, user_input: str) -> AgentResult:
         await self._context.add_user_message(user_input)
         await self._emit(TurnStarted(
@@ -76,8 +110,9 @@ class Agent:
                     "LLM call #%d with %d tool(s) defined", iterations, len(tools)
                 )
 
-                response = await self._llm.chat_from_messages(
-                    self._session.to_llm_messages(), tools=tools if tools else None
+                response = await self._stream_llm_call(
+                    self._session.to_llm_messages(),
+                    tools=tools if tools else None,
                 )
 
                 if not response.tool_calls:
@@ -147,7 +182,7 @@ class Agent:
                 "Max tool iterations (%d) reached. Forcing text response.",
                 self._max_iterations,
             )
-            response = await self._llm.chat_from_messages(
+            response = await self._stream_llm_call(
                 self._session.to_llm_messages()
             )
             await self._context.add_assistant_message(response.content)
