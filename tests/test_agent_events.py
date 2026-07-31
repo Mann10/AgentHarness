@@ -86,25 +86,22 @@ def _make_stub_agent(emit=None, no_tools=False):
     from unittest.mock import AsyncMock, MagicMock
 
     from llm.base import BaseLLMClient
-    from llm.base import LLMResponse
+    from llm.base import LLMResponse, StreamChunk
     from session.models import Session
     from tool.models import ToolCall
     from tool.registry import ToolRegistry
 
     llm = MagicMock(spec=BaseLLMClient)
 
-    if no_tools:
-        llm.chat_from_messages = AsyncMock(return_value=LLMResponse(
-            content="Hello!",
-            tool_calls=None,
-        ))
-    else:
-        llm.chat_from_messages = AsyncMock(return_value=LLMResponse(
-            content="",
-            tool_calls=[
+    async def _fake_stream(messages, tools=None, **kwargs):
+        if not no_tools and tools:
+            yield StreamChunk(tool_calls=[
                 ToolCall(id="call_1", name="get_weather", arguments={"location": "NYC"}),
-            ],
-        ))
+            ])
+        else:
+            yield StreamChunk(content="Hello!")
+
+    llm.stream_chat = _fake_stream
 
     registry = MagicMock(spec=ToolRegistry)
     registry.list_tools = MagicMock(return_value=[MagicMock()])
