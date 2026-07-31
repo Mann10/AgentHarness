@@ -64,6 +64,9 @@ progress:
 
 ## Notes
 
+- Phase 10 (Token Streaming) planning ran with `--skip-research`: no RESEARCH.md / VALIDATION.md produced by design. Nyquist validation skipped deliberately — gap is fully documented in 09-VERIFICATION.md (Phase 9 gap 1) and no new libraries/APIs are introduced (openai SDK streaming is already a dependency). 10-04's human end-to-end checkpoint is the functional validation substitute.
+- Phase 10 context captured (8 decisions D-01..D-08) in .planning/phases/10-token-streaming/10-CONTEXT.md
+
 - Phase 8 context captured: 6 decisions covering header removal, launch behavior, right stats panel, message bifurcation, tool calls, and window background
 - Phase 8 does not need research — scope is layout-only, no new libraries or APIs
 - [D-01] Header removed — no Header widget in compose(), maximizes conversation space
