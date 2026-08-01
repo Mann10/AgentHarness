@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 11 UI-SPEC approved
-last_updated: "2026-07-31T17:13:07.669Z"
+status: executing
+last_updated: "2026-08-01T12:49:04.000Z"
 progress:
-  total_phases: 11
+  total_phases: 10
   completed_phases: 4
-  total_plans: 21
-  completed_plans: 18
-  percent: 82
+  total_plans: 25
+  completed_plans: 19
+  percent: 76
 ---
 
 # Project State
 
-**Updated:** 2026-07-31
-**Status:** Phase 11 UI-SPEC approved
+**Updated:** 2026-08-01
+**Status:** Executing Phase 11
 
 ## Current Phase
 
@@ -28,6 +28,7 @@ progress:
 - [x] Validation strategy — 11-VALIDATION.md
 - [x] UI design contract approved (6/6 dimensions) — 11-UI-SPEC.md
 - [x] Phase 11 added to roadmap
+- [x] 11-01-PLAN.md — Backend: context-restore fix, sessions.get RPC, auto-title (D-06/D-10/D-13) (Wave 1)
 
 ## Progress
 
@@ -82,6 +83,7 @@ progress:
 
 ## Notes
 
+- Phase 11 plan 01 complete 2026-08-01: switch_session context-restore fix (load + restore_context before Agent creation, D-10), 8th RPC method sessions.get returning chronological history with isalnum() path-traversal guard (T-11-01), Session.get_messages() + SessionManager.get_session() pure-read accessors, submit_prompt first-prompt auto-title (D-13). 54 pytest green (11 new).
 - Phase 11 (Session Popup & Panel Layout) context captured 2026-07-31: 16 decisions D-01..D-16 in .planning/phases/11-session-popup-and-panel-layout/11-CONTEXT.md. Conversation becomes main panel, date/time panel on right (reverses 09-CONTEXT D-29), /session full-screen keyboard overlay to switch sessions (loads history — needs new backend sessions.get RPC), /new starts fresh via sessions.create with auto-title. Phase added to roadmap.
 - Phase 10 (Token Streaming) complete 2026-07-31: stream_chat() implemented, agent emits TokenProduced, TUI streams live tokens with truncation marker + auto-scroll, REPL batch unchanged (D-08). 43 pytest, typecheck 0 errors, human E2E verified. Closes 09-VERIFICATION Gap 1.
 - Phase 10 planning ran with `--skip-research`: no RESEARCH.md / VALIDATION.md produced by design. Nyquist validation skipped deliberately — gap is fully documented in 09-VERIFICATION.md (Phase 9 gap 1) and no new libraries/APIs are introduced (openai SDK streaming is already a dependency). 10-04's human end-to-end checkpoint is the functional validation substitute.
