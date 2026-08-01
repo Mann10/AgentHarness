@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-08-01T07:25:21.105Z"
+last_updated: "2026-08-01T07:30:50.778Z"
 progress:
   total_phases: 10
   completed_phases: 4
   total_plans: 25
-  completed_plans: 20
-  percent: 80
+  completed_plans: 21
+  percent: 84
 ---
 
 # Project State
@@ -29,6 +29,8 @@ progress:
 - [x] UI design contract approved (6/6 dimensions) — 11-UI-SPEC.md
 - [x] Phase 11 added to roadmap
 - [x] 11-01-PLAN.md — Backend: context-restore fix, sessions.get RPC, auto-title (D-06/D-10/D-13) (Wave 1)
+- [x] 11-02-PLAN.md — TUI contracts: SessionMessage type, getSessionHistory, loadConversation (D-10) (Wave 1)
+- [x] 11-03-PLAN.md — /session full-screen picker + /new + honest footer (D-06..D-09, D-11/D-12) (Wave 2)
 
 ## Progress
 
@@ -84,6 +86,7 @@ progress:
 ## Notes
 
 - Phase 11 plan 01 complete 2026-08-01: switch_session context-restore fix (load + restore_context before Agent creation, D-10), 8th RPC method sessions.get returning chronological history with isalnum() path-traversal guard (T-11-01), Session.get_messages() + SessionManager.get_session() pure-read accessors, submit_prompt first-prompt auto-title (D-13). 54 pytest green (11 new).
+- Phase 11 plans 02/03 complete 2026-08-01: TUI contracts (SessionMessage/SessionHistoryResponse types, getSessionHistory with error discrimination, loadConversation store action — typecheck clean) and /session full-screen SessionPicker overlay (key trap via conditional render, sorted rows with 8-char id + message count + relative age, switch-only, Esc/q close), /new + /sessions slash-command branches, q-gate while picker open, honest footer hints. typecheck + build green.
 - Phase 11 (Session Popup & Panel Layout) context captured 2026-07-31: 16 decisions D-01..D-16 in .planning/phases/11-session-popup-and-panel-layout/11-CONTEXT.md. Conversation becomes main panel, date/time panel on right (reverses 09-CONTEXT D-29), /session full-screen keyboard overlay to switch sessions (loads history — needs new backend sessions.get RPC), /new starts fresh via sessions.create with auto-title. Phase added to roadmap.
 - Phase 10 (Token Streaming) complete 2026-07-31: stream_chat() implemented, agent emits TokenProduced, TUI streams live tokens with truncation marker + auto-scroll, REPL batch unchanged (D-08). 43 pytest, typecheck 0 errors, human E2E verified. Closes 09-VERIFICATION Gap 1.
 - Phase 10 planning ran with `--skip-research`: no RESEARCH.md / VALIDATION.md produced by design. Nyquist validation skipped deliberately — gap is fully documented in 09-VERIFICATION.md (Phase 9 gap 1) and no new libraries/APIs are introduced (openai SDK streaming is already a dependency). 10-04's human end-to-end checkpoint is the functional validation substitute.
