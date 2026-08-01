@@ -169,13 +169,13 @@ Plans:
   2. Agent sees a manifest listing every valid skill's `name` + `description` in the system prompt each turn — no skill body is loaded by the manifest alone.
   3. The manifest never exceeds its character budget (~1,500 chars): over-long descriptions are trimmed deterministically and trimmed skills are logged with a warning.
   4. A skill with missing/invalid frontmatter is skipped with a warning and never breaks the harness; duplicate names resolve first-wins (deterministic order) with a warning naming the shadowed skill.
-**Plans**: 4 plans (initial estimate — refined during planning)
+**Plans**: 4 plans (finalized 2026-08-01 — waves: {12-01} → {12-02, 12-03} → {12-04}; 12-02 and 12-03 are parallel-safe, no shared files)
 
 Plans:
-- [ ] 12-01: `skills/` package foundation — `models.py` dataclasses + `frontmatter.py` splitter (PyYAML `safe_load`; add `PyYAML>=6.0.3` to requirements.txt)
-- [ ] 12-02: `discovery.py` — one-pass scan, per-skill try/except skip-and-warn, normalized first-wins, name/folder validation
-- [ ] 12-03: `manifest.py` — budgeted assembly, deterministic trim + trim warnings, sanitized descriptions
-- [ ] 12-04: System-prompt integration (`_build_system_prompt`) + fixture tests (broken YAML, empty file, non-UTF8, dupes, cap enforcement)
+- [ ] 12-01: `skills/` package foundation — `PyYAML>=6.0.3` added to requirements.txt, `models.py` `SkillInfo` dataclass, `frontmatter.py` delimiter splitter (`yaml.safe_load`, degrades to `({}, body)`)
+- [ ] 12-02: `discovery.py` — per-skill parse+validate skip-and-warn taxonomy (`parse_skill_entry`) + deterministic first-wins scan with win32 case handling (`discover_skills`)
+- [ ] 12-03: `manifest.py` — `build_manifest_text` (D-11 format, D-13 None-when-empty, D-14 sanitize, D-09 char cap via `SKILL_MANIFEST_MAX_CHARS`, D-10 longest-first trim with marker + warnings)
+- [ ] 12-04: System-prompt integration — `Session.skill_manifest` (non-serialized field) + `# Available Skills` appended at end of `_build_system_prompt()` (D-12), barrel completion, end-to-end seam tests
 
 ### Phase 13: Context Plumbing (Persist Fix)
 **Goal**: Session serialization handles loaded skill bodies safely: they persist for the session (system-role, summarization-exempt) but never serialize to the JSONL session file. Highest-risk change in the milestone — lands *before* any real skill body can flow through `to_events()`.
