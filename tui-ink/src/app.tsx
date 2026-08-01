@@ -3,7 +3,7 @@ import { Box, Text, useFocus, useFocusManager, useInput, useApp } from "ink"
 import { Header } from "./components/header.js"
 import { Footer } from "./components/footer.js"
 import { SessionPicker } from "./components/session-picker.js"
-import { SessionPanel } from "./panels/session-panel.js"
+import { DatePanel } from "./panels/date-panel.js"
 import { ConversationPanel } from "./panels/conversation-panel.js"
 import { ToolMonitorPanel } from "./panels/tool-monitor-panel.js"
 import { useAgentStore } from "./store/agent-store.js"
@@ -150,13 +150,11 @@ export function App({ client, cwd }: AppProps) {
   return (
     <Box flexDirection="column" height="100%">
       <Header />
-      <Box flexGrow={1} flexDirection="row" height="60%">
-        <FocusablePanel id="sessions">
-          {(focused) => <SessionPanel focused={focused} />}
-        </FocusablePanel>
+      <Box flexGrow={1} flexDirection="row">
         <FocusablePanel id="conversation">
           {(focused) => <ConversationPanel focused={focused} />}
         </FocusablePanel>
+        <DatePanel />
       </Box>
       <FocusablePanel id="tool-monitor">
         {(focused) => <ToolMonitorPanel focused={focused} />}
