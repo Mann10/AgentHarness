@@ -46,7 +46,13 @@ class Session:
     skill_manifest: str | None = None
     skill_state: dict = field(default_factory=dict)  # Phase 12 pattern — non-serialized by construction
     _context: ConversationContext | None = None
-    _last_saved_count: int = 0
+    # Identity watermark of already-persisted messages, as {id(msg): msg}.
+    # Keying by identity (not position) survives summarization removing
+    # saved messages between saves (CR-01). The dict VALUES hold strong
+    # references so an id() can never be garbage-collected and reused by a
+    # new message — a bare {id(m)} set would wrongly mark a brand-new
+    # message as saved and drop it from the JSONL file.
+    _saved_messages: dict = field(default_factory=dict)
 
     @property
     def context(self) -> ConversationContext:
@@ -76,17 +82,16 @@ class Session:
     # ── Serialization ─────────────────────────────────────
 
     def to_events(self) -> list[dict]:
-        events = []
-        for msg in self._context._messages:
-            if not msg.persist:
-                continue
-            d = {"role": msg.role, "content": msg.content, "token_count": msg.token_count}
-            if msg.tool_calls:
-                d["tool_calls"] = [asdict(tc) for tc in msg.tool_calls]
-            if msg.tool_call_id:
-                d["tool_call_id"] = msg.tool_call_id
-            events.append(d)
-        return events
+        return [self._message_to_event(m) for m in self._context._messages if m.persist]
+
+    @staticmethod
+    def _message_to_event(msg: Message) -> dict:
+        d = {"role": msg.role, "content": msg.content, "token_count": msg.token_count}
+        if msg.tool_calls:
+            d["tool_calls"] = [asdict(tc) for tc in msg.tool_calls]
+        if msg.tool_call_id:
+            d["tool_call_id"] = msg.tool_call_id
+        return d
 
     def get_messages(self) -> list[dict]:
         """Return conversation messages as serializable dicts in chronological order.
@@ -101,12 +106,20 @@ class Session:
         return [dict(e) for e in getattr(self, "_stored_events", [])]
 
     def unpersisted_events(self) -> list[dict]:
-        all_events = self.to_events()
-        return all_events[self._last_saved_count:]
+        if self._context is None:
+            return []
+        saved = getattr(self, "_saved_messages", {})
+        events = []
+        for msg in self._context._messages:
+            if msg.persist and id(msg) not in saved:
+                events.append(self._message_to_event(msg))
+        return events
 
     def mark_saved(self) -> None:
         if self._context is not None:
-            self._last_saved_count = sum(1 for m in self._context._messages if m.persist)
+            # Watermark by message identity, not position: survives
+            # summarization removing already-saved messages between saves (CR-01).
+            self._saved_messages = {id(m): m for m in self._context._messages}
 
     def to_snapshot_meta(self) -> dict:
         return {
@@ -153,7 +166,9 @@ class Session:
             msg = Message.from_dict(e)
             await ctx.add_message(msg)
         self._context = ctx
-        self._last_saved_count = len(self._stored_events)
+        # Seed the identity watermark: every replayed event is already on disk,
+        # so all live messages count as saved (CR-01 consistency with mark_saved).
+        self._saved_messages = {id(m): m for m in self._context._messages}
         del self._stored_events
 
     @classmethod
