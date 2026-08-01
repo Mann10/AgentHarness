@@ -56,6 +56,15 @@ def test_no_valid_skills_omits_section(tmp_path: Path) -> None:
     assert "# Available Skills" not in session.to_llm_messages()[0]["content"]
 
 
+def test_manifest_stable_across_calls(tmp_path: Path) -> None:
+    """D-08: the section is rebuilt per call — content is identical each turn."""
+    _write_skill(tmp_path, "solo", "solo", "a skill")
+    session = _session_with_manifest(tmp_path)
+    first = session.to_llm_messages()[0]["content"]
+    second = session.to_llm_messages()[0]["content"]
+    assert first == second
+
+
 def test_manifest_never_serialized_to_snapshot(tmp_path: Path) -> None:
     """The JSONL session file must never carry the manifest (Phase 13 completes the
     persist plumbing; this guard proves the field is non-serialized now)."""
