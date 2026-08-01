@@ -190,7 +190,7 @@ Plans:
 
 Plans:
 - [x] 13-01: `Message.persist: bool = True` field + `persist=False` support for skill bodies
-- [ ] 13-02: `to_events()` persist filter + `mark_saved()` index fix (paired change; save/resume round-trip tests)
+- [x] 13-02: `to_events()` persist filter + `mark_saved()` index fix (paired change; save/resume round-trip tests)
 - [ ] 13-03: Non-serialized `Session.skill_manifest`/`skill_state` fields + summarization-exemption documentation + unit tests
 
 ### Phase 14: read_skill Provider End-to-End
@@ -286,7 +286,7 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 10. Token Streaming | v1.0 | 4/4 | Complete | 2026-07-31 |
 | 11. Session Popup & Panel Layout | v1.0 | 4/4 | Complete | 2026-08-01 |
 | 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete    | 2026-08-01 |
-| 13. Context Plumbing (Persist Fix) | v1.1 | 1/3 | In Progress|  |
+| 13. Context Plumbing (Persist Fix) | v1.1 | 2/3 | In Progress|  |
 | 14. read_skill Provider End-to-End | v1.1 | 0/4 | Not started | - |
 | 15. Session Behavior & /skill Command | v1.1 | 0/3 | Not started | - |
 | 16. TUI Integration (Skill Indicator) | v1.1 | 0/3 | Not started | - |
