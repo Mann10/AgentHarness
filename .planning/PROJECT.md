@@ -10,6 +10,16 @@ A terminal-first AI agent harness. Users chat with an LLM agent that can use MCP
 
 A reliable, session-persistent terminal chat loop where the LLM agent drives tools — with a TUI that makes long conversations fast to navigate and continue.
 
+## Current Milestone: v1.1 Skills System
+
+**Goal:** Build progressive-disclosure skills for AgentHarness — SKILL.md files under `.agentharness/skills/`, surfaced to the agent as a cheap manifest and loaded on demand.
+
+**Target features:**
+- Skill storage & format (`.agentharness/skills/<name>/SKILL.md`, frontmatter, folder-per-skill)
+- Progressive disclosure (manifest in system prompt → `read_skill` tool → bundled references)
+- Activation & session behavior (`/skill` command, session-persist as system-role messages)
+- Skill capabilities (bundled resources, optional `allowed-tools` filtering)
+
 ## Principles
 
 - **Terminal-first** — CLI REPL + Ink TUI, no web UI
@@ -37,6 +47,11 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 
 ### Active
 
+- [ ] **SKL-01**: User can author skills as `SKILL.md` files under `.agentharness/skills/`
+- [ ] **SKL-02**: Agent learns available skills via a manifest (name + description) in the system prompt
+- [ ] **SKL-03**: Agent loads a skill body on demand via a `read_skill` tool when the description matches
+- [ ] **SKL-04**: User can force-load a skill via `/skill <name>` slash command
+- [ ] **SKL-05**: Loaded skill bodies persist for the session as system-role messages
 - [ ] Tool system hardening (remove_provider, health-check, reconnect)
 - [ ] Multi-turn agent improvements
 - [ ] Package restructuring
@@ -45,6 +60,9 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 
 - Web UI — terminal-first principle
 - Non-OpenAI-compatible providers — non-negotiable constraint
+- Skill authoring UI / management tools — deferred to future milestone
+- User-global skills dir (~/.config/agentharness/skills/) — deferred to future milestone
+- Script-as-tool registration — deferred (skills are markdown + bundled files in v1.1)
 
 ## Context
 
@@ -63,5 +81,22 @@ Shipped v1.0 (2026-08-01) with a Python async backend + Ink/React TUI. 63 pytest
 | Live clock via useEffect + setInterval in DatePanel | ✓ Good — 1 Hz tick isolated from streaming subtree |
 | sessions.active RPC binding active session on TUI connect | ✓ Good — fixes "No session"/"untitled" on cold start |
 
+## Evolution
+
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
 ---
-*Last updated: 2026-08-01 after v1.0 milestone*
+*Last updated: 2026-08-01 after v1.1 Skills System milestone start*
