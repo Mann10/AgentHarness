@@ -203,7 +203,7 @@ Plans:
   3. Every path-traversal attempt — `../`, `..\`, absolute paths, symlinks, win32 drive-path tricks — is rejected with a clear error; reads never escape the skills directory (win32 test vectors ship in the same wave as the tool).
   4. `read_skill` is a reserved, un-namespaced tool name (async provider registered as `__skills__`): no skill can shadow it, and the allowed-tools filter contract always retains it (`allowed ∪ {read_skill}`, unit-tested here).
   5. Cancelling a turn mid-load leaves no dangling tool_calls — the next turn streams cleanly (pre-existing cancel hole closed and tested).
-**Plans**: 4 plans (initial estimate — refined during planning)
+**Plans**: 4 plans
 
 Plans:
 - [ ] 14-01: `store.py` — `SkillStore` (index, `load`, `read_path` with canonicalize+contain traversal guard) + traversal test suite
