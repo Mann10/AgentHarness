@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
 status: executing
-last_updated: "2026-08-01T14:22:20.823Z"
-last_activity: 2026-08-01 -- Phase 13 planning complete
+last_updated: "2026-08-01T14:36:51.080Z"
+last_activity: 2026-08-01
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
-  percent: 57
+  completed_plans: 5
+  percent: 71
 ---
 
 # Project State
@@ -20,17 +20,17 @@ progress:
 
 ## Current Position
 
-Phase: 13
-Plan: Not started
+Phase: 13 (context-plumbing-persist-fix) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-08-01 -- Phase 13 planning complete
+Last activity: 2026-08-01
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-08-01)
 
 **Core value:** A reliable, session-persistent terminal chat loop where the LLM agent drives tools — with a TUI that makes long conversations fast to navigate and continue.
-**Current focus:** Phase 12 — skills-discovery-manifest
+**Current focus:** Phase 13 — context-plumbing-persist-fix
 
 ## Progress
 
