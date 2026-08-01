@@ -43,6 +43,7 @@ class Session:
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
     metadata: dict = field(default_factory=dict)
+    skill_manifest: str | None = None
     _context: ConversationContext | None = None
     _last_saved_count: int = 0
 
@@ -66,6 +67,9 @@ class Session:
         if agents_md.exists():
             parts.append(f"# Project Instructions\n\n{agents_md.read_text()}")
         parts.append(f"# Environment\nCWD: {os.getcwd()}")
+        # D-11/D-12/D-13: budgeted skills manifest, appended last, omitted when empty.
+        if self.skill_manifest:
+            parts.append(self.skill_manifest)
         return "\n\n---\n\n".join(parts)
 
     # ── Serialization ─────────────────────────────────────
