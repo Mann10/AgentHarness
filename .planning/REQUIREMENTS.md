@@ -7,16 +7,16 @@
 
 ### Skill Storage & Format
 
-- [ ] **STORE-01**: User can author a skill as a `SKILL.md` file at `.agentharness/skills/<name>/SKILL.md` (one folder per skill)
-- [ ] **STORE-02**: Skill name is kebab-case and matches the folder name
-- [ ] **STORE-03**: User can provide `name` and `description` frontmatter (required) and `allowed-tools` (optional)
-- [ ] **STORE-04**: Skills with missing/invalid frontmatter are skipped with a warning and never break the harness
-- [ ] **STORE-05**: Duplicate skill names resolve deterministically (first-wins) with a warning about the shadowed skill
+- [x] **STORE-01**: User can author a skill as a `SKILL.md` file at `.agentharness/skills/<name>/SKILL.md` (one folder per skill)
+- [x] **STORE-02**: Skill name is kebab-case and matches the folder name
+- [x] **STORE-03**: User can provide `name` and `description` frontmatter (required) and `allowed-tools` (optional)
+- [x] **STORE-04**: Skills with missing/invalid frontmatter are skipped with a warning and never break the harness
+- [x] **STORE-05**: Duplicate skill names resolve deterministically (first-wins) with a warning about the shadowed skill
 
 ### Progressive Disclosure
 
-- [ ] **DISC-01**: Agent sees a manifest of every skill's `name` + `description` in the system prompt each turn
-- [ ] **DISC-02**: Manifest is subject to a budget (character/token cap) with trimming of over-long skills
+- [x] **DISC-01**: Agent sees a manifest of every skill's `name` + `description` in the system prompt each turn
+- [x] **DISC-02**: Manifest is subject to a budget (character/token cap) with trimming of over-long skills
 - [ ] **DISC-03**: Agent can load a skill body on demand via a dedicated `read_skill` tool when the description matches the current task
 - [ ] **DISC-04**: `read_skill` reads are path-scoped to the skills directory — no traversal outside it
 - [ ] **DISC-05**: Skills support bundled resources (`references/`, `scripts/`, `assets/`) readable on demand through path-scoped reads into the skill directory
@@ -69,13 +69,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| STORE-01 | Phase 12 | Pending |
-| STORE-02 | Phase 12 | Pending |
-| STORE-03 | Phase 12 | Pending |
-| STORE-04 | Phase 12 | Pending |
-| STORE-05 | Phase 12 | Pending |
-| DISC-01 | Phase 12 | Pending |
-| DISC-02 | Phase 12 | Pending |
+| STORE-01 | Phase 12 | Complete |
+| STORE-02 | Phase 12 | Complete |
+| STORE-03 | Phase 12 | Complete |
+| STORE-04 | Phase 12 | Complete |
+| STORE-05 | Phase 12 | Complete |
+| DISC-01 | Phase 12 | Complete |
+| DISC-02 | Phase 12 | Complete |
 | DISC-03 | Phase 14 | Pending |
 | DISC-04 | Phase 14 | Pending |
 | DISC-05 | Phase 14 | Pending |

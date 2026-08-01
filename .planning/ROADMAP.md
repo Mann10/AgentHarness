@@ -285,7 +285,7 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 8. TUI Conversation Layout | v1.0 | 3/3 | Complete | 2026-08-01 |
 | 10. Token Streaming | v1.0 | 4/4 | Complete | 2026-07-31 |
 | 11. Session Popup & Panel Layout | v1.0 | 4/4 | Complete | 2026-08-01 |
-| 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete   | 2026-08-01 |
+| 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete    | 2026-08-01 |
 | 13. Context Plumbing (Persist Fix) | v1.1 | 0/3 | Not started | - |
 | 14. read_skill Provider End-to-End | v1.1 | 0/4 | Not started | - |
 | 15. Session Behavior & /skill Command | v1.1 | 0/3 | Not started | - |
