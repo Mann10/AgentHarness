@@ -25,9 +25,9 @@
 
 - [ ] **ACT-01**: User can force-load a skill via a `/skill <name>` slash command
 - [ ] **ACT-02**: Agent auto-invokes skills when a manifest description matches the current task
-- [ ] **ACT-03**: Loaded skill body persists for the rest of the session as a system-role message
-- [ ] **ACT-04**: Loaded skill bodies survive context summarization (system-role exemption)
-- [ ] **ACT-05**: Loaded skills are session-scoped — never persisted to the JSONL session file
+- [x] **ACT-03**: Loaded skill body persists for the rest of the session as a system-role message
+- [x] **ACT-04**: Loaded skill bodies survive context summarization (system-role exemption)
+- [x] **ACT-05**: Loaded skills are session-scoped — never persisted to the JSONL session file
 - [ ] **ACT-06**: TUI shows a visible indicator when a skill is loaded
 
 ### Skill Capabilities
@@ -81,9 +81,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DISC-05 | Phase 14 | Pending |
 | ACT-01 | Phase 15 | Pending |
 | ACT-02 | Phase 14 | Pending |
-| ACT-03 | Phase 13 | Pending |
-| ACT-04 | Phase 13 | Pending |
-| ACT-05 | Phase 13 | Pending |
+| ACT-03 | Phase 13 | Complete |
+| ACT-04 | Phase 13 | Complete |
+| ACT-05 | Phase 13 | Complete |
 | ACT-06 | Phase 16 | Pending |
 | CAP-01 | Phase 14 | Pending |
 | CAP-02 | Phase 17 | Pending |

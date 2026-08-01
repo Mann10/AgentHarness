@@ -14,7 +14,7 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 
 **Goal:** Build progressive-disclosure skills for AgentHarness — SKILL.md files under `.agentharness/skills/`, surfaced to the agent as a cheap manifest and loaded on demand.
 
-**Progress:** Phase 12 complete — skills package foundation (`SkillInfo`, frontmatter parser), one-pass discovery with skip-and-warn + dedupe, budgeted manifest assembly, and the system-prompt seam (`Session.skill_manifest`). Production wiring of the manifest construction site lands in Phase 14.
+**Progress:** Phase 12 complete — skills package foundation (`SkillInfo`, frontmatter parser), one-pass discovery with skip-and-warn + dedupe, budgeted manifest assembly, and the system-prompt seam (`Session.skill_manifest`). Phase 13 complete — persist-safe plumbing: `Message.persist` flag, `to_events()` filter, identity-based save watermark (no index drift under summarization), non-serialized `skill_state`, system-role summarization exemption. Production wiring of the manifest construction site lands in Phase 14.
 
 **Target features:**
 - Skill storage & format (`.agentharness/skills/<name>/SKILL.md`, frontmatter, folder-per-skill)
@@ -54,6 +54,7 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 - [ ] **SKL-03**: Agent loads a skill body on demand via a `read_skill` tool when the description matches
 - [ ] **SKL-04**: User can force-load a skill via `/skill <name>` slash command
 - [ ] **SKL-05**: Loaded skill bodies persist for the session as system-role messages
+  - Validated in Phase 13: persist plumbing (`Message.persist` + `to_events()` filter), summarization exemption (ACT-04), never-to-JSONL (ACT-05)
 - [ ] Tool system hardening (remove_provider, health-check, reconnect)
 - [ ] Multi-turn agent improvements
 - [ ] Package restructuring
@@ -101,4 +102,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-01 after Phase 12 (Skills Discovery & Manifest) completion*
+*Last updated: 2026-08-01 after Phase 13 (Context Plumbing / Persist Fix) completion*
