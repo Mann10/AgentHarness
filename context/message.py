@@ -14,6 +14,7 @@ class Message:
     token_count: int = 0
     tool_calls: list[ToolCall] | None = None
     tool_call_id: str | None = None
+    persist: bool = True
 
     def __post_init__(self) -> None:
         if self.role not in VALID_ROLES:
