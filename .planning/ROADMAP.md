@@ -127,10 +127,13 @@ Plans:
 
 **Requirements**: TBD
 **Depends on:** Phase 10
-**Plans:** 0 plans
+**Plans:** 4 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 11 to break down)
+- [ ] 11-01-PLAN.md — Backend: context-restore fix, sessions.get RPC, auto-title (D-06/D-10/D-13) — Wave 1
+- [ ] 11-02-PLAN.md — TUI contracts: SessionMessage type, getSessionHistory, loadConversation (D-10) — Wave 1
+- [ ] 11-03-PLAN.md — /session full-screen picker + /new + honest footer (D-06..D-09, D-11/D-12) — Wave 2
+- [ ] 11-04-PLAN.md — Conversation-first layout + live DatePanel + E2E checkpoint (D-01..D-05, D-14..D-16) — Wave 3
 
 ---
 
