@@ -111,7 +111,8 @@ async def test_load_skill_dedup_no_op_second_load(runtime: RuntimeAPI) -> None:
     assert "Loaded skill" in ack1
 
     contents = [m["content"] for m in runtime.active_session.context.to_llm_messages()]
-    assert contents.count("Hello body") == 1
+    body_messages = [c for c in contents if "Hello body" in c]
+    assert len(body_messages) == 1
 
 
 # -- Test 4: skill_state["loaded"] records name + base dir (D-09) ------------

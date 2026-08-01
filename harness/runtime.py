@@ -11,6 +11,8 @@ from config import Config
 from llm import OpenAIClient
 from session.models import Session, SessionSummary, derive_title
 from session.store import JSONLSessionStore
+from skills.provider import SkillToolProvider
+from skills.store import SkillStore
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
 from harness.event_bus import EventBus
@@ -44,12 +46,14 @@ class RuntimeAPI:
         registry: ToolRegistry,
         store: JSONLSessionStore | None = None,
         *,
+        skill_store: SkillStore | None = None,
         backlog_maxsize: int = 10,
     ) -> None:
         self._config = config
         self._client = client
         self._registry = registry
         self._summarize_fn = self._make_summarize_fn(client)
+        self._skill_store = skill_store
 
         # Runtime-owned subsystems
         self._event_bus = EventBus()
@@ -168,6 +172,47 @@ class RuntimeAPI:
         """True if an agent turn is currently executing."""
         return self._scheduler is not None and self._scheduler.is_busy
 
+    # -- Skills (D-09 single shared load path) ------------------
+
+    async def load_skill(self, name: str) -> str:
+        """D-09: single shared load path (read_skill tool + /skill command later).
+
+        Dedup (D-07) via session.skill_state['loaded'] → injection (D-08) via
+        add_skill_message → short ack (D-05). Body flows as system message only.
+        """
+        if self._skill_store is None:
+            raise RuntimeError("SkillStore not configured")
+        session = self._session_manager.active_session
+        if session is None:
+            raise RuntimeError("No active session")
+        loaded = session.skill_state.get("loaded", [])
+        existing = next((e for e in loaded if e["name"] == name), None)
+        if existing is not None:
+            return f"Skill '{name}' already loaded"          # D-07 no-op ack
+        info = self._skill_store.lookup(name)                # KeyError → clear error
+        body = self._skill_store.load(name)
+        await session.context.add_skill_message(info.name, body)
+        loaded.append({"name": info.name, "dir": str(info.path)})   # D-09 record (name + base dir)
+        session.skill_state["loaded"] = loaded
+        return f"Loaded skill {info.name}"                   # D-05 short ack
+
+    async def _read_skill_path(self, skill: str, rel: str) -> str:
+        """read_skill_path handler — delegates to SkillStore (14-01 traversal guard)."""
+        if self._skill_store is None:
+            raise RuntimeError("SkillStore not configured")
+        return self._skill_store.read_path(skill, rel)
+
+    def make_skill_provider(self) -> SkillToolProvider:
+        """Build the __skills__ provider bound to this runtime's load/read handlers.
+
+        Registered by main.py BEFORE runtime.start() — the provider must be in the
+        registry before registry.start() runs inside Agent.start().
+        """
+        return SkillToolProvider(
+            load_handler=self.load_skill,
+            read_handler=self._read_skill_path,
+        )
+
     # -- Lifecycle -----------------------------------------
 
     async def start(self) -> None:
@@ -220,6 +265,16 @@ class RuntimeAPI:
         session = self._session_manager.active_session
         if session is None:
             raise RuntimeError("Cannot create agent: no active session")
+
+        # Phase 12 seam: attach the skills manifest once per Session object.
+        if session.skill_manifest is None and self._skill_store is not None:
+            from skills.discovery import discover_skills
+            from skills.manifest import build_manifest_text
+
+            entries = discover_skills(self._skill_store._root)
+            text = build_manifest_text(entries)
+            if text:
+                session.skill_manifest = text
 
         if self._agent is not None:
             await self._agent.shutdown()
