@@ -109,6 +109,61 @@ async def test_persist_false_between_saves_does_not_shift_index(
 
 
 @pytest.mark.asyncio
+async def test_summarization_between_saves_does_not_lose_new_messages(
+    store: JSONLSessionStore,
+) -> None:
+    """Summarization between saves must not drop the newest messages (CR-01).
+
+    _maybe_summarize() removes already-saved messages and inserts a summary at
+    index 0, shrinking the event list. The old positional watermark
+    (_last_saved_count) then sliced past the end, so the next save() appended
+    nothing — the newest user/assistant messages were silently lost from the
+    JSONL file. The identity watermark must survive that shrinkage.
+    """
+    call_count = 0
+
+    async def mock_summarize(msgs: list[dict]) -> str:
+        nonlocal call_count
+        call_count += 1
+        return "Summary."
+
+    session = Session.create(
+        "sys",
+        count_tokens=len,  # token_count == character count, predictable
+        token_limit=60,
+        summarize_fn=mock_summarize,
+        summarize_threshold=0.75,  # fires when total_tokens >= 45
+        keep_recent_exchanges=1,  # keep last 2 messages when summarizing
+    )
+    await session.context.add_user_message("question one")
+    await session.context.add_assistant_message("answer one")
+    await session.context.add_user_message("question two")
+    await session.context.add_assistant_message("answer two")
+    await store.save(session)
+
+    # Drive past the threshold; summarization removes the 4 already-saved
+    # messages and inserts a summary at index 0.
+    await session.context.add_user_message("question three")
+    await session.context.add_assistant_message("answer three")
+    assert call_count >= 1, "summarization should have fired above threshold"
+
+    # New user message added after summarization, then saved.
+    await session.context.add_user_message("question four")
+    await store.save(session)
+
+    file_text = (store._dir / f"{session.id}.jsonl").read_text(encoding="utf-8")
+    # Old saved events are still present exactly once (not duplicated).
+    assert file_text.count("question one") == 1
+    assert file_text.count("answer two") == 1
+    # Newest messages (added since the last save) must all be persisted.
+    assert file_text.count("question three") == 1
+    assert file_text.count("answer three") == 1
+    assert file_text.count("question four") == 1
+    # The summary event itself is persisted too.
+    assert "Previous conversation summary: Summary." in file_text
+
+
+@pytest.mark.asyncio
 async def test_system_skill_body_survives_summarization() -> None:
     """A system-role persist=False skill body survives _maybe_summarize() (ACT-04).
 
