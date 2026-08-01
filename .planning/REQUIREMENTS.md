@@ -76,25 +76,33 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STORE-05 | Phase 12 | Pending |
 | DISC-01 | Phase 12 | Pending |
 | DISC-02 | Phase 12 | Pending |
-| DISC-03 | Phase 13 | Pending |
-| DISC-04 | Phase 13 | Pending |
-| DISC-05 | Phase 13 | Pending |
+| DISC-03 | Phase 14 | Pending |
+| DISC-04 | Phase 14 | Pending |
+| DISC-05 | Phase 14 | Pending |
 | ACT-01 | Phase 15 | Pending |
-| ACT-02 | Phase 13 | Pending |
-| ACT-03 | Phase 14 | Pending |
-| ACT-04 | Phase 14 | Pending |
-| ACT-05 | Phase 14 | Pending |
-| ACT-06 | Phase 15 | Pending |
-| CAP-01 | Phase 13 | Pending |
-| CAP-02 | Phase 16 | Pending |
-| CAP-03 | Phase 16 | Pending |
-| CAP-04 | Phase 16 | Pending |
+| ACT-02 | Phase 14 | Pending |
+| ACT-03 | Phase 13 | Pending |
+| ACT-04 | Phase 13 | Pending |
+| ACT-05 | Phase 13 | Pending |
+| ACT-06 | Phase 16 | Pending |
+| CAP-01 | Phase 14 | Pending |
+| CAP-02 | Phase 17 | Pending |
+| CAP-03 | Phase 14 | Pending |
+| CAP-04 | Phase 17 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 20 total
 - Mapped to phases: 20
 - Unmapped: 0 ✓
 
+**Mapping rationale:**
+- **Phase 12 (Skills Discovery & Manifest):** STORE-01..05 + DISC-01..02 — pure domain: authoring format, skip-and-warn discovery, budgeted manifest.
+- **Phase 13 (Context Plumbing / Persist Fix):** ACT-03..05 — the persist flag + `mark_saved()` index fix makes bodies persist in-session (system-role, summarization-exempt) but never to JSONL. Placed second so the D-13 leak is closed before any real body flows.
+- **Phase 14 (read_skill Provider End-to-End):** DISC-03..05, ACT-02, CAP-01, CAP-03 — the tool, path-scoped reads, bundled resources, and the never-filtered retention contract ship together.
+- **Phase 15 (Session Behavior & /skill Command):** ACT-01 — `/skill` via the 4-layer RPC contract + REPL; combined-filter semantics decision locked here (CAP-04 design-before-implementation).
+- **Phase 16 (TUI Integration):** ACT-06 — typed `skill_loaded` notification + visible indicator + TUI `/skill` intercept.
+- **Phase 17 (allowed-tools Enforcement & Hardening):** CAP-02, CAP-04 — per-iteration filter projection, intersection semantics, E2E verification.
+
 ---
 *Requirements defined: 2026-08-01*
-*Last updated: 2026-08-01 after initial definition*
+*Last updated: 2026-08-01 after roadmap creation (v1.1, phases 12-17)*

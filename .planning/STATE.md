@@ -5,9 +5,9 @@ milestone_name: skills-system
 status: planning
 last_updated: "2026-08-01T00:00:00.000Z"
 progress:
-  total_phases: 0
+  total_phases: 6
   completed_phases: 0
-  total_plans: 0
+  total_plans: 20
   completed_plans: 0
   percent: 0
 ---
@@ -15,14 +15,14 @@ progress:
 # Project State
 
 **Updated:** 2026-08-01
-**Status:** Milestone v1.1 started (planning)
+**Status:** Milestone v1.1 in planning (roadmap created)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 12 — Skills Discovery & Manifest (not started)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-08-01 — Milestone v1.1 started
+Status: Roadmap created (phases 12-17); awaiting phase planning
+Last activity: 2026-08-01 — Milestone v1.1 roadmap created
 
 ## Project Reference
 
@@ -43,6 +43,12 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 - [x] Phase 8: TUI Conversation Layout — Complete (v1.0, 3 plans)
 - [x] Phase 10: Token Streaming — Complete (v1.0, 4 plans)
 - [x] Phase 11: Session Popup & Panel Layout — Complete (v1.0, 4 plans)
+- [ ] Phase 12: Skills Discovery & Manifest — Not started (v1.1, 4 plans)
+- [ ] Phase 13: Context Plumbing (Persist Fix) — Not started (v1.1, 3 plans)
+- [ ] Phase 14: read_skill Provider End-to-End — Not started (v1.1, 4 plans)
+- [ ] Phase 15: Session Behavior & /skill Command — Not started (v1.1, 3 plans)
+- [ ] Phase 16: TUI Integration (Skill Indicator) — Not started (v1.1, 3 plans)
+- [ ] Phase 17: allowed-tools Enforcement & Hardening — Not started (v1.1, 3 plans)
 
 ## Deferred Items
 
@@ -57,6 +63,7 @@ Items acknowledged and deferred at v1.0 milestone close on 2026-08-01:
 
 - v1.0 milestone complete 2026-08-01 (see .planning/MILESTONES.md). Phase 11 plan 04 complete: conversation-first layout with DatePanel live-clock, SessionPanel removed, E2E human-verified. Follow-up session-name fix delivered via quick task 260801-jra (sessions.active RPC + TUI startup binding + refresh on submit).
 - v1.1 Skills System milestone started 2026-08-01. Context captured (16 decisions D-01..D-16) in .planning/MILESTONE-CONTEXT.md. Skills at .agentharness/skills/, manifest in system prompt, read_skill tool, /skill command, system-role persistence, allowed-tools filtering.
+- v1.1 roadmap created 2026-08-01: 6 phases (12-17), 20/20 requirements mapped, following research SUMMARY.md ordering — discovery & manifest (12) → context plumbing / persist fix (13, highest risk, placed second so D-13 JSONL leak is closed before any body flows) → read_skill provider (14) → session behavior + /skill RPC (15) → TUI indicator (16) → allowed-tools enforcement & hardening (17). CAP-03 (read_skill never filtered) ships with the read_skill phase per roadmap; CAP-04 intersection semantics decided in Phase 15, enforced in Phase 17.
 
 ## Quick Tasks Completed
 
