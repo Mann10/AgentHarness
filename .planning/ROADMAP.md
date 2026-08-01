@@ -186,7 +186,7 @@ Plans:
   2. Repeated saves of an active session produce no missing or duplicated events — the persist filter and `mark_saved()` index stay aligned (index-drift fix, paired with the `Message.persist` filter).
   3. A conversation that crosses the summarization threshold keeps its loaded skill bodies intact — system-role exemption at `context.py:88` honored (documented, not reimplemented).
   4. Loaded skill bodies persist in memory for the entire session — every subsequent turn sees them — and vanish on `/new` or session close (session-scoped state via non-serialized `skill_manifest`/`skill_state` fields).
-**Plans**: 3 plans (initial estimate — refined during planning)
+**Plans**: 3 plans (waves: 1 → 2 → 3; 13-01 no deps, 13-02 dep 13-01, 13-03 dep 13-02)
 
 Plans:
 - [ ] 13-01: `Message.persist: bool = True` field + `persist=False` support for skill bodies
