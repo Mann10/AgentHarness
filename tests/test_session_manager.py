@@ -113,3 +113,19 @@ async def test_delete_active_session_clears_active(mgr: SessionManager) -> None:
     assert mgr.active_session is not None
     await mgr.delete_session(session.id)
     assert mgr.active_session is None
+
+
+@pytest.mark.asyncio
+async def test_get_session_pure_read_does_not_switch_active(mgr: SessionManager) -> None:
+    first = await mgr.create_session(system_prompt="first", count_tokens=len, token_limit=1000)
+    second = await mgr.create_session(system_prompt="second", count_tokens=len, token_limit=1000)
+    assert mgr.active_session.id == second.id
+    loaded = await mgr.get_session(first.id)
+    assert loaded is not None
+    assert loaded.id == first.id
+    assert mgr.active_session.id == second.id  # active unchanged — pure read
+
+
+@pytest.mark.asyncio
+async def test_get_session_nonexistent_returns_none(mgr: SessionManager) -> None:
+    assert await mgr.get_session("nonexistent-id") is None

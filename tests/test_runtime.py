@@ -108,3 +108,83 @@ async def test_runtime_event_bus_property(runtime: RuntimeAPI) -> None:
 async def test_runtime_submit_prompt_no_start_does_not_raise(runtime: RuntimeAPI) -> None:
     """submit_prompt() before start() logs warning but doesn't raise."""
     await runtime.submit_prompt("hello")  # Should not raise
+
+
+@pytest.fixture
+def runtime_with_store():
+    """RuntimeAPI with an isolated tempdir JSONLSessionStore."""
+    import tempfile
+    from session.store import JSONLSessionStore
+    config = MagicMock()
+    config.system_prompt = "test"
+    config.max_tokens = 1000
+    config.max_tool_iterations = 5
+    client = MagicMock()
+    client.count_tokens = len
+    async def _mock_chat_from_messages(messages, **kwargs):
+        response = MagicMock()
+        response.tool_calls = None
+        response.content = "mock response"
+        return response
+    client.chat_from_messages = _mock_chat_from_messages
+    registry = MagicMock()
+    registry.list_tools = MagicMock(return_value=[])
+    registry.start = AsyncMock()
+    registry.shutdown = AsyncMock()
+    store = JSONLSessionStore(tempfile.mkdtemp())
+    return RuntimeAPI(config, client, registry, store=store, backlog_maxsize=5)
+
+
+@pytest.mark.asyncio
+async def test_switch_session_restores_context(runtime_with_store: RuntimeAPI) -> None:
+    """switch_session on a persisted session restores context (D-10 path)."""
+    runtime = runtime_with_store
+    await runtime.start()
+    first_id = runtime.active_session.id
+    await runtime.active_session.context.add_user_message("hello")
+    await runtime._session_manager.save_session()
+    second = await runtime.create_session()  # switches active away
+    assert second.id != first_id
+    success = await runtime.switch_session(first_id)
+    assert success is True
+    assert runtime.active_session.id == first_id
+    msgs = runtime.active_session.context.to_llm_messages()
+    assert any(m["role"] == "user" and m["content"] == "hello" for m in msgs)
+    await runtime.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_switch_session_missing_id_returns_false(runtime_with_store: RuntimeAPI) -> None:
+    runtime = runtime_with_store
+    await runtime.start()
+    assert await runtime.switch_session("nonexistent-id") is False
+    await runtime.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_get_session_history_returns_chronological_messages(runtime_with_store: RuntimeAPI) -> None:
+    runtime = runtime_with_store
+    await runtime.start()
+    sid = runtime.active_session.id
+    await runtime.active_session.context.add_user_message("first")
+    await runtime.active_session.context.add_assistant_message("second")
+    await runtime._session_manager.save_session()
+    history = await runtime.get_session_history(sid)
+    assert history is not None
+    roles = [m["role"] for m in history]
+    assert roles == ["user", "assistant"]
+    assert history[0]["content"] == "first"
+    assert history[1]["content"] == "second"
+    assert await runtime.get_session_history("missing") is None
+    await runtime.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_submit_prompt_auto_titles_new_session(runtime_with_store: RuntimeAPI) -> None:
+    """D-13: first prompt becomes the title, truncated to 50 chars + '...'."""
+    runtime = runtime_with_store
+    await runtime.start()
+    long_prompt = "x" * 60
+    await runtime.submit_prompt(long_prompt)
+    assert runtime.active_session.title == ("x" * 50) + "..."
+    await runtime.shutdown()
