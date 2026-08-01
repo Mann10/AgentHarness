@@ -30,6 +30,14 @@ function InputBar({ client, onOpenPicker }: { client: RpcClient; onOpenPicker: (
   const [input, setInput] = useState("")
   const { isFocused } = useFocus({ id: "input", autoFocus: true })
 
+  // Refresh the sessions array from disk so panel titles (auto-title included)
+  // update without a manual session switch. sessions.list is a disk read —
+  // submit_prompt persists the auto-title synchronously (backend fix, task 1).
+  const refreshSessions = () =>
+    client.listSessions().then((sessions) => {
+      useAgentStore.getState().setSessions(sessions)
+    })
+
   useInput(
     (char, key) => {
       if (!isFocused) return
@@ -45,13 +53,14 @@ function InputBar({ client, onOpenPicker }: { client: RpcClient; onOpenPicker: (
             const store = useAgentStore.getState()
             store.setActiveSession(id)
             store.resetConversation()
-          })
-        } else if (trimmed === "/sessions") {
-          client.listSessions().then((sessions) => {
+            return client.listSessions()
+          }).then((sessions) => {
             useAgentStore.getState().setSessions(sessions)
           })
+        } else if (trimmed === "/sessions") {
+          refreshSessions()
         } else {
-          client.submitPrompt(trimmed)
+          client.submitPrompt(trimmed).then(refreshSessions)
         }
         setInput("")
         return
