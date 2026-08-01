@@ -215,7 +215,7 @@ Cross-cutting constraints:
 - [x] 14-02: `provider.py` — async `SkillToolProvider` registered as `__skills__`, reserved-name collision rejection, filter-retention contract
 
 **Wave 2** *(blocked on Wave 1)*:
-- [ ] 14-03: Agent integration — `RuntimeAPI.load_skill()` single shared load path, system-role body injection via tagged `add_skill_message()`, short ack tool result
+- [x] 14-03: Agent integration — `RuntimeAPI.load_skill()` single shared load path, system-role body injection via tagged `add_skill_message()`, short ack tool result
 
 **Wave 3** *(blocked on Wave 2)*:
 - [ ] 14-04: Cancel-mid-gather fix + backend E2E (load → inject → summarize-survive → JSONL untouched)
@@ -296,7 +296,7 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 11. Session Popup & Panel Layout | v1.0 | 4/4 | Complete | 2026-08-01 |
 | 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete    | 2026-08-01 |
 | 13. Context Plumbing (Persist Fix) | v1.1 | 3/3 | Complete    | 2026-08-01 |
-| 14. read_skill Provider End-to-End | v1.1 | 2/4 | In Progress|  |
+| 14. read_skill Provider End-to-End | v1.1 | 3/4 | In Progress|  |
 | 15. Session Behavior & /skill Command | v1.1 | 0/3 | Not started | - |
 | 16. TUI Integration (Skill Indicator) | v1.1 | 0/3 | Not started | - |
 | 17. allowed-tools Enforcement & Hardening | v1.1 | 0/3 | Not started | - |
