@@ -14,6 +14,8 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 
 **Goal:** Build progressive-disclosure skills for AgentHarness — SKILL.md files under `.agentharness/skills/`, surfaced to the agent as a cheap manifest and loaded on demand.
 
+**Progress:** Phase 12 complete — skills package foundation (`SkillInfo`, frontmatter parser), one-pass discovery with skip-and-warn + dedupe, budgeted manifest assembly, and the system-prompt seam (`Session.skill_manifest`). Production wiring of the manifest construction site lands in Phase 14.
+
 **Target features:**
 - Skill storage & format (`.agentharness/skills/<name>/SKILL.md`, frontmatter, folder-per-skill)
 - Progressive disclosure (manifest in system prompt → `read_skill` tool → bundled references)
@@ -99,4 +101,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-01 after v1.1 Skills System milestone start*
+*Last updated: 2026-08-01 after Phase 12 (Skills Discovery & Manifest) completion*
