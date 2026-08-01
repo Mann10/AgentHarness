@@ -9,7 +9,7 @@ from agent import Agent
 from agent.result import AgentResult
 from config import Config
 from llm import OpenAIClient
-from session.models import Session, SessionSummary
+from session.models import Session, SessionSummary, derive_title
 from session.store import JSONLSessionStore
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
@@ -79,6 +79,14 @@ class RuntimeAPI:
                 summarize_fn=self._summarize_fn,
             )
             await self._create_agent()
+        # D-13: auto-title new sessions from their first prompt (REPL parity)
+        session = self._session_manager.active_session
+        if session is not None and session.title is None:
+            session.title = derive_title(prompt)
+            # D-13: persist the auto-title NOW (not just on_turn_complete) so a
+            # list_sessions() issued right after the chat RPC resolves (TUI refresh)
+            # reads the title from disk instead of None.
+            await self._session_manager.save_session()
         await self._scheduler.submit_prompt(prompt)
 
     def cancel(self) -> None:
@@ -113,14 +121,36 @@ class RuntimeAPI:
     async def switch_session(self, session_id: str) -> bool:
         """Switch to a different session by ID.
 
-        Loads the session from store. Returns False if not found.
-        Creates a new Agent for the switched session.
+        Loads the session from store, restores its conversation context, then
+        creates a new Agent for it. Returns False if not found or if context
+        restoration fails (matches the existing not-found contract).
         """
         session = await self._session_manager.load_session(session_id)
         if session is None:
             return False
+        try:
+            await session.restore_context(
+                count_tokens=self._client.count_tokens,
+                token_limit=self._config.max_tokens,
+                summarize_fn=self._summarize_fn,
+            )
+        except Exception:
+            logger.exception("Failed to restore context for session %s", session_id[:8])
+            return False
         await self._create_agent()
         return True
+
+    async def get_session_history(self, session_id: str) -> list[dict] | None:
+        """Return a session's stored conversation messages in chronological order.
+
+        Pure read — does NOT switch the active session. Returns None if the
+        session doesn't exist or its file is corrupt (store.load already
+        returns None in those cases).
+        """
+        session = await self._session_manager.get_session(session_id)
+        if session is None:
+            return None
+        return session.get_messages()
 
     # -- Properties ----------------------------------------
 
@@ -159,6 +189,7 @@ class RuntimeAPI:
             self._agent,
             self._event_bus,
             backlog_maxsize=self._backlog_maxsize,
+            on_turn_complete=self._session_manager.save_session,
         )
         await self._scheduler.start()
         logger.info("RuntimeAPI started")
@@ -200,6 +231,8 @@ class RuntimeAPI:
             max_tool_iterations=self._config.max_tool_iterations,
         )
         await self._agent.start()
+        if self._scheduler is not None:
+            self._scheduler.set_agent(self._agent)
 
     @staticmethod
     def _make_summarize_fn(client: OpenAIClient) -> Callable[[list[dict]], Awaitable[str]]:

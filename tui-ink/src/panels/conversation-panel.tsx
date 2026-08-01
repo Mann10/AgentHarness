@@ -8,8 +8,10 @@ interface ConversationPanelProps {
 }
 
 export function ConversationPanel({ focused }: ConversationPanelProps) {
-  const { conversation, status } = useAgentStore()
+  const { conversation, status, sessions, activeSessionId } = useAgentStore()
   const borderColor = focused ? "green" : "gray"
+  const active = sessions.find((s) => s.id === activeSessionId)
+  const title = active?.title ?? "untitled"
 
   return (
     <Box
@@ -19,9 +21,14 @@ export function ConversationPanel({ focused }: ConversationPanelProps) {
       borderColor={borderColor}
       paddingX={1}
     >
-      <Text bold underline>
-        Conversation
-      </Text>
+      <Box>
+        <Text bold underline>
+          Conversation
+        </Text>
+        <Text dimColor>
+          {"  "}· {title}
+        </Text>
+      </Box>
       <Box flexDirection="column-reverse" flexGrow={1} marginY={1}>
         {status === "thinking" && conversation.length > 0 && (
           <Box>

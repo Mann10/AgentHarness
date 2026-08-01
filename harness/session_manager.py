@@ -54,6 +54,14 @@ class SessionManager:
             logger.debug("Loaded session %s", session_id[:8])
         return session
 
+    async def get_session(self, session_id: str) -> Session | None:
+        """Load a session from the store WITHOUT making it active (pure read).
+
+        Unlike load_session, does not touch the active-session pointer —
+        used by the history RPC so fetching history has zero side effects.
+        """
+        return await self._store.load(session_id)
+
     async def save_session(self) -> None:
         """Persist the active session if one exists.
 

@@ -87,5 +87,7 @@ RPC_METHODS: list[str] = [
     "sessions.switch",
     "sessions.create",
     "sessions.delete",
+    "sessions.get",
+    "sessions.active",
     "ping",
 ]

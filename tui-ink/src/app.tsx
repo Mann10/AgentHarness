@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from "react"
 import { Box, Text, useFocus, useFocusManager, useInput, useApp } from "ink"
 import { Header } from "./components/header.js"
 import { Footer } from "./components/footer.js"
-import { SessionPanel } from "./panels/session-panel.js"
+import { SessionPicker } from "./components/session-picker.js"
+import { DatePanel } from "./panels/date-panel.js"
 import { ConversationPanel } from "./panels/conversation-panel.js"
 import { ToolMonitorPanel } from "./panels/tool-monitor-panel.js"
 import { useAgentStore } from "./store/agent-store.js"
@@ -24,10 +25,18 @@ function FocusablePanel({
   return <>{children(isFocused)}</>
 }
 
-function InputBar({ client }: { client: RpcClient }) {
+function InputBar({ client, onOpenPicker }: { client: RpcClient; onOpenPicker: () => void }) {
   const { busy } = useAgentStore()
   const [input, setInput] = useState("")
   const { isFocused } = useFocus({ id: "input", autoFocus: true })
+
+  // Refresh the sessions array from disk so panel titles (auto-title included)
+  // update without a manual session switch. sessions.list is a disk read —
+  // submit_prompt persists the auto-title synchronously (backend fix, task 1).
+  const refreshSessions = () =>
+    client.listSessions().then((sessions) => {
+      useAgentStore.getState().setSessions(sessions)
+    })
 
   useInput(
     (char, key) => {
@@ -36,12 +45,22 @@ function InputBar({ client }: { client: RpcClient }) {
       if (key.return) {
         const trimmed = input.trim()
         if (!trimmed) return
-        if (trimmed === "/sessions") {
-          client.listSessions().then((sessions) => {
+        if (trimmed === "/session") {
+          onOpenPicker()                                  // D-06: open full-screen overlay
+        } else if (trimmed === "/new") {
+          // D-11/D-12: immediate fresh start — create, switch active, clear view. No confirm.
+          client.createSession().then((id) => {
+            const store = useAgentStore.getState()
+            store.setActiveSession(id)
+            store.resetConversation()
+            return client.listSessions()
+          }).then((sessions) => {
             useAgentStore.getState().setSessions(sessions)
           })
+        } else if (trimmed === "/sessions") {
+          refreshSessions()
         } else {
-          client.submitPrompt(trimmed)
+          client.submitPrompt(trimmed).then(refreshSessions)
         }
         setInput("")
         return
@@ -77,6 +96,7 @@ export function App({ client, cwd }: AppProps) {
   const [connected, setConnected] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [sessions, setSessions] = useState<ReturnType<typeof useAgentStore.getState>["sessions"]>([])
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   useEffect(() => {
     enableFocus()
@@ -88,6 +108,10 @@ export function App({ client, cwd }: AppProps) {
       .start({ cwd })
       .then(() => {
         setConnected(true)
+        return client.getActiveSession()
+      })
+      .then((sessionId) => {
+        if (sessionId) useAgentStore.getState().setActiveSession(sessionId)
         return client.listSessions()
       })
       .then((sessions) => {
@@ -103,6 +127,7 @@ export function App({ client, cwd }: AppProps) {
   }, [client])
 
   useInput((input) => {
+    if (pickerOpen) return
     if (input === "q") {
       client.stop().then(() => exit()).catch(() => exit())
     }
@@ -131,22 +156,24 @@ export function App({ client, cwd }: AppProps) {
     )
   }
 
+  if (pickerOpen) {
+    return <SessionPicker client={client} onClose={() => setPickerOpen(false)} />
+  }
+
   return (
     <Box flexDirection="column" height="100%">
       <Header />
-      <Box flexGrow={1} flexDirection="row" height="60%">
-        <FocusablePanel id="sessions">
-          {(focused) => <SessionPanel focused={focused} />}
-        </FocusablePanel>
+      <Box flexGrow={1} flexDirection="row">
         <FocusablePanel id="conversation">
           {(focused) => <ConversationPanel focused={focused} />}
         </FocusablePanel>
+        <DatePanel />
       </Box>
       <FocusablePanel id="tool-monitor">
         {(focused) => <ToolMonitorPanel focused={focused} />}
       </FocusablePanel>
       <FocusablePanel id="input">
-        {(focused) => <InputBar client={client} />}
+        {(focused) => <InputBar client={client} onOpenPicker={() => setPickerOpen(true)} />}
       </FocusablePanel>
       <Footer />
     </Box>

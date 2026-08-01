@@ -11,6 +11,21 @@ from context.context import ConversationContext
 from context.message import Message
 
 
+TITLE_MAX_CHARS = 15
+
+
+def derive_title(text: str) -> str:
+    """Derive a session title from a prompt: first line, truncated to 15 chars.
+
+    Matches the user-facing rule: title = first line of what the user wrote,
+    truncated to TITLE_MAX_CHARS characters with a trailing "..." when longer.
+    """
+    first_line = text.strip().splitlines()[0] if text.strip() else ""
+    if len(first_line) > TITLE_MAX_CHARS:
+        return first_line[:TITLE_MAX_CHARS] + "..."
+    return first_line
+
+
 @dataclass
 class SessionSummary:
     id: str
@@ -65,6 +80,18 @@ class Session:
                 d["tool_call_id"] = msg.tool_call_id
             events.append(d)
         return events
+
+    def get_messages(self) -> list[dict]:
+        """Return conversation messages as serializable dicts in chronological order.
+
+        Works for live sessions (restored context) AND store-loaded sessions
+        (raw stored events). Never raises on a non-restored session — the
+        AttributeError in to_events() on _context=None is exactly the bug this
+        accessor exists to avoid (research finding, empirically confirmed).
+        """
+        if self._context is not None:
+            return self.to_events()
+        return [dict(e) for e in getattr(self, "_stored_events", [])]
 
     def unpersisted_events(self) -> list[dict]:
         all_events = self.to_events()

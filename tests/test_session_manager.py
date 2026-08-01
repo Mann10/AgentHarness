@@ -113,3 +113,47 @@ async def test_delete_active_session_clears_active(mgr: SessionManager) -> None:
     assert mgr.active_session is not None
     await mgr.delete_session(session.id)
     assert mgr.active_session is None
+
+
+@pytest.mark.asyncio
+async def test_get_session_pure_read_does_not_switch_active(mgr: SessionManager) -> None:
+    first = await mgr.create_session(system_prompt="first", count_tokens=len, token_limit=1000)
+    second = await mgr.create_session(system_prompt="second", count_tokens=len, token_limit=1000)
+    assert mgr.active_session.id == second.id
+    loaded = await mgr.get_session(first.id)
+    assert loaded is not None
+    assert loaded.id == first.id
+    assert mgr.active_session.id == second.id  # active unchanged — pure read
+
+
+@pytest.mark.asyncio
+async def test_get_session_nonexistent_returns_none(mgr: SessionManager) -> None:
+    assert await mgr.get_session("nonexistent-id") is None
+
+
+@pytest.mark.asyncio
+async def test_title_persists_after_save(mgr: SessionManager) -> None:
+    """Auto-title set after creation survives a re-save and is listed."""
+    session = await mgr.create_session(
+        system_prompt="test",
+        count_tokens=len,
+        token_limit=1000,
+    )
+    session.title = "my session title"
+    await mgr.save_session()
+    summaries = await mgr.list_sessions()
+    assert summaries[0].title == "my session title"
+
+
+@pytest.mark.asyncio
+async def test_list_fallback_title_from_first_user_message(mgr: SessionManager) -> None:
+    """Legacy sessions (title None) get a title derived from their first message."""
+    session = await mgr.create_session(
+        system_prompt="test",
+        count_tokens=len,
+        token_limit=1000,
+    )
+    await session.context.add_user_message("what is the weather like today?")
+    await mgr.save_session()
+    summaries = await mgr.list_sessions()
+    assert summaries[0].title == "what is the wea..."

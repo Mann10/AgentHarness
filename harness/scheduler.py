@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import Awaitable, Callable
 
 from agent import Agent
 from agent.result import AgentResult
@@ -27,6 +28,7 @@ class Scheduler:
     - If busy, queues to backlog (FIFO asyncio.Queue)
     - After turn completes, drains the backlog automatically
     - cancel() cancels the current asyncio.Task (CancelledError propagates)
+    - on_turn_complete is awaited after each successful turn (used to persist)
     """
 
     def __init__(
@@ -35,21 +37,33 @@ class Scheduler:
         event_bus: EventBus,
         *,
         backlog_maxsize: int = 0,
+        on_turn_complete: Callable[[], Awaitable[None]] | None = None,
     ) -> None:
         self._agent = agent
         self._bus = event_bus
+        self._on_turn_complete = on_turn_complete
         self._backlog: asyncio.Queue[str] = asyncio.Queue(maxsize=backlog_maxsize)
         self._current_task: asyncio.Task[AgentResult] | None = None
         self._cancellation_token: CancellationToken | None = None
         self._running = False
 
-        # Wire Agent's emit callback to EventBus publish
-        # The Agent already constructed with emit= or will be set externally
-        # We wire it here by replacing agent._emit
+        self._wire_agent(agent)
+
+    def set_agent(self, agent: Agent) -> None:
+        """Swap the active agent (e.g. after session create/switch).
+
+        Re-wires emit so events from the new agent still reach the EventBus,
+        then replaces the reference used by _run_turn. The current turn, if
+        any, keeps running against the agent it started with.
+        """
+        self._wire_agent(agent)
+        self._agent = agent
+
+    def _wire_agent(self, agent: Agent) -> None:
         async def _emit_to_bus(event):
             await self._bus.publish(event)
 
-        self._agent._emit = _emit_to_bus
+        agent._emit = _emit_to_bus
 
     async def submit_prompt(self, prompt: str) -> None:
         """Submit a prompt for execution (non-blocking, D-15).
@@ -143,6 +157,13 @@ class Scheduler:
         except Exception as e:
             logger.exception("Turn failed: %s", e)
             raise
+
+        # Persist after each successful turn so sessions are loadable mid-run
+        if self._on_turn_complete is not None:
+            try:
+                await self._on_turn_complete()
+            except Exception as e:
+                logger.warning("on_turn_complete failed: %s", e)
 
         # Drain backlog: process next queued prompt (FIFO)
         if not self._backlog.empty():

@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import { spawn, type ChildProcess } from "node:child_process"
 import { createInterface, type Interface as ReadlineInterface } from "node:readline"
 import { useAgentStore } from "../store/agent-store.js"
-import type { EventPayload, SessionSummary } from "../types.js"
+import type { EventPayload, SessionMessage, SessionSummary } from "../types.js"
 
 let reqId = 0
 const nextReqId = () => ++reqId
@@ -125,11 +125,26 @@ export class RpcClient {
     return result.session_id
   }
 
+  async getActiveSession(): Promise<string | null> {
+    const result = (await this.request("sessions.active")) as { session_id: string | null }
+    return result.session_id
+  }
+
   async deleteSession(sessionId: string): Promise<boolean> {
     const result = (await this.request("sessions.delete", { session_id: sessionId })) as {
       deleted: boolean
     }
     return result.deleted
+  }
+
+  async getSessionHistory(sessionId: string): Promise<SessionMessage[]> {
+    const result = (await this.request("sessions.get", { session_id: sessionId })) as
+      | { messages: SessionMessage[] }
+      | { error: string }
+    if ("error" in result) {
+      throw new Error(result.error)
+    }
+    return result.messages
   }
 
   async ping(): Promise<void> {
