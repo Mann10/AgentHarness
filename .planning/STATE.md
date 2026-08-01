@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-last_updated: "2026-08-01T07:30:50.778Z"
+status: completed
+last_updated: "2026-08-01T09:27:53.240Z"
 progress:
   total_phases: 10
-  completed_phases: 4
+  completed_phases: 10
   total_plans: 25
-  completed_plans: 21
-  percent: 84
+  completed_plans: 22
+  percent: 88
 ---
 
 # Project State
 
 **Updated:** 2026-08-01
-**Status:** Executing Phase 11
+**Status:** v1.0 milestone complete
 
 ## Current Phase
 
@@ -31,6 +31,7 @@ progress:
 - [x] 11-01-PLAN.md — Backend: context-restore fix, sessions.get RPC, auto-title (D-06/D-10/D-13) (Wave 1)
 - [x] 11-02-PLAN.md — TUI contracts: SessionMessage type, getSessionHistory, loadConversation (D-10) (Wave 1)
 - [x] 11-03-PLAN.md — /session full-screen picker + /new + honest footer (D-06..D-09, D-11/D-12) (Wave 2)
+- [x] 11-04-PLAN.md — Conversation-first layout + live DatePanel + E2E checkpoint (D-01..D-05, D-14..D-16) (Wave 3)
 
 ## Progress
 
@@ -41,9 +42,24 @@ progress:
 - [x] Phase 5: Harness Runtime — Complete (8 plans)
 - [x] Phase 6: Rich Textual TUI — Complete (3 plans)
 - [x] Phase 7: TUI Visual Overhaul — Complete (3 plans)
-- [ ] Phase 8: TUI Conversation Layout — Planned (3 plans in 2 waves)
+- [x] Phase 8: TUI Conversation Layout — Complete (3 plans in 2 waves)
 - [x] Phase 10: Token Streaming — Complete (4 plans in 4 waves)
-- [ ] Phase 11: Session Popup & Panel Layout — Context gathered (16 decisions D-01..D-16)
+- [x] Phase 11: Session Popup & Panel Layout — Complete (4 plans in 4 waves)
+
+## Quick Tasks Completed
+
+| # | Description | Date | Commit | Status | Directory |
+|---|-------------|------|--------|--------|-----------|
+| 260801-jra | Show session name in conversation panel on first question | 2026-08-01 | e22128f | Verified | [260801-jra-when-new-session-is-launched-its-name-is](./quick/260801-jra-when-new-session-is-launched-its-name-is/) |
+
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-08-01:
+
+| Category | Item | Status |
+|----------|------|--------|
+| debug | enter-not-submitting | resolving |
+| verification_gap | 09-VERIFICATION.md | gaps_found |
 
 ## Phase 10 Progress
 
@@ -85,6 +101,7 @@ progress:
 
 ## Notes
 
+- v1.0 milestone complete 2026-08-01 (see .planning/MILESTONES.md). Phase 11 plan 04 complete: conversation-first layout with DatePanel live-clock, SessionPanel removed, E2E human-verified. Follow-up session-name fix delivered via quick task 260801-jra (sessions.active RPC + TUI startup binding + refresh on submit).
 - Phase 11 plan 01 complete 2026-08-01: switch_session context-restore fix (load + restore_context before Agent creation, D-10), 8th RPC method sessions.get returning chronological history with isalnum() path-traversal guard (T-11-01), Session.get_messages() + SessionManager.get_session() pure-read accessors, submit_prompt first-prompt auto-title (D-13). 54 pytest green (11 new).
 - Phase 11 plans 02/03 complete 2026-08-01: TUI contracts (SessionMessage/SessionHistoryResponse types, getSessionHistory with error discrimination, loadConversation store action — typecheck clean) and /session full-screen SessionPicker overlay (key trap via conditional render, sorted rows with 8-char id + message count + relative age, switch-only, Esc/q close), /new + /sessions slash-command branches, q-gate while picker open, honest footer hints. typecheck + build green.
 - Phase 11 (Session Popup & Panel Layout) context captured 2026-07-31: 16 decisions D-01..D-16 in .planning/phases/11-session-popup-and-panel-layout/11-CONTEXT.md. Conversation becomes main panel, date/time panel on right (reverses 09-CONTEXT D-29), /session full-screen keyboard overlay to switch sessions (loads history — needs new backend sessions.get RPC), /new starts fresh via sessions.create with auto-title. Phase added to roadmap.
