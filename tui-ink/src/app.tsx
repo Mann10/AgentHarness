@@ -108,6 +108,10 @@ export function App({ client, cwd }: AppProps) {
       .start({ cwd })
       .then(() => {
         setConnected(true)
+        return client.getActiveSession()
+      })
+      .then((sessionId) => {
+        if (sessionId) useAgentStore.getState().setActiveSession(sessionId)
         return client.listSessions()
       })
       .then((sessions) => {

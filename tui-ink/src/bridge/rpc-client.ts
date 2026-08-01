@@ -125,6 +125,11 @@ export class RpcClient {
     return result.session_id
   }
 
+  async getActiveSession(): Promise<string | null> {
+    const result = (await this.request("sessions.active")) as { session_id: string | null }
+    return result.session_id
+  }
+
   async deleteSession(sessionId: string): Promise<boolean> {
     const result = (await this.request("sessions.delete", { session_id: sessionId })) as {
       deleted: boolean

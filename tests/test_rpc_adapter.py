@@ -46,3 +46,24 @@ def test_sessions_get_registered_in_dispatcher() -> None:
     dispatcher = Dispatcher()
     _adapter_with().register_all(dispatcher)
     assert dispatcher._handlers["sessions.get"] is not None
+
+
+def test_sessions_active_returns_runtime_active_session() -> None:
+    runtime = MagicMock()
+    runtime.active_session = MagicMock()
+    runtime.active_session.id = "abc123"
+    adapter = RPCAdapter(runtime)
+    assert adapter.handle_sessions_active(None) == {"session_id": "abc123"}
+
+
+def test_sessions_active_returns_none_when_no_session() -> None:
+    runtime = MagicMock()
+    runtime.active_session = None
+    adapter = RPCAdapter(runtime)
+    assert adapter.handle_sessions_active(None) == {"session_id": None}
+
+
+def test_sessions_active_registered_in_dispatcher() -> None:
+    dispatcher = Dispatcher()
+    _adapter_with().register_all(dispatcher)
+    assert dispatcher._handlers["sessions.active"] is not None

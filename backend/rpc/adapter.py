@@ -82,6 +82,15 @@ class RPCAdapter:
             return {"error": "Session not found"}
         return {"messages": history}
 
+    def handle_sessions_active(self, params: dict | None) -> dict:
+        """Return the id of the runtime's active session (or null if none).
+
+        The TUI binds this on connect so the panels show the real session
+        name instead of a fallback when a fresh session is auto-created.
+        """
+        session = self._runtime.active_session
+        return {"session_id": session.id if session is not None else None}
+
     def handle_ping(self, params: dict | None) -> dict:
         """Health check — returns ok."""
         return {"status": "ok"}
@@ -95,4 +104,5 @@ class RPCAdapter:
         dispatcher.register("sessions.create", self.handle_sessions_create)
         dispatcher.register("sessions.delete", self.handle_sessions_delete)
         dispatcher.register("sessions.get", self.handle_sessions_get)
+        dispatcher.register("sessions.active", self.handle_sessions_active)
         dispatcher.register("ping", self.handle_ping)
