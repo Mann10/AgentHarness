@@ -152,7 +152,7 @@ Plans:
 **Milestone Goal:** Progressive-disclosure skills for AgentHarness — users author `SKILL.md` files under `.agentharness/skills/`, the agent sees a cheap budgeted manifest (name + description) in the system prompt each turn, and the full skill body loads into context only on demand (via `read_skill` or `/skill`). Six phases, dependency-ordered pure → integrated, with the highest-risk change (session serialization) placed second so the JSONL exclusion is proven before any real skill body flows.
 
 - [x] **Phase 12: Skills Discovery & Manifest** - SKILL.md authoring, discovery with skip-and-warn, budgeted manifest in the system prompt (completed 2026-08-01)
-- [ ] **Phase 13: Context Plumbing (Persist Fix)** - session serialization handles skill bodies: persist in memory, never to JSONL
+- [x] **Phase 13: Context Plumbing (Persist Fix)** - session serialization handles skill bodies: persist in memory, never to JSONL (completed 2026-08-01)
 - [ ] **Phase 14: read_skill Provider End-to-End** - path-scoped `read_skill` tool, bundled resources, system-role body injection
 - [ ] **Phase 15: Session Behavior & /skill Command** - user-invocable `/skill` via the 4-layer RPC contract, loaded-skill accounting
 - [ ] **Phase 16: TUI Integration (Skill Indicator)** - TUI `/skill` + visible "Skill loaded" indicator via typed event
@@ -191,7 +191,7 @@ Plans:
 Plans:
 - [x] 13-01: `Message.persist: bool = True` field + `persist=False` support for skill bodies
 - [x] 13-02: `to_events()` persist filter + `mark_saved()` index fix (paired change; save/resume round-trip tests)
-- [ ] 13-03: Non-serialized `Session.skill_manifest`/`skill_state` fields + summarization-exemption documentation + unit tests
+- [x] 13-03: Non-serialized `Session.skill_manifest`/`skill_state` fields + summarization-exemption documentation + unit tests
 
 ### Phase 14: read_skill Provider End-to-End
 **Goal**: Agent can load a skill body on demand via a dedicated `read_skill` tool and read bundled resources through path-scoped reads — Level-2/Level-3 disclosure. Bodies flow through the persist-safe plumbing from Phase 13 as system-role messages.
@@ -286,7 +286,7 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 10. Token Streaming | v1.0 | 4/4 | Complete | 2026-07-31 |
 | 11. Session Popup & Panel Layout | v1.0 | 4/4 | Complete | 2026-08-01 |
 | 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete    | 2026-08-01 |
-| 13. Context Plumbing (Persist Fix) | v1.1 | 2/3 | In Progress|  |
+| 13. Context Plumbing (Persist Fix) | v1.1 | 3/3 | Complete   | 2026-08-01 |
 | 14. read_skill Provider End-to-End | v1.1 | 0/4 | Not started | - |
 | 15. Session Behavior & /skill Command | v1.1 | 0/3 | Not started | - |
 | 16. TUI Integration (Skill Indicator) | v1.1 | 0/3 | Not started | - |
