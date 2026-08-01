@@ -11,6 +11,21 @@ from context.context import ConversationContext
 from context.message import Message
 
 
+TITLE_MAX_CHARS = 15
+
+
+def derive_title(text: str) -> str:
+    """Derive a session title from a prompt: first line, truncated to 15 chars.
+
+    Matches the user-facing rule: title = first line of what the user wrote,
+    truncated to TITLE_MAX_CHARS characters with a trailing "..." when longer.
+    """
+    first_line = text.strip().splitlines()[0] if text.strip() else ""
+    if len(first_line) > TITLE_MAX_CHARS:
+        return first_line[:TITLE_MAX_CHARS] + "..."
+    return first_line
+
+
 @dataclass
 class SessionSummary:
     id: str

@@ -181,10 +181,65 @@ async def test_get_session_history_returns_chronological_messages(runtime_with_s
 
 @pytest.mark.asyncio
 async def test_submit_prompt_auto_titles_new_session(runtime_with_store: RuntimeAPI) -> None:
-    """D-13: first prompt becomes the title, truncated to 50 chars + '...'."""
+    """D-13: first prompt becomes the title, first line truncated to 15 chars + '...'."""
     runtime = runtime_with_store
     await runtime.start()
     long_prompt = "x" * 60
     await runtime.submit_prompt(long_prompt)
-    assert runtime.active_session.title == ("x" * 50) + "..."
+    assert runtime.active_session.title == ("x" * 15) + "..."
+    await runtime.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_submit_prompt_title_uses_first_line(runtime_with_store: RuntimeAPI) -> None:
+    """Title derives from the first line of the prompt, not the whole text."""
+    runtime = runtime_with_store
+    await runtime.start()
+    await runtime.submit_prompt("multi-line first prompt\nsecond line here")
+    assert runtime.active_session.title == "multi-line firs..."
+    await runtime.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_submit_prompt_title_persists_to_store(runtime_with_store: RuntimeAPI) -> None:
+    """Auto-title reaches disk so list_sessions returns a real name, not None."""
+    runtime = runtime_with_store
+    await runtime.start()
+    sid = runtime.active_session.id
+    await runtime.submit_prompt("a persistent title question")
+    await asyncio.sleep(0.3)
+    summaries = await runtime.list_sessions()
+    matches = [s for s in summaries if s.id == sid]
+    assert len(matches) == 1
+    assert matches[0].title == "a persistent ti..."
+    await runtime.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_messages_persist_after_each_turn(runtime_with_store: RuntimeAPI) -> None:
+    """History is available from the store mid-run, before shutdown."""
+    runtime = runtime_with_store
+    await runtime.start()
+    sid = runtime.active_session.id
+    await runtime.submit_prompt("first question")
+    await asyncio.sleep(0.3)
+    history = await runtime.get_session_history(sid)
+    assert history is not None
+    roles = [m["role"] for m in history]
+    assert "user" in roles
+    await runtime.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_scheduler_agent_tracks_active_session_after_create(runtime_with_store: RuntimeAPI) -> None:
+    """After create_session, new prompts run against the new session's agent."""
+    runtime = runtime_with_store
+    await runtime.start()
+    first_id = runtime.active_session.id
+    await runtime.create_session()  # new session becomes active
+    assert runtime.active_session.id != first_id
+    assert runtime._scheduler._agent._session.id == runtime.active_session.id
+    await runtime.submit_prompt("question for second session")
+    await asyncio.sleep(0.3)
+    assert runtime._scheduler._agent._session.id == runtime.active_session.id
     await runtime.shutdown()

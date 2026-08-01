@@ -9,7 +9,7 @@ from agent import Agent
 from agent.result import AgentResult
 from config import Config
 from llm import OpenAIClient
-from session.models import Session, SessionSummary
+from session.models import Session, SessionSummary, derive_title
 from session.store import JSONLSessionStore
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
@@ -82,7 +82,7 @@ class RuntimeAPI:
         # D-13: auto-title new sessions from their first prompt (REPL parity)
         session = self._session_manager.active_session
         if session is not None and session.title is None:
-            session.title = prompt[:50] + ("..." if len(prompt) > 50 else "")
+            session.title = derive_title(prompt)
         await self._scheduler.submit_prompt(prompt)
 
     def cancel(self) -> None:
@@ -185,6 +185,7 @@ class RuntimeAPI:
             self._agent,
             self._event_bus,
             backlog_maxsize=self._backlog_maxsize,
+            on_turn_complete=self._session_manager.save_session,
         )
         await self._scheduler.start()
         logger.info("RuntimeAPI started")
@@ -226,6 +227,8 @@ class RuntimeAPI:
             max_tool_iterations=self._config.max_tool_iterations,
         )
         await self._agent.start()
+        if self._scheduler is not None:
+            self._scheduler.set_agent(self._agent)
 
     @staticmethod
     def _make_summarize_fn(client: OpenAIClient) -> Callable[[list[dict]], Awaitable[str]]:
