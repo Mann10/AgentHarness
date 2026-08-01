@@ -70,16 +70,29 @@ class RPCAdapter:
         deleted = await self._runtime.delete_session(params["session_id"])
         return {"deleted": deleted}
 
+    async def handle_sessions_get(self, params: dict | None) -> dict:
+        """Return a session's stored conversation messages (chronological)."""
+        if params is None or "session_id" not in params:
+            return {"error": "Missing 'session_id' in params"}
+        session_id = params["session_id"]
+        if not isinstance(session_id, str) or not session_id.isalnum():
+            return {"error": "Invalid session_id"}
+        history = await self._runtime.get_session_history(session_id)
+        if history is None:
+            return {"error": "Session not found"}
+        return {"messages": history}
+
     def handle_ping(self, params: dict | None) -> dict:
         """Health check — returns ok."""
         return {"status": "ok"}
 
     def register_all(self, dispatcher: Dispatcher) -> None:
-        """Register all 7 RPC methods with the given dispatcher."""
+        """Register all 8 RPC methods with the given dispatcher."""
         dispatcher.register("chat", self.handle_chat)
         dispatcher.register("cancel", self.handle_cancel)
         dispatcher.register("sessions.list", self.handle_sessions_list)
         dispatcher.register("sessions.switch", self.handle_sessions_switch)
         dispatcher.register("sessions.create", self.handle_sessions_create)
         dispatcher.register("sessions.delete", self.handle_sessions_delete)
+        dispatcher.register("sessions.get", self.handle_sessions_get)
         dispatcher.register("ping", self.handle_ping)

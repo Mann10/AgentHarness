@@ -79,6 +79,10 @@ class RuntimeAPI:
                 summarize_fn=self._summarize_fn,
             )
             await self._create_agent()
+        # D-13: auto-title new sessions from their first prompt (REPL parity)
+        session = self._session_manager.active_session
+        if session is not None and session.title is None:
+            session.title = prompt[:50] + ("..." if len(prompt) > 50 else "")
         await self._scheduler.submit_prompt(prompt)
 
     def cancel(self) -> None:
@@ -131,6 +135,18 @@ class RuntimeAPI:
             return False
         await self._create_agent()
         return True
+
+    async def get_session_history(self, session_id: str) -> list[dict] | None:
+        """Return a session's stored conversation messages in chronological order.
+
+        Pure read — does NOT switch the active session. Returns None if the
+        session doesn't exist or its file is corrupt (store.load already
+        returns None in those cases).
+        """
+        session = await self._session_manager.get_session(session_id)
+        if session is None:
+            return None
+        return session.get_messages()
 
     # -- Properties ----------------------------------------
 
