@@ -113,11 +113,21 @@ class RuntimeAPI:
     async def switch_session(self, session_id: str) -> bool:
         """Switch to a different session by ID.
 
-        Loads the session from store. Returns False if not found.
-        Creates a new Agent for the switched session.
+        Loads the session from store, restores its conversation context, then
+        creates a new Agent for it. Returns False if not found or if context
+        restoration fails (matches the existing not-found contract).
         """
         session = await self._session_manager.load_session(session_id)
         if session is None:
+            return False
+        try:
+            await session.restore_context(
+                count_tokens=self._client.count_tokens,
+                token_limit=self._config.max_tokens,
+                summarize_fn=self._summarize_fn,
+            )
+        except Exception:
+            logger.exception("Failed to restore context for session %s", session_id[:8])
             return False
         await self._create_agent()
         return True

@@ -66,6 +66,18 @@ class Session:
             events.append(d)
         return events
 
+    def get_messages(self) -> list[dict]:
+        """Return conversation messages as serializable dicts in chronological order.
+
+        Works for live sessions (restored context) AND store-loaded sessions
+        (raw stored events). Never raises on a non-restored session — the
+        AttributeError in to_events() on _context=None is exactly the bug this
+        accessor exists to avoid (research finding, empirically confirmed).
+        """
+        if self._context is not None:
+            return self.to_events()
+        return [dict(e) for e in getattr(self, "_stored_events", [])]
+
     def unpersisted_events(self) -> list[dict]:
         all_events = self.to_events()
         return all_events[self._last_saved_count:]
