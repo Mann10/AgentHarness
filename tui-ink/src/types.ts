@@ -6,6 +6,15 @@ export interface SessionSummary {
   message_count: number
 }
 
+export interface SessionMessage {
+  role: "user" | "assistant"
+  content: string
+}
+
+export interface SessionHistoryResponse {
+  messages: SessionMessage[]
+}
+
 export interface TurnStartedPayload {
   session_id: string
   prompt: string
