@@ -19,10 +19,10 @@ progress:
 
 ## Current Position
 
-Phase: 12 — Skills Discovery & Manifest (not started)
+Phase: 12 — Skills Discovery & Manifest (context gathered)
 Plan: —
-Status: Roadmap created (phases 12-17); awaiting phase planning
-Last activity: 2026-08-01 — Milestone v1.1 roadmap created
+Status: Phase 12 context gathered (4 areas discussed); awaiting phase planning
+Last activity: 2026-08-01 — Phase 12 context captured
 
 ## Project Reference
 
@@ -64,6 +64,7 @@ Items acknowledged and deferred at v1.0 milestone close on 2026-08-01:
 - v1.0 milestone complete 2026-08-01 (see .planning/MILESTONES.md). Phase 11 plan 04 complete: conversation-first layout with DatePanel live-clock, SessionPanel removed, E2E human-verified. Follow-up session-name fix delivered via quick task 260801-jra (sessions.active RPC + TUI startup binding + refresh on submit).
 - v1.1 Skills System milestone started 2026-08-01. Context captured (16 decisions D-01..D-16) in .planning/MILESTONE-CONTEXT.md. Skills at .agentharness/skills/, manifest in system prompt, read_skill tool, /skill command, system-role persistence, allowed-tools filtering.
 - v1.1 roadmap created 2026-08-01: 6 phases (12-17), 20/20 requirements mapped, following research SUMMARY.md ordering — discovery & manifest (12) → context plumbing / persist fix (13, highest risk, placed second so D-13 JSONL leak is closed before any body flows) → read_skill provider (14) → session behavior + /skill RPC (15) → TUI indicator (16) → allowed-tools enforcement & hardening (17). CAP-03 (read_skill never filtered) ships with the read_skill phase per roadmap; CAP-04 intersection semantics decided in Phase 15, enforced in Phase 17.
+- Phase 12 context gathered 2026-08-01 (17 decisions D-01..D-17): frontmatter-name-wins on mismatch, lenient name validation, case-insensitive win32 match, char-based 1500-char configurable cap with longest-first truncation (never drops skills), `# Available Skills` heading + `- name: description` bullets appended at end of _build_system_prompt, section omitted when no skills, allowed-tools parsed + shape-validated now (malformed → keep skill, drop field), enforcement deferred to Phase 17.
 
 ## Quick Tasks Completed
 
