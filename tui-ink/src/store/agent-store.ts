@@ -5,6 +5,7 @@ import type {
   Message,
   ToolCallStatus,
   SessionSummary,
+  SessionMessage,
 } from "../types.js"
 
 let msgCounter = 0
@@ -32,6 +33,7 @@ interface AgentActions {
   setResponseTime: (time: string) => void
   setBusy: (busy: boolean) => void
   resetConversation: () => void
+  loadConversation: (messages: SessionMessage[]) => void
   clearToolCalls: () => void
   incrementToolCallCount: () => void
 }
@@ -195,6 +197,20 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   resetConversation: () =>
     set({
       conversation: [],
+      toolCalls: [],
+      toolCallCount: 0,
+      status: "idle",
+      error: null,
+    }),
+
+  loadConversation: (messages) =>
+    set({
+      conversation: messages.map((m) => ({
+        id: nextId(),
+        role: m.role,
+        content: m.content,
+        timestamp: now(),
+      })),
       toolCalls: [],
       toolCallCount: 0,
       status: "idle",
