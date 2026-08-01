@@ -205,10 +205,19 @@ Plans:
   5. Cancelling a turn mid-load leaves no dangling tool_calls — the next turn streams cleanly (pre-existing cancel hole closed and tested).
 **Plans**: 4 plans
 
-Plans:
+Cross-cutting constraints:
+- System-role body injection flows through Phase 13 persist-safe plumbing (`persist=False` + summarization exemption) — enforced in 14-03/14-04
+- `read_skill`/`read_skill_path` are reserved, un-namespaced `__skills__` tools — no skill can shadow or be shadowed (D-01/D-02/D-03)
+- Traversal guard is canonicalize+contain (`is_relative_to`) with win32 test vectors in the same wave (D-10/D-11/D-12)
+
+**Wave 1** *(parallel)*:
 - [ ] 14-01: `store.py` — `SkillStore` (index, `load`, `read_path` with canonicalize+contain traversal guard) + traversal test suite
 - [ ] 14-02: `provider.py` — async `SkillToolProvider` registered as `__skills__`, reserved-name collision rejection, filter-retention contract
+
+**Wave 2** *(blocked on Wave 1)*:
 - [ ] 14-03: Agent integration — `RuntimeAPI.load_skill()` single shared load path, system-role body injection via tagged `add_skill_message()`, short ack tool result
+
+**Wave 3** *(blocked on Wave 2)*:
 - [ ] 14-04: Cancel-mid-gather fix + backend E2E (load → inject → summarize-survive → JSONL untouched)
 
 ### Phase 15: Session Behavior & /skill Command
