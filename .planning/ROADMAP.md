@@ -151,7 +151,7 @@ Plans:
 
 **Milestone Goal:** Progressive-disclosure skills for AgentHarness — users author `SKILL.md` files under `.agentharness/skills/`, the agent sees a cheap budgeted manifest (name + description) in the system prompt each turn, and the full skill body loads into context only on demand (via `read_skill` or `/skill`). Six phases, dependency-ordered pure → integrated, with the highest-risk change (session serialization) placed second so the JSONL exclusion is proven before any real skill body flows.
 
-- [ ] **Phase 12: Skills Discovery & Manifest** - SKILL.md authoring, discovery with skip-and-warn, budgeted manifest in the system prompt
+- [x] **Phase 12: Skills Discovery & Manifest** - SKILL.md authoring, discovery with skip-and-warn, budgeted manifest in the system prompt (completed 2026-08-01)
 - [ ] **Phase 13: Context Plumbing (Persist Fix)** - session serialization handles skill bodies: persist in memory, never to JSONL
 - [ ] **Phase 14: read_skill Provider End-to-End** - path-scoped `read_skill` tool, bundled resources, system-role body injection
 - [ ] **Phase 15: Session Behavior & /skill Command** - user-invocable `/skill` via the 4-layer RPC contract, loaded-skill accounting
@@ -172,10 +172,10 @@ Plans:
 **Plans**: 4 plans (finalized 2026-08-01 — waves: {12-01} → {12-02, 12-03} → {12-04}; 12-02 and 12-03 are parallel-safe, no shared files)
 
 Plans:
-- [ ] 12-01: `skills/` package foundation — `PyYAML>=6.0.3` added to requirements.txt, `models.py` `SkillInfo` dataclass, `frontmatter.py` delimiter splitter (`yaml.safe_load`, degrades to `({}, body)`)
-- [ ] 12-02: `discovery.py` — per-skill parse+validate skip-and-warn taxonomy (`parse_skill_entry`) + deterministic first-wins scan with win32 case handling (`discover_skills`)
-- [ ] 12-03: `manifest.py` — `build_manifest_text` (D-11 format, D-13 None-when-empty, D-14 sanitize, D-09 char cap via `SKILL_MANIFEST_MAX_CHARS`, D-10 longest-first trim with marker + warnings)
-- [ ] 12-04: System-prompt integration — `Session.skill_manifest` (non-serialized field) + `# Available Skills` appended at end of `_build_system_prompt()` (D-12), barrel completion, end-to-end seam tests
+- [x] 12-01: `skills/` package foundation — `PyYAML>=6.0.3` added to requirements.txt, `models.py` `SkillInfo` dataclass, `frontmatter.py` delimiter splitter (`yaml.safe_load`, degrades to `({}, body)`)
+- [x] 12-02: `discovery.py` — per-skill parse+validate skip-and-warn taxonomy (`parse_skill_entry`) + deterministic first-wins scan with win32 case handling (`discover_skills`)
+- [x] 12-03: `manifest.py` — `build_manifest_text` (D-11 format, D-13 None-when-empty, D-14 sanitize, D-09 char cap via `SKILL_MANIFEST_MAX_CHARS`, D-10 longest-first trim with marker + warnings)
+- [x] 12-04: System-prompt integration — `Session.skill_manifest` (non-serialized field) + `# Available Skills` appended at end of `_build_system_prompt()` (D-12), barrel completion, end-to-end seam tests
 
 ### Phase 13: Context Plumbing (Persist Fix)
 **Goal**: Session serialization handles loaded skill bodies safely: they persist for the session (system-role, summarization-exempt) but never serialize to the JSONL session file. Highest-risk change in the milestone — lands *before* any real skill body can flow through `to_events()`.
@@ -285,7 +285,7 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 8. TUI Conversation Layout | v1.0 | 3/3 | Complete | 2026-08-01 |
 | 10. Token Streaming | v1.0 | 4/4 | Complete | 2026-07-31 |
 | 11. Session Popup & Panel Layout | v1.0 | 4/4 | Complete | 2026-08-01 |
-| 12. Skills Discovery & Manifest | v1.1 | 0/4 | Not started | - |
+| 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete   | 2026-08-01 |
 | 13. Context Plumbing (Persist Fix) | v1.1 | 0/3 | Not started | - |
 | 14. read_skill Provider End-to-End | v1.1 | 0/4 | Not started | - |
 | 15. Session Behavior & /skill Command | v1.1 | 0/3 | Not started | - |
