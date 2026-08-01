@@ -83,6 +83,10 @@ class RuntimeAPI:
         session = self._session_manager.active_session
         if session is not None and session.title is None:
             session.title = derive_title(prompt)
+            # D-13: persist the auto-title NOW (not just on_turn_complete) so a
+            # list_sessions() issued right after the chat RPC resolves (TUI refresh)
+            # reads the title from disk instead of None.
+            await self._session_manager.save_session()
         await self._scheduler.submit_prompt(prompt)
 
     def cancel(self) -> None:

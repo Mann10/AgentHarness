@@ -202,12 +202,12 @@ async def test_submit_prompt_title_uses_first_line(runtime_with_store: RuntimeAP
 
 @pytest.mark.asyncio
 async def test_submit_prompt_title_persists_to_store(runtime_with_store: RuntimeAPI) -> None:
-    """Auto-title reaches disk so list_sessions returns a real name, not None."""
+    """Auto-title reaches disk synchronously in submit_prompt so an immediate
+    list_sessions (TUI refresh path) returns a real name, not None."""
     runtime = runtime_with_store
     await runtime.start()
     sid = runtime.active_session.id
     await runtime.submit_prompt("a persistent title question")
-    await asyncio.sleep(0.3)
     summaries = await runtime.list_sessions()
     matches = [s for s in summaries if s.id == sid]
     assert len(matches) == 1
