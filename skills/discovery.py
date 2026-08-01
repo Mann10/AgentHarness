@@ -86,3 +86,34 @@ def parse_skill_entry(skill_dir: Path) -> SkillInfo | None:
                 "[skills] %s: malformed 'allowed-tools' dropped (skill kept)", skill_dir
             )
     return SkillInfo(name=name, description=description, path=skill_dir, allowed_tools=allowed_tools)
+
+
+def discover_skills(root: Path) -> list[SkillInfo]:
+    """One-pass deterministic discovery over root/*/SKILL.md (D-08).
+
+    D-04: duplicate names resolve first-wins over the deterministic sort —
+    the shadowed skill is named in a warning. D-06: dedupe keys are
+    case-insensitive on win32 (NTFS) and case-sensitive elsewhere.
+    Iteration order is sorted by folder name (case-insensitive) so first-wins
+    is reproducible across platforms. Never raises (P-07).
+    """
+    if not root.is_dir():
+        return []
+    seen: dict[str, SkillInfo] = {}
+    case_insensitive = os.name == "nt"  # D-06: NTFS is case-insensitive
+    for skill_dir in sorted(root.iterdir(), key=lambda p: p.name.lower()):
+        if not skill_dir.is_dir():
+            continue
+        entry = parse_skill_entry(skill_dir)
+        if entry is None:
+            continue
+        key = _dedupe_key(entry.name, case_insensitive=case_insensitive)  # D-06
+        previous = seen.get(key)
+        if previous is None:
+            seen[key] = entry
+        else:
+            logger.warning(
+                "[skills] '%s' (%s) shadowed by first-wins duplicate '%s' (%s)",
+                entry.name, skill_dir, previous.name, previous.path,
+            )
+    return sorted(seen.values(), key=lambda s: s.name)
