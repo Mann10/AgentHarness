@@ -106,3 +106,60 @@ async def test_persist_false_between_saves_does_not_shift_index(
     assert file_text.count("sure thing") == 1
     assert file_text.count("next question") == 1
     assert "SKILL-BODY-SECRET" not in file_text
+
+
+@pytest.mark.asyncio
+async def test_system_skill_body_survives_summarization() -> None:
+    """A system-role persist=False skill body survives _maybe_summarize() (ACT-04).
+
+    The system-role exemption at context/context.py (m.role != "system") keeps
+    loaded skill bodies out of the summarization payload — the body text must
+    still be in to_llm_messages() after compaction fires.
+    """
+    call_count = 0
+
+    async def mock_summarize(msgs: list[dict]) -> str:
+        nonlocal call_count
+        call_count += 1
+        return "Summary."
+
+    ctx = ConversationContext(
+        count_tokens=lambda t: len(t.split()),
+        token_limit=60,
+        summarize_fn=mock_summarize,
+        summarize_threshold=0.75,
+        keep_recent_exchanges=0,
+    )
+    await ctx.add_message(Message(role="system", content="SKILL BODY", persist=False))
+    for i in range(6):
+        await ctx.add_user_message(f"Task {i} with some extra context here")
+        await ctx.add_assistant_message(f"Response {i} with details and analysis")
+
+    assert call_count >= 1, "Summarization should have fired above threshold"
+    contents = [m["content"] for m in ctx.to_llm_messages()]
+    assert "SKILL BODY" in contents
+
+
+@pytest.mark.asyncio
+async def test_skill_state_never_in_snapshot_meta_or_jsonl(store: JSONLSessionStore) -> None:
+    """Session.skill_state is non-serialized by construction (ACT-05).
+
+    The field must never appear in to_snapshot_meta() (explicit-copy omits it)
+    nor in the saved JSONL session file.
+    """
+    session = Session.create("sys", count_tokens=len, token_limit=1000)
+    assert session.skill_state == {}
+    await session.context.add_user_message("help me")
+    session.skill_state = {"demo-greeter": {"loaded": True}}
+    assert "skill_state" not in session.to_snapshot_meta()
+    await store.save(session)
+    file_text = (store._dir / f"{session.id}.jsonl").read_text(encoding="utf-8")
+    assert "skill_state" not in file_text
+
+
+def test_skill_state_fresh_per_session() -> None:
+    """skill_state is session-scoped — a fresh session starts with an empty dict (ACT-03)."""
+    s1 = Session.create("sys", count_tokens=len, token_limit=1000)
+    s2 = Session.create("sys", count_tokens=len, token_limit=1000)
+    s1.skill_state = {"demo-greeter": {"loaded": True}}
+    assert s2.skill_state == {}
