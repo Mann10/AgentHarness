@@ -31,4 +31,5 @@ class Message:
             token_count=d.get("token_count", 0),
             tool_calls=tool_calls,
             tool_call_id=d.get("tool_call_id"),
+            persist=d.get("persist", True),
         )
