@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 
+from skills.provider import RESERVED_SKILL_TOOLS  # D-02/D-03
 from tool.config import MCPConfig
 from tool.mcp_provider import MCPToolProvider
 from tool.models import Tool, ToolProvider, ToolResult
@@ -129,6 +130,14 @@ class ToolRegistry:
                 llm_name = f"{namespace}_{tool.name}"
             else:
                 llm_name = tool.name
+
+            if llm_name in RESERVED_SKILL_TOOLS:
+                existing = self._tool_map.get(llm_name)
+                if existing is not None and existing != provider_name:
+                    raise ValueError(
+                        f"Tool name collision: '{llm_name}' is a reserved skill tool already "
+                        f"registered by provider '{existing}'. A skill can never shadow or be shadowed (D-03)."
+                    )
 
             if llm_name in self._tool_map:
                 existing = self._tool_map[llm_name]
