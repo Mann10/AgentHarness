@@ -82,6 +82,8 @@ class ConversationContext:
         recent = self._messages[-keep_count:] if keep_count > 0 else []
 
         recent_ids = {id(m) for m in recent}
+        # System-role messages (summary + loaded skill bodies, D-12) are exempt
+        # from summarization — bodies persist for the session (ACT-04).
         to_summarize = [
             m
             for m in self._messages

@@ -44,6 +44,7 @@ class Session:
     updated_at: datetime = field(default_factory=datetime.now)
     metadata: dict = field(default_factory=dict)
     skill_manifest: str | None = None
+    skill_state: dict = field(default_factory=dict)  # Phase 12 pattern — non-serialized by construction
     _context: ConversationContext | None = None
     _last_saved_count: int = 0
 
