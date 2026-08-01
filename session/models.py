@@ -77,6 +77,8 @@ class Session:
     def to_events(self) -> list[dict]:
         events = []
         for msg in self._context._messages:
+            if not msg.persist:
+                continue
             d = {"role": msg.role, "content": msg.content, "token_count": msg.token_count}
             if msg.tool_calls:
                 d["tool_calls"] = [asdict(tc) for tc in msg.tool_calls]
@@ -103,7 +105,7 @@ class Session:
 
     def mark_saved(self) -> None:
         if self._context is not None:
-            self._last_saved_count = len(self._context._messages)
+            self._last_saved_count = sum(1 for m in self._context._messages if m.persist)
 
     def to_snapshot_meta(self) -> dict:
         return {
