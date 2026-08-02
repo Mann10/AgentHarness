@@ -118,6 +118,18 @@ async def _handle_session_cmd(
         print(f"Session renamed to \"{title}\".")
         return True
 
+    if cmd == "/skill":
+        name = (parts[1] if len(parts) > 1 else "").strip()
+        if not name:
+            print("Usage: /skill <name>")                  # D-02 no-arg → usage
+            return True
+        try:
+            ack = await runtime.load_skill(name)           # D-07: REPL calls load_skill directly
+            print(ack)                                     # D-01: short ack (loaded / already loaded)
+        except KeyError:
+            print(f"Skill '{name}' not found.")            # D-02 distinct error
+        return True                                        # handled — never fall through to chat
+
     return False
 
 
