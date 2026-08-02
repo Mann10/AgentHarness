@@ -154,7 +154,7 @@ Plans:
 - [x] **Phase 12: Skills Discovery & Manifest** - SKILL.md authoring, discovery with skip-and-warn, budgeted manifest in the system prompt (completed 2026-08-01)
 - [x] **Phase 13: Context Plumbing (Persist Fix)** - session serialization handles skill bodies: persist in memory, never to JSONL (completed 2026-08-01)
 - [x] **Phase 14: read_skill Provider End-to-End** - path-scoped `read_skill` tool, bundled resources, system-role body injection (completed 2026-08-02)
-- [ ] **Phase 15: Session Behavior & /skill Command** - user-invocable `/skill` via the 4-layer RPC contract, loaded-skill accounting
+- [x] **Phase 15: Session Behavior & /skill Command** - user-invocable `/skill` via the 4-layer RPC contract, loaded-skill accounting (completed 2026-08-02)
 - [ ] **Phase 16: TUI Integration (Skill Indicator)** - TUI `/skill` + visible "Skill loaded" indicator via typed event
 - [ ] **Phase 17: allowed-tools Enforcement & Hardening** - tool-list filtering, intersection semantics, full E2E verification
 
@@ -236,10 +236,10 @@ Cross-cutting constraints:
 
 Plans:
 - **Wave 1**
-- [ ] 15-01-PLAN.md — `skills.load` RPC across all four layers (protocol RPC_METHODS + dispatcher RPCError passthrough + adapter handler + runtime load_skill_status + TS contract)
-- [ ] 15-02-PLAN.md — REPL `/skill` branch in `_handle_session_cmd` + distinct error/usage handling (D-01..D-04)
+- [x] 15-01-PLAN.md — `skills.load` RPC across all four layers (protocol RPC_METHODS + dispatcher RPCError passthrough + adapter handler + runtime load_skill_status + TS contract)
+- [x] 15-02-PLAN.md — REPL `/skill` branch in `_handle_session_cmd` + distinct error/usage handling (D-01..D-04)
 - **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 15-03-PLAN.md — loaded-skill token accounting + cap (D-09..D-12) + CAP-04 combined-filter semantics contract + doc (D-13/D-14)
+- [x] 15-03-PLAN.md — loaded-skill token accounting + cap (D-09..D-12) + CAP-04 combined-filter semantics contract + doc (D-13/D-14)
 
 ### Phase 16: TUI Integration (Skill Indicator)
 **Goal**: The TUI surfaces skill activity: `/skill <name>` works from the input bar and a visible "Skill loaded" indicator appears whenever a skill loads — driven by a typed `skill_loaded` notification, never by inference or stream pollution.
@@ -302,6 +302,6 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete    | 2026-08-01 |
 | 13. Context Plumbing (Persist Fix) | v1.1 | 3/3 | Complete    | 2026-08-01 |
 | 14. read_skill Provider End-to-End | v1.1 | 5/5 | Complete    | 2026-08-02 |
-| 15. Session Behavior & /skill Command | v1.1 | 0/3 | Not started | - |
+| 15. Session Behavior & /skill Command | v1.1 | 3/3 | Complete   | 2026-08-02 |
 | 16. TUI Integration (Skill Indicator) | v1.1 | 0/3 | Not started | - |
 | 17. allowed-tools Enforcement & Hardening | v1.1 | 0/3 | Not started | - |

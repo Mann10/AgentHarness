@@ -2,35 +2,35 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
-status: planning
-last_updated: "2026-08-02T13:34:16.653Z"
-last_activity: 2026-08-02
+status: executing
+last_updated: "2026-08-02T14:40:43.837Z"
+last_activity: 2026-08-02 -- Phase 15 execution started
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 12
+  total_plans: 15
   completed_plans: 12
-  percent: 100
+  percent: 80
 ---
 
 # Project State
 
 **Updated:** 2026-08-02
-**Status:** Ready to execute
+**Status:** Executing Phase 15
 
 ## Current Position
 
-Phase: 15
-Plan: 3 plans (15-01, 15-02, 15-03) — ready to execute
-Status: Planned
-Last activity: 2026-08-02
+Phase: 15 (session-behavior-skill-command) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 15
+Last activity: 2026-08-02 -- Phase 15 execution started
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-08-01)
 
 **Core value:** A reliable, session-persistent terminal chat loop where the LLM agent drives tools â€” with a TUI that makes long conversations fast to navigate and continue.
-**Current focus:** Phase 14 — read_skill Provider End-to-End
+**Current focus:** Phase 15 — session-behavior-skill-command
 
 ## Progress
 
