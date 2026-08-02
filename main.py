@@ -128,6 +128,8 @@ async def _handle_session_cmd(
             print(ack)                                     # D-01: short ack (loaded / already loaded)
         except KeyError:
             print(f"Skill '{name}' not found.")            # D-02 distinct error
+        except RuntimeError as exc:
+            print(str(exc))                                # D-11: cap-refusal message reaches the REPL user
         return True                                        # handled — never fall through to chat
 
     return False

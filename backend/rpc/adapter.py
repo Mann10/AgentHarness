@@ -10,7 +10,7 @@ import logging
 from typing import Any
 
 from backend.rpc.dispatcher import Dispatcher
-from backend.rpc.protocol import RPCError, INVALID_PARAMS, SKILL_NOT_FOUND
+from backend.rpc.protocol import RPCError, INVALID_PARAMS, INTERNAL_ERROR, SKILL_NOT_FOUND
 from harness.runtime import RuntimeAPI
 
 logger = logging.getLogger(__name__)
@@ -105,6 +105,10 @@ class RPCAdapter:
             return await self._runtime.load_skill_status(name)
         except KeyError:
             raise RPCError(code=SKILL_NOT_FOUND, message=f"Skill '{name}' not found.")
+        except RuntimeError as exc:
+            # D-11 cap-breach contract: mapped to documented -32603 INTERNAL_ERROR
+            # with the verbatim D-11 message (the message string IS the contract).
+            raise RPCError(code=INTERNAL_ERROR, message=str(exc))
 
     def register_all(self, dispatcher: Dispatcher) -> None:
         """Register all 10 RPC methods with the given dispatcher."""

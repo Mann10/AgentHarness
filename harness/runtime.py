@@ -12,6 +12,7 @@ from llm import OpenAIClient
 from session.models import Session, SessionSummary, derive_title
 from session.store import JSONLSessionStore
 from skills.provider import SkillToolProvider
+from skills.limits import loaded_skill_token_cap
 from skills.store import SkillStore
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
@@ -194,9 +195,19 @@ class RuntimeAPI:
         if existing is not None:
             return f"Skill '{info.name}' already loaded"   # D-07 no-op ack (canonical name)
         body = self._skill_store.load(name)
+        # D-09: count the body's tokens at load time (tiktoken via client).
+        # D-11: refuse BEFORE the mark (H-03 mark-before-inject) — a refused
+        # load leaves no partial state and injects no body message.
+        body_tokens = self._client.count_tokens(body)
+        new_total = sum(e.get("tokens", 0) for e in loaded) + body_tokens
+        cap = loaded_skill_token_cap()
+        if new_total > cap:
+            raise RuntimeError(
+                f"Skill '{info.name}' not loaded — loaded-skill token cap ({cap}) would be exceeded"
+            )
         # H-03 hardening: mark the record BEFORE the injection await — any
         # concurrent load_skill caller sees the record (no TOCTOU double-inject).
-        loaded.append({"name": info.name, "dir": str(info.path)})   # D-09 record (name + base dir)
+        loaded.append({"name": info.name, "dir": str(info.path), "tokens": body_tokens})   # D-09 record (name + base dir + tokens)
         session.skill_state["loaded"] = loaded
         await session.context.add_skill_message(info.name, body)
         return f"Loaded skill {info.name}"             # D-05 short ack
