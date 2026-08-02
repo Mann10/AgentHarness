@@ -1,5 +1,5 @@
 from skills.discovery import discover_skills
-from skills.filter import retain_read_skills
+from skills.filter import intersect_allowed_tools, retain_read_skills
 from skills.frontmatter import parse_skill_doc
 from skills.limits import loaded_skill_token_cap
 from skills.manifest import build_manifest_text, manifest_max_chars
@@ -18,4 +18,5 @@ __all__ = [
     "SkillToolProvider",
     "RESERVED_SKILL_TOOLS",
     "retain_read_skills",
+    "intersect_allowed_tools",
 ]
