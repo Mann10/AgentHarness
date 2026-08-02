@@ -232,12 +232,12 @@ Cross-cutting constraints:
   2. `/skill` with an unknown name shows a distinct skill-not-found error; `/skill` with no argument shows usage — never a silent no-op or fall-through to a chat prompt.
   3. Loaded-skill tokens are accounted separately from chat tokens so the summarization threshold stays chat-relative; a loaded-skill token cap bounds context growth (no unbounded accumulation).
   4. Combined `allowed-tools` semantics across multiple loaded skills are decided and documented (intersection recommended) — the decision is recorded here so Phase 17 only implements.
-**Plans**: 3 plans (initial estimate — refined during planning)
+**Plans**: 3 plans
 
 Plans:
-- [ ] 15-01: `skills.load` RPC across all four layers in one change (protocol.py RPC_METHODS, adapter.py, rpc-client.ts, types.ts)
-- [ ] 15-02: REPL `/skill` branch in `_handle_session_cmd` + distinct error/usage handling (non-blocking vs streaming turn)
-- [ ] 15-03: `loaded_skill_tokens` accounting + loaded-skill token cap + combined-filter semantics doc (P-05/P-09/P-11)
+- [ ] 15-01-PLAN.md — `skills.load` RPC across all four layers (protocol RPC_METHODS + dispatcher RPCError passthrough + adapter handler + runtime load_skill_status + TS contract)
+- [ ] 15-02-PLAN.md — REPL `/skill` branch in `_handle_session_cmd` + distinct error/usage handling (D-01..D-04)
+- [ ] 15-03-PLAN.md — loaded-skill token accounting + cap (D-09..D-12) + CAP-04 combined-filter semantics contract + doc (D-13/D-14)
 
 ### Phase 16: TUI Integration (Skill Indicator)
 **Goal**: The TUI surfaces skill activity: `/skill <name>` works from the input bar and a visible "Skill loaded" indicator appears whenever a skill loads — driven by a typed `skill_loaded` notification, never by inference or stream pollution.
