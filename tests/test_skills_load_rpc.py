@@ -128,6 +128,29 @@ async def test_handle_skills_load_returns_loaded_status() -> None:
     assert result == {"skill": "demo-greeter", "status": "loaded"}
 
 
+# -- Test 7b: D-11 cap-refusal RuntimeError -> INTERNAL_ERROR (-32603) --------
+
+
+@pytest.mark.asyncio
+async def test_handle_skills_load_runtime_error_maps_to_internal_error() -> None:
+    """D-11 RPC path: load_skill_status raising RuntimeError (cap refusal) maps to
+    RPCError INTERNAL_ERROR (-32603) with the verbatim message (documented cap-breach
+    contract — the message string IS the contract, no dedicated domain code)."""
+    runtime = MagicMock()
+    runtime.load_skill_status = AsyncMock(
+        side_effect=RuntimeError(
+            "Skill 'demo-greeter' not loaded — loaded-skill token cap (8000) would be exceeded"
+        )
+    )
+    adapter = RPCAdapter(runtime)
+
+    with pytest.raises(RPCError) as exc:
+        await adapter.handle_skills_load({"name": "demo-greeter"})
+    assert exc.value.code == INTERNAL_ERROR
+    assert "would be exceeded" in exc.value.message
+    assert "Skill 'demo-greeter' not loaded" in exc.value.message
+
+
 # -- Test 8: register_all registration (T-15-01) -------------------------------
 
 

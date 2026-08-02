@@ -108,6 +108,25 @@ async def test_skill_case_variant_passes_raw_name(
 
 
 @pytest.mark.asyncio
+async def test_skill_runtime_error_prints_message_and_returns_true(
+    runtime: MagicMock, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """D-11 REPL path: load_skill raising RuntimeError (cap refusal) prints
+    str(exc) and returns True — the REPL stays alive instead of tracebacking
+    (run_repl has no try/except of its own)."""
+    runtime.load_skill.side_effect = RuntimeError(
+        "Skill 'demo-greeter' not loaded — loaded-skill token cap (8000) would be exceeded"
+    )
+
+    handled, out = await _run_cmd("/skill demo-greeter", runtime, capsys)
+
+    assert handled is True
+    assert "would be exceeded" in out
+    assert "Skill 'demo-greeter' not loaded" in out
+    runtime.load_skill.assert_awaited_once_with("demo-greeter")
+
+
+@pytest.mark.asyncio
 async def test_unknown_command_falls_through_to_false(
     runtime: MagicMock, capsys: pytest.CaptureFixture[str]
 ) -> None:

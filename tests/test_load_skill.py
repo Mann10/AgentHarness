@@ -157,6 +157,56 @@ async def test_load_skill_unknown_raises_clear_error(runtime: RuntimeAPI) -> Non
         await runtime.load_skill("no-such-skill")
 
 
+# -- Test 7: loaded-skill token accounting (D-09/D-10/D-11/D-12) -------------
+
+
+@pytest.mark.asyncio
+async def test_load_skill_records_token_count(runtime: RuntimeAPI) -> None:
+    """D-09: load_skill caches the per-skill token count in skill_state['loaded']."""
+    await runtime.start()
+    await runtime.load_skill("demo-greeter")
+
+    loaded = runtime.active_session.skill_state["loaded"]
+    rec = next(e for e in loaded if e["name"] == "demo-greeter")
+    assert "tokens" in rec                      # D-09 record shape gains the token count
+    assert isinstance(rec["tokens"], int)
+    assert rec["tokens"] > 0
+
+
+@pytest.mark.asyncio
+async def test_load_skill_refuses_when_cap_exceeded_no_partial_state(
+    runtime: RuntimeAPI, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """D-11: loading a skill that would exceed the cap refuses with a clear error
+    naming the cap, leaves no partial state, and injects no body."""
+    monkeypatch.setenv("LOADED_SKILL_TOKEN_CAP", "1")   # body > 1 token -> breach
+    await runtime.start()
+
+    with pytest.raises(RuntimeError, match="token cap.*would be exceeded"):
+        await runtime.load_skill("demo-greeter")
+
+    # no partial state (D-11): no record, no body message
+    assert runtime.active_session.skill_state.get("loaded", []) == []
+    contents = [m["content"] for m in runtime.active_session.context.to_llm_messages()]
+    assert not any("Hello body" in c for c in contents)
+
+
+@pytest.mark.asyncio
+async def test_load_skill_cap_env_override_controls_refusal(
+    runtime: RuntimeAPI, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """D-10/D-12: LOADED_SKILL_TOKEN_CAP is the env-var override - a generous cap
+    lets the same skill through that a tiny cap refuses."""
+    monkeypatch.setenv("LOADED_SKILL_TOKEN_CAP", "1000000")
+    await runtime.start()
+
+    ack = await runtime.load_skill("demo-greeter")
+    assert "Loaded skill" in ack
+
+    loaded = runtime.active_session.skill_state["loaded"]
+    assert any(e["name"] == "demo-greeter" for e in loaded)
+
+
 # -- Manifest attach: fresh session gets skill_manifest (Phase 12 seam) ------
 
 
