@@ -201,6 +201,25 @@ class RuntimeAPI:
         await session.context.add_skill_message(info.name, body)
         return f"Loaded skill {info.name}"             # D-05 short ack
 
+    async def load_skill_status(self, name: str) -> dict:
+        """D-06: structured load result — {skill: <canonical>, status: loaded|already_loaded}.
+
+        No body echoed. KeyError propagates for unknown skills (adapter maps to
+        SKILL_NOT_FOUND). The actual load goes through self.load_skill — the same
+        shared path as read_skill (D-07), so activation cannot drift.
+        """
+        if self._skill_store is None:
+            raise RuntimeError("SkillStore not configured")
+        session = self._session_manager.active_session
+        if session is None:
+            raise RuntimeError("No active session")
+        info = self._skill_store.lookup(name)          # KeyError → unknown skill
+        loaded = session.skill_state.get("loaded", [])
+        if any(e["name"] == info.name for e in loaded):   # canonical dedup (H-01)
+            return {"skill": info.name, "status": "already_loaded"}
+        await self.load_skill(info.name)                   # D-07 shared path
+        return {"skill": info.name, "status": "loaded"}
+
     async def _read_skill_path(self, skill: str, rel: str) -> str:
         """read_skill_path handler — delegates to SkillStore (14-01 traversal guard)."""
         if self._skill_store is None:
