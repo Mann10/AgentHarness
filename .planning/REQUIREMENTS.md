@@ -17,14 +17,14 @@
 
 - [x] **DISC-01**: Agent sees a manifest of every skill's `name` + `description` in the system prompt each turn
 - [x] **DISC-02**: Manifest is subject to a budget (character/token cap) with trimming of over-long skills
-- [ ] **DISC-03**: Agent can load a skill body on demand via a dedicated `read_skill` tool when the description matches the current task
-- [ ] **DISC-04**: `read_skill` reads are path-scoped to the skills directory — no traversal outside it
-- [ ] **DISC-05**: Skills support bundled resources (`references/`, `scripts/`, `assets/`) readable on demand through path-scoped reads into the skill directory
+- [x] **DISC-03**: Agent can load a skill body on demand via a dedicated `read_skill` tool when the description matches the current task
+- [x] **DISC-04**: `read_skill` reads are path-scoped to the skills directory — no traversal outside it
+- [x] **DISC-05**: Skills support bundled resources (`references/`, `scripts/`, `assets/`) readable on demand through path-scoped reads into the skill directory
 
 ### Activation & Session Behavior
 
 - [ ] **ACT-01**: User can force-load a skill via a `/skill <name>` slash command
-- [ ] **ACT-02**: Agent auto-invokes skills when a manifest description matches the current task
+- [x] **ACT-02**: Agent auto-invokes skills when a manifest description matches the current task
 - [x] **ACT-03**: Loaded skill body persists for the rest of the session as a system-role message
 - [x] **ACT-04**: Loaded skill bodies survive context summarization (system-role exemption)
 - [x] **ACT-05**: Loaded skills are session-scoped — never persisted to the JSONL session file
@@ -32,9 +32,9 @@
 
 ### Skill Capabilities
 
-- [ ] **CAP-01**: Skill bodies are markdown instructions that can reference bundled files relative to the skill directory
+- [x] **CAP-01**: Skill bodies are markdown instructions that can reference bundled files relative to the skill directory
 - [ ] **CAP-02**: A skill's optional `allowed-tools` filters the tool list passed to the LLM while the skill is loaded
-- [ ] **CAP-03**: `read_skill` is always retained in the tool list even when `allowed-tools` filtering is active
+- [x] **CAP-03**: `read_skill` is always retained in the tool list even when `allowed-tools` filtering is active
 - [ ] **CAP-04**: When multiple skills with `allowed-tools` are loaded, filtering uses documented intersection semantics
 
 ## v1.2 Requirements (Future)
@@ -76,18 +76,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STORE-05 | Phase 12 | Complete |
 | DISC-01 | Phase 12 | Complete |
 | DISC-02 | Phase 12 | Complete |
-| DISC-03 | Phase 14 | Pending |
-| DISC-04 | Phase 14 | Pending |
-| DISC-05 | Phase 14 | Pending |
+| DISC-03 | Phase 14 | Complete |
+| DISC-04 | Phase 14 | Complete |
+| DISC-05 | Phase 14 | Complete |
 | ACT-01 | Phase 15 | Pending |
-| ACT-02 | Phase 14 | Pending |
+| ACT-02 | Phase 14 | Complete |
 | ACT-03 | Phase 13 | Complete |
 | ACT-04 | Phase 13 | Complete |
 | ACT-05 | Phase 13 | Complete |
 | ACT-06 | Phase 16 | Pending |
-| CAP-01 | Phase 14 | Pending |
+| CAP-01 | Phase 14 | Complete |
 | CAP-02 | Phase 17 | Pending |
-| CAP-03 | Phase 14 | Pending |
+| CAP-03 | Phase 14 | Complete |
 | CAP-04 | Phase 17 | Pending |
 
 **Coverage:**
