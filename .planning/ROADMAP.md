@@ -235,8 +235,10 @@ Cross-cutting constraints:
 **Plans**: 3 plans
 
 Plans:
+- **Wave 1**
 - [ ] 15-01-PLAN.md — `skills.load` RPC across all four layers (protocol RPC_METHODS + dispatcher RPCError passthrough + adapter handler + runtime load_skill_status + TS contract)
 - [ ] 15-02-PLAN.md — REPL `/skill` branch in `_handle_session_cmd` + distinct error/usage handling (D-01..D-04)
+- **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 15-03-PLAN.md — loaded-skill token accounting + cap (D-09..D-12) + CAP-04 combined-filter semantics contract + doc (D-13/D-14)
 
 ### Phase 16: TUI Integration (Skill Indicator)
