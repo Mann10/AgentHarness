@@ -47,6 +47,8 @@ created: 2026-08-01
 | 14-03-03 | 03 | 2 | ACT-02, DISC-03 | T-14-01 | main.py production wiring: manifest attach + `__skills__` provider registration + reserved-name assert | unit | `python -m pytest -q` | ✗ W0 | ⏳ pending |
 | 14-04-01 | 04 | 3 | ACT-02, CAP-01 | T-14-04 | Cancel-mid-gather: no partial tool messages, no dangling tool_calls next turn | unit | `python -m pytest tests/test_cancel_mid_gather.py -x` | ✗ W0 | ⏳ pending |
 | 14-04-02 | 04 | 3 | DISC-03..05, ACT-02, CAP-01, CAP-03 | T-14-02..05 | Backend E2E: load → inject → summarize-survive → JSONL untouched | unit/e2e | `python -m pytest tests/test_load_skill.py tests/test_cancel_mid_gather.py -x` | ✗ W0 | ⏳ pending |
+| 14-05-01 | 05 | 4 | ACT-02, DISC-03 | T-14-07 | RED: case-variant dedup regression tests (`load_skill('demo-greeter')` then `'DEMO-GREETER'`) — exactly one body, one record | unit | `python -m pytest tests/test_load_skill.py tests/test_skills_e2e.py -x` | ✗ W0 | ⏳ pending |
+| 14-05-02 | 05 | 4 | ACT-02, DISC-03 | T-14-07, T-14-08 | GREEN: canonical-name dedup comparison after lookup (mark-before-inject closes TOCTOU); win32 case-variant no-op ack | unit | `python -m pytest tests/test_load_skill.py tests/test_skills_e2e.py -x; python -m pytest -q` | ✗ W0 | ⏳ pending |
 
 *Status: ⏳ pending | ✅ green | ❌ red | ⚠️ flaky*
 
