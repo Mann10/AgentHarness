@@ -203,7 +203,7 @@ Plans:
   3. Every path-traversal attempt — `../`, `..\`, absolute paths, symlinks, win32 drive-path tricks — is rejected with a clear error; reads never escape the skills directory (win32 test vectors ship in the same wave as the tool).
   4. `read_skill` is a reserved, un-namespaced tool name (async provider registered as `__skills__`): no skill can shadow it, and the allowed-tools filter contract always retains it (`allowed ∪ {read_skill}`, unit-tested here).
   5. Cancelling a turn mid-load leaves no dangling tool_calls — the next turn streams cleanly (pre-existing cancel hole closed and tested).
-**Plans**: 4 plans
+**Plans**: 5 plans (4 executed + 1 gap closure)
 
 Cross-cutting constraints:
 - System-role body injection flows through Phase 13 persist-safe plumbing (`persist=False` + summarization exemption) — enforced in 14-03/14-04
@@ -219,6 +219,9 @@ Cross-cutting constraints:
 
 **Wave 3** *(blocked on Wave 2)*:
 - [x] 14-04: Cancel-mid-gather fix + backend E2E (load → inject → summarize-survive → JSONL untouched)
+
+**Wave 4** *(gap closure)*:
+- [ ] 14-05: Case-variant dedup exactly-once (H-01 fix: canonical-name dedup + mark-before-inject + win32 regression tests)
 
 ### Phase 15: Session Behavior & /skill Command
 **Goal**: Loaded-skill state becomes user-invocable and accounted: `/skill <name>` slash command via the full 4-layer RPC contract (REPL + backend), separate loaded-skill token accounting, and the combined-filter semantics decision locked before enforcement ships.
