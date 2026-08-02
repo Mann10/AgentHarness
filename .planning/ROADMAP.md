@@ -221,7 +221,7 @@ Cross-cutting constraints:
 - [x] 14-04: Cancel-mid-gather fix + backend E2E (load → inject → summarize-survive → JSONL untouched)
 
 **Wave 4** *(gap closure)*:
-- [ ] 14-05: Case-variant dedup exactly-once (H-01 fix: canonical-name dedup + mark-before-inject + win32 regression tests)
+- [x] 14-05: Case-variant dedup exactly-once (H-01 fix: canonical-name dedup + mark-before-inject + win32 regression tests)
 
 ### Phase 15: Session Behavior & /skill Command
 **Goal**: Loaded-skill state becomes user-invocable and accounted: `/skill <name>` slash command via the full 4-layer RPC contract (REPL + backend), separate loaded-skill token accounting, and the combined-filter semantics decision locked before enforcement ships.
@@ -299,7 +299,7 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 11. Session Popup & Panel Layout | v1.0 | 4/4 | Complete | 2026-08-01 |
 | 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete    | 2026-08-01 |
 | 13. Context Plumbing (Persist Fix) | v1.1 | 3/3 | Complete    | 2026-08-01 |
-| 14. read_skill Provider End-to-End | v1.1 | 4/4 | Complete   | 2026-08-02 |
+| 14. read_skill Provider End-to-End | v1.1 | 5/5 | Complete   | 2026-08-02 |
 | 15. Session Behavior & /skill Command | v1.1 | 0/3 | Not started | - |
 | 16. TUI Integration (Skill Indicator) | v1.1 | 0/3 | Not started | - |
 | 17. allowed-tools Enforcement & Hardening | v1.1 | 0/3 | Not started | - |
