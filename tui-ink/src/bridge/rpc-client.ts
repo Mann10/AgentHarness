@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import { spawn, type ChildProcess } from "node:child_process"
 import { createInterface, type Interface as ReadlineInterface } from "node:readline"
 import { useAgentStore } from "../store/agent-store.js"
-import type { EventPayload, SessionMessage, SessionSummary } from "../types.js"
+import type { EventPayload, SessionMessage, SessionSummary, SkillLoadResult } from "../types.js"
 
 let reqId = 0
 const nextReqId = () => ++reqId
@@ -135,6 +135,10 @@ export class RpcClient {
       deleted: boolean
     }
     return result.deleted
+  }
+
+  async loadSkill(name: string): Promise<SkillLoadResult> {
+    return (await this.request("skills.load", { name })) as SkillLoadResult
   }
 
   async getSessionHistory(sessionId: string): Promise<SessionMessage[]> {

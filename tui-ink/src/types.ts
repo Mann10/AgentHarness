@@ -6,6 +6,13 @@ export interface SessionSummary {
   message_count: number
 }
 
+export type SkillLoadStatus = "loaded" | "already_loaded" | "not_found"
+
+export interface SkillLoadResult {
+  skill: string
+  status: SkillLoadStatus
+}
+
 export interface SessionMessage {
   role: "user" | "assistant"
   content: string
