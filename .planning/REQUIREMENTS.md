@@ -23,7 +23,7 @@
 
 ### Activation & Session Behavior
 
-- [ ] **ACT-01**: User can force-load a skill via a `/skill <name>` slash command
+- [x] **ACT-01**: User can force-load a skill via a `/skill <name>` slash command
 - [x] **ACT-02**: Agent auto-invokes skills when a manifest description matches the current task
 - [x] **ACT-03**: Loaded skill body persists for the rest of the session as a system-role message
 - [x] **ACT-04**: Loaded skill bodies survive context summarization (system-role exemption)
@@ -79,7 +79,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DISC-03 | Phase 14 | Complete |
 | DISC-04 | Phase 14 | Complete |
 | DISC-05 | Phase 14 | Complete |
-| ACT-01 | Phase 15 | Pending |
+| ACT-01 | Phase 15 | Complete |
 | ACT-02 | Phase 14 | Complete |
 | ACT-03 | Phase 13 | Complete |
 | ACT-04 | Phase 13 | Complete |

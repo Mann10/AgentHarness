@@ -302,6 +302,6 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 12. Skills Discovery & Manifest | v1.1 | 4/4 | Complete    | 2026-08-01 |
 | 13. Context Plumbing (Persist Fix) | v1.1 | 3/3 | Complete    | 2026-08-01 |
 | 14. read_skill Provider End-to-End | v1.1 | 5/5 | Complete    | 2026-08-02 |
-| 15. Session Behavior & /skill Command | v1.1 | 3/3 | Complete   | 2026-08-02 |
+| 15. Session Behavior & /skill Command | v1.1 | 3/3 | Complete    | 2026-08-02 |
 | 16. TUI Integration (Skill Indicator) | v1.1 | 0/3 | Not started | - |
 | 17. allowed-tools Enforcement & Hardening | v1.1 | 0/3 | Not started | - |
