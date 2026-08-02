@@ -14,7 +14,7 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 
 **Goal:** Build progressive-disclosure skills for AgentHarness — SKILL.md files under `.agentharness/skills/`, surfaced to the agent as a cheap manifest and loaded on demand.
 
-**Progress:** Phase 12 complete — skills package foundation (`SkillInfo`, frontmatter parser), one-pass discovery with skip-and-warn + dedupe, budgeted manifest assembly, and the system-prompt seam (`Session.skill_manifest`). Phase 13 complete — persist-safe plumbing: `Message.persist` flag, `to_events()` filter, identity-based save watermark (no index drift under summarization), non-serialized `skill_state`, system-role summarization exemption. Production wiring of the manifest construction site lands in Phase 14.
+**Progress:** Phase 12 complete — skills package foundation (`SkillInfo`, frontmatter parser), one-pass discovery with skip-and-warn + dedupe, budgeted manifest assembly, and the system-prompt seam (`Session.skill_manifest`). Phase 13 complete — persist-safe plumbing: `Message.persist` flag, `to_events()` filter, identity-based save watermark (no index drift under summarization), non-serialized `skill_state`, system-role summarization exemption. Phase 14 complete — read_skill Provider End-to-End: `SkillStore` with canonicalize+contain path-traversal guard, async `__skills__` provider exposing un-namespaced `read_skill`/`read_skill_path`, single shared `RuntimeAPI.load_skill()` path with case-insensitive exactly-once dedup, production wiring in main.py, and cancel-mid-gather cleanup.
 
 **Target features:**
 - Skill storage & format (`.agentharness/skills/<name>/SKILL.md`, frontmatter, folder-per-skill)
@@ -52,6 +52,7 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 - [ ] **SKL-01**: User can author skills as `SKILL.md` files under `.agentharness/skills/`
 - [ ] **SKL-02**: Agent learns available skills via a manifest (name + description) in the system prompt
 - [ ] **SKL-03**: Agent loads a skill body on demand via a `read_skill` tool when the description matches
+  - Validated in Phase 14: SkillStore + SkillToolProvider + single shared load path (exactly-once dedup)
 - [ ] **SKL-04**: User can force-load a skill via `/skill <name>` slash command
 - [ ] **SKL-05**: Loaded skill bodies persist for the session as system-role messages
   - Validated in Phase 13: persist plumbing (`Message.persist` + `to_events()` filter), summarization exemption (ACT-04), never-to-JSONL (ACT-05)
@@ -102,4 +103,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-01 after Phase 13 (Context Plumbing / Persist Fix) completion*
+*Last updated: 2026-08-02 after Phase 14 (read_skill Provider End-to-End) completion*
