@@ -179,22 +179,27 @@ class RuntimeAPI:
 
         Dedup (D-07) via session.skill_state['loaded'] → injection (D-08) via
         add_skill_message → short ack (D-05). Body flows as system message only.
+        H-01: dedup compares the CANONICAL name from SkillStore.lookup()
+        (case-insensitive on win32), never the raw caller name — case-variant
+        re-loads are no-ops.
         """
         if self._skill_store is None:
             raise RuntimeError("SkillStore not configured")
         session = self._session_manager.active_session
         if session is None:
             raise RuntimeError("No active session")
+        info = self._skill_store.lookup(name)          # KeyError → clear error (canonical name)
         loaded = session.skill_state.get("loaded", [])
-        existing = next((e for e in loaded if e["name"] == name), None)
+        existing = next((e for e in loaded if e["name"] == info.name), None)
         if existing is not None:
-            return f"Skill '{name}' already loaded"          # D-07 no-op ack
-        info = self._skill_store.lookup(name)                # KeyError → clear error
+            return f"Skill '{info.name}' already loaded"   # D-07 no-op ack (canonical name)
         body = self._skill_store.load(name)
-        await session.context.add_skill_message(info.name, body)
+        # H-03 hardening: mark the record BEFORE the injection await — any
+        # concurrent load_skill caller sees the record (no TOCTOU double-inject).
         loaded.append({"name": info.name, "dir": str(info.path)})   # D-09 record (name + base dir)
         session.skill_state["loaded"] = loaded
-        return f"Loaded skill {info.name}"                   # D-05 short ack
+        await session.context.add_skill_message(info.name, body)
+        return f"Loaded skill {info.name}"             # D-05 short ack
 
     async def _read_skill_path(self, skill: str, rel: str) -> str:
         """read_skill_path handler — delegates to SkillStore (14-01 traversal guard)."""
