@@ -191,3 +191,29 @@ async def test_read_skill_path_returns_bundled_reference(skills_root: Path) -> N
         "read_skill_path", {"skill": "demo-greeter", "path": "references/guide.md"}
     )
     assert "GUIDE REFERENCE CONTENT" in result.content
+
+
+# -- H-01 regression: case-variant re-load through the real stack (D-07) -----
+
+
+@pytest.mark.asyncio
+async def test_case_variant_reload_never_double_injects(skills_root: Path) -> None:
+    """H-01 regression through the real stack: load_skill('demo-greeter')
+    then 'DEMO-GREETER' — exactly one system body and one skill_state
+    record (D-07/ACT-02 exactly-once, broken pre-fix on win32)."""
+    runtime = _build_runtime(skills_root)
+    await runtime.start()
+    await runtime.load_skill("demo-greeter")
+
+    try:
+        ack2 = await runtime.load_skill("DEMO-GREETER")
+        assert "already loaded" in ack2.lower()
+    except KeyError:
+        pass  # posix: case-sensitive lookup — the variant is an unknown skill
+
+    msgs = runtime.active_session.to_llm_messages()
+    assert len([m for m in msgs if "Hello body" in m["content"]]) == 1
+
+    loaded = runtime.active_session.skill_state["loaded"]
+    assert len(loaded) == 1
+    assert loaded[0]["name"] == "demo-greeter"

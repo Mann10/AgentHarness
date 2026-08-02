@@ -167,3 +167,30 @@ async def test_create_agent_attaches_manifest(runtime: RuntimeAPI) -> None:
     manifest = runtime.active_session.skill_manifest
     assert manifest is not None
     assert "demo-greeter" in manifest
+
+
+# -- H-01 regression: case-variant re-load (win32 D-07 exactly-once) ---------
+
+
+@pytest.mark.asyncio
+async def test_case_variant_reload_never_double_injects(runtime: RuntimeAPI) -> None:
+    """H-01 regression (win32): loading 'demo-greeter' then 'DEMO-GREETER'
+    must never double-inject — exactly one system body and one skill_state
+    record. On win32 the second load is a no-op 'already loaded' ack; on
+    posix the case-variant lookup raises KeyError. Either way the
+    exactly-once contract (D-07, ACT-02) holds."""
+    await runtime.start()
+    await runtime.load_skill("demo-greeter")
+
+    try:
+        ack2 = await runtime.load_skill("DEMO-GREETER")
+        assert "already loaded" in ack2.lower()
+    except KeyError:
+        pass  # posix: case-sensitive lookup — the variant is an unknown skill
+
+    contents = [m["content"] for m in runtime.active_session.context.to_llm_messages()]
+    assert len([c for c in contents if "Hello body" in c]) == 1
+
+    loaded = runtime.active_session.skill_state["loaded"]
+    assert len(loaded) == 1
+    assert loaded[0]["name"] == "demo-greeter"
