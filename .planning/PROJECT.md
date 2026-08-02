@@ -54,6 +54,7 @@ A reliable, session-persistent terminal chat loop where the LLM agent drives too
 - [ ] **SKL-03**: Agent loads a skill body on demand via a `read_skill` tool when the description matches
   - Validated in Phase 14: SkillStore + SkillToolProvider + single shared load path (exactly-once dedup)
 - [ ] **SKL-04**: User can force-load a skill via `/skill <name>` slash command
+  - Validated in Phase 15: `/skill` REPL branch + `skills.load` RPC (4-layer), shared load path, token cap
 - [ ] **SKL-05**: Loaded skill bodies persist for the session as system-role messages
   - Validated in Phase 13: persist plumbing (`Message.persist` + `to_events()` filter), summarization exemption (ACT-04), never-to-JSONL (ACT-05)
 - [ ] Tool system hardening (remove_provider, health-check, reconnect)
@@ -103,4 +104,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-02 after Phase 14 (read_skill Provider End-to-End) completion*
+*Last updated: 2026-08-02 after Phase 15 (Session Behavior & /skill Command) completion*
