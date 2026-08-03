@@ -405,8 +405,10 @@ if (trimmed === "/session") {
   // ... existing ...
 } else if (trimmed === "/sessions") {
   refreshSessions()
-} else if (trimmed.startsWith("/skill")) {
-  const m = trimmed.match(SKILL_CMD)        // /^\/skill(?:\s+(.+))?$/ — never matches /skills
+} else if (SKILL_CMD.test(trimmed)) {
+  // Branch gate is the anchored regex ITSELF (research Pitfall 6) — `/skills`
+  // fails the test and falls through to the final else → submitPrompt. NOT startsWith.
+  const m = trimmed.match(SKILL_CMD)        // /^\/skill(?:\s+(.+))?$/ — non-null here, no /g flag
   const store = useAgentStore.getState()
   const name = m?.[1]?.trim()
   if (!name) {
@@ -420,8 +422,15 @@ if (trimmed === "/session") {
         else s.addSkillNotice(`Skill '${result.skill}' already loaded`)  // info
       })
       .catch((err: Error) => {
-        useAgentStore.getState().addSkillNotice(
-          SKILL_LOAD_FAILED(err.message), "error")  // "Failed to load skill: {message}"
+        const s = useAgentStore.getState()
+        // D-04: SKILL_NOT_FOUND surfaces the BARE verbatim copy — the RPC client
+        // rejects with only the message (rpc-client.ts:180) and adapter.py:107
+        // builds it from the exact trimmed name, so equality is deterministic.
+        if (err.message === `Skill '${name}' not found.`) {
+          s.addSkillNotice(`Skill '${name}' not found`, "error")   // D-04 verbatim (no trailing period)
+        } else {
+          s.addSkillNotice(SKILL_LOAD_FAILED(err.message), "error") // "Failed to load skill: {message}"
+        }
       })
   }
 } else {
@@ -492,20 +501,20 @@ Copy strings are locked verbatim (UI-SPEC §11): `Loaded skill <name>`, `Skill '
 | A2 | `useWindowSize` is the right width source for the footer truncation (already used by session-picker for rows) | Code Examples / footer | LOW — verified the hook exists and returns `{columns, rows}` in Ink 7.1.1 build; only the `columns` member usage is new |
 | A3 | No TS test runner should be introduced (typecheck + build + human E2E remain the TUI verification bar) | Standard Stack / Validation Architecture | MEDIUM — if the milestone wants durable TUI regression tests, a vitest harness is a follow-up decision; Phase 11 explicitly rejected adding one, and ink-testing-library is incompatible with Ink 7.1 |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should the `skill_loaded` case also clear duplicate entries in `loadedSkills` on `already_loaded`?**
+1. **Should the `skill_loaded` case also clear duplicate entries in `loadedSkills` on `already_loaded`?** — **RESOLVED:** no additional handling. The store dedup-append is the agreed defensive behavior and the backend never fires the event on `already_loaded` (D-07), so duplicates are impossible by construction.
    - What we know: the backend dedups (D-07) and only fires the event on real loads, so duplicates are impossible by construction; UI-SPEC §6.4 locks the dedup-append as "belt-and-suspenders".
    - What's unclear: nothing material — the store dedup-append is the agreed defensive behavior.
-   - Recommendation: implement as spec'd; no additional handling.
+   - Recommendation: implement as spec'd; no additional handling. **(Implemented in 16-01 task 3 — `addLoadedSkill` dedup-append.)**
 
-2. **Does the notification need `session_id` in the payload?**
+2. **Does the notification need `session_id` in the payload?** — **RESOLVED:** `session_id` lives on the `SkillLoadedEvent` dataclass for wire `request_id` consistency but stays OUT of the payload — D-06 `{skill}` only.
    - What we know: D-06 locks `{skill}` only; `_event_to_notification` derives `request_id` from `event.session_id` automatically (falling back to `event_id` if absent); the TUI ignores `request_id` in `handleEvent` (verified rpc-client.ts:204 destructures type/payload only).
-   - Recommendation: include a `session_id` field on the `SkillLoadedEvent` dataclass (wire-consistent with every other event) but keep it out of the payload. Purely cosmetic; either choice works.
+   - Recommendation: include a `session_id` field on the `SkillLoadedEvent` dataclass (wire-consistent with every other event) but keep it out of the payload. Purely cosmetic; either choice works. **(Implemented in 16-01 tasks 2-3 + `test_payload_is_skill_only`.)**
 
-3. **Where exactly does the human E2E checkpoint live?**
+3. **Where exactly does the human E2E checkpoint live?** — **RESOLVED:** the blocking human E2E is the final task of plan 16-03 (task 3, mirroring 11-04-03); automated pytest covers touchpoints 1-3.
    - What we know: Phase 11 placed a blocking human checkpoint as the final plan task (11-04-03); Phase 16's plan 16-03 includes "round-trip test (keystroke → RPC → notification → indicator)".
-   - Recommendation: automated pytest covers touchpoints 1-3; the human E2E (plan 16-03 task, mirroring 11-04-03) covers keystroke → chip and the no-pollution visual check. No open question — just a planning decision to make it blocking.
+   - Recommendation: automated pytest covers touchpoints 1-3; the human E2E (plan 16-03 task, mirroring 11-04-03) covers keystroke → chip and the no-pollution visual check. No open question — just a planning decision to make it blocking. **(Implemented: 16-03 task 3, blocking `checkpoint:human-verify`.)**
 
 ## Environment Availability
 
