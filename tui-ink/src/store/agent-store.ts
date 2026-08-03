@@ -26,6 +26,7 @@ interface AgentActions {
   updateToolResult: (callId: string, result: string) => void
   setToolCallError: (callId: string) => void
   addNotice: (text: string) => void
+  addSkillNotice: (text: string, tone?: "success" | "error") => void
   addError: (error: string) => void
   setStatus: (status: AgentStatus) => void
   setModel: (model: string) => void
@@ -36,6 +37,7 @@ interface AgentActions {
   loadConversation: (messages: SessionMessage[]) => void
   clearToolCalls: () => void
   incrementToolCallCount: () => void
+  addLoadedSkill: (name: string) => void
 }
 
 export type AgentStore = AgentState & AgentActions
@@ -54,6 +56,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   responseTime: "",
   error: null,
   busy: false,
+  loadedSkills: [] as string[],
 
   setSessions: (sessions) => set({ sessions }),
 
@@ -175,6 +178,21 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
       ],
     })),
 
+  addLoadedSkill: (name) =>
+    set((s) =>
+      s.loadedSkills.includes(name)
+        ? s                                  // belt-and-suspenders; backend dedups (D-07)
+        : { loadedSkills: [...s.loadedSkills, name] }
+    ),
+
+  addSkillNotice: (text, tone) =>
+    set((s) => ({
+      conversation: [
+        ...s.conversation,
+        { id: nextId(), role: "notice", content: text, timestamp: now(), ...(tone && { tone }) },
+      ],
+    })),   // NEVER touches status/busy/error — addError is NOT reused (UI-SPEC §6.3)
+
   addError: (error) =>
     set((s) => ({
       conversation: [
@@ -201,6 +219,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
       toolCallCount: 0,
       status: "idle",
       error: null,
+      loadedSkills: [],
     }),
 
   loadConversation: (messages) =>
@@ -215,6 +234,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
       toolCallCount: 0,
       status: "idle",
       error: null,
+      loadedSkills: [],
     }),
 
   clearToolCalls: () => set({ toolCalls: [] }),

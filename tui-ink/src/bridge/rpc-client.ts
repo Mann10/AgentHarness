@@ -278,6 +278,14 @@ export class RpcClient {
         store.setBusy(false)
         break
       }
+      case "skill_loaded": {
+        // D-07/D-08: chip state ONLY — no notice, no stream message,
+        // never touches status/busy (ROADMAP criterion 4). Model-driven loads
+        // must not inject into the conversation.
+        const p = payload as { skill: string }
+        store.addLoadedSkill(p.skill)
+        break
+      }
     }
   }
 }

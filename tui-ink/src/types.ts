@@ -64,6 +64,10 @@ export interface CancelledPayload {
   session_id: string
 }
 
+export interface SkillLoadedPayload {
+  skill: string        // canonical name (D-06: { skill } only)
+}
+
 export type EventPayload =
   | { type: "turn_started"; payload: TurnStartedPayload }
   | { type: "tool_call"; payload: ToolCallPayload }
@@ -72,6 +76,7 @@ export type EventPayload =
   | { type: "response_complete"; payload: ResponseCompletePayload }
   | { type: "error"; payload: ErrorPayload }
   | { type: "cancelled"; payload: CancelledPayload }
+  | { type: "skill_loaded"; payload: SkillLoadedPayload }
 
 export type AgentStatus = "idle" | "thinking" | "streaming" | "error"
 
@@ -92,6 +97,7 @@ export interface Message {
   timestamp: number
   isStreaming?: boolean
   truncated?: boolean
+  tone?: "success" | "error"
 }
 
 export interface AgentState {
@@ -106,4 +112,5 @@ export interface AgentState {
   responseTime: string
   error: string | null
   busy: boolean
+  loadedSkills: string[]
 }
