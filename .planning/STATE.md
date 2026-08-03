@@ -2,35 +2,35 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
-status: ready_to_plan
-last_updated: "2026-08-02T14:40:43.837Z"
-last_activity: 2026-08-02 -- Phase 15 execution started
+status: planning
+last_updated: "2026-08-03T06:50:56.761Z"
+last_activity: 2026-08-03 -- Phase 16 context gathered
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 15
-  completed_plans: 12
-  percent: 67
+  completed_plans: 15
+  percent: 100
 ---
 
 # Project State
 
-**Updated:** 2026-08-02
+**Updated:** 2026-08-03
 **Status:** Ready to plan
 
 ## Current Position
 
 Phase: 16
 Plan: Not started
-Status: Executing Phase 15
-Last activity: 2026-08-02
+Status: Context gathered
+Last activity: 2026-08-03
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-08-01)
 
-**Core value:** A reliable, session-persistent terminal chat loop where the LLM agent drives tools â€” with a TUI that makes long conversations fast to navigate and continue.
-**Current focus:** Phase 15 — session-behavior-skill-command
+**Core value:** A reliable, session-persistent terminal chat loop where the LLM agent drives tools — with a TUI that makes long conversations fast to navigate and continue.
+**Current focus:** Phase 16 — TUI integration (skill indicator)
 
 ## Progress
 
@@ -66,6 +66,7 @@ Items acknowledged and deferred at v1.0 milestone close on 2026-08-01:
 - v1.1 Skills System milestone started 2026-08-01. Context captured (16 decisions D-01..D-16) in .planning/MILESTONE-CONTEXT.md. Skills at .agentharness/skills/, manifest in system prompt, read_skill tool, /skill command, system-role persistence, allowed-tools filtering.
 - v1.1 roadmap created 2026-08-01: 6 phases (12-17), 20/20 requirements mapped, following research SUMMARY.md ordering â€” discovery & manifest (12) â†’ context plumbing / persist fix (13, highest risk, placed second so D-13 JSONL leak is closed before any body flows) â†’ read_skill provider (14) â†’ session behavior + /skill RPC (15) â†’ TUI indicator (16) â†’ allowed-tools enforcement & hardening (17). CAP-03 (read_skill never filtered) ships with the read_skill phase per roadmap; CAP-04 intersection semantics decided in Phase 15, enforced in Phase 17.
 - Phase 12 context gathered 2026-08-01 (17 decisions D-01..D-17): frontmatter-name-wins on mismatch, lenient name validation, case-insensitive win32 match, char-based 1500-char configurable cap with longest-first truncation (never drops skills), `# Available Skills` heading + `- name: description` bullets appended at end of _build_system_prompt, section omitted when no skills, allowed-tools parsed + shape-validated now (malformed â†’ keep skill, drop field), enforcement deferred to Phase 17.
+- Phase 16 context gathered 2026-08-03 (9 decisions D-01..D-09): persistent footer chip on a dedicated line above hints, chip shows all loaded skills, inline notices for every /skill outcome, bare /skill shows usage and never falls through, `skill_loaded` notification payload is `{skill}` only fired from the shared load_skill() path across all five touchpoints, live-events-only indicator (no backend skill_state RPC).
 
 ## Quick Tasks Completed
 
