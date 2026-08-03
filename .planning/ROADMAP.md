@@ -250,12 +250,12 @@ Plans:
   2. TUI shows a visible "Skill loaded: <name>" indicator (footer chip / inline notice) whenever a skill loads — whether model-driven (`read_skill`) or via `/skill`.
   3. The indicator round-trips end-to-end through the typed `skill_loaded` notification: keystroke → JSON-RPC → load → notification → indicator (all five touchpoints).
   4. The indicator never pollutes the assistant message stream — no fake tool cards, no streamed text chunks, no token/tool_result smuggling.
-**Plans**: 3 plans (initial estimate — refined during planning)
+**Plans**: 3 plans (finalized 2026-08-03 — waves: {16-01} → {16-02, 16-03}; 16-02 and 16-03 are parallel-safe, no shared files; 16-03 has a blocking human E2E checkpoint as its final task, mirroring 11-04-03)
 
 Plans:
-- [ ] 16-01: `NotificationType.skill_loaded` across all five touchpoints (harness event → server mapping + extractor → protocol → `handleEvent` → store)
-- [ ] 16-02: InputBar `/skill ` intercept (mirroring `/session`/`/new`, never falls through to `submitPrompt`)
-- [ ] 16-03: "Skill loaded" indicator UI + round-trip test (keystroke → RPC → notification → indicator)
+- [x] 16-01-PLAN.md — `NotificationType.skill_loaded` across all five touchpoints (harness event → server mapping + extractor → protocol → `handleEvent` → store) + Wave 0 test file
+- [x] 16-02-PLAN.md — InputBar `/skill` intercept (mirroring `/session`/`/new`, never falls through to `submitPrompt`)
+- [x] 16-03-PLAN.md — "Skill loaded" indicator UI (footer chip + notice tones) + blocking human E2E round-trip checkpoint
 **UI hint**: yes
 
 ### Phase 17: allowed-tools Enforcement & Hardening
