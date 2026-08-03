@@ -235,12 +235,13 @@ export class RpcClient {
       }
       case "token": {
         const p = payload as { session_id: string; chunk: string; request_id: string }
-        // Start assistant message on first token
+        // CR-01 fix: scan backwards for the last streaming assistant — a notice
+        // inserted mid-stream (e.g. /skill ack) must not spawn a second assistant box.
         const state = useAgentStore.getState()
-        const lastMsg = state.conversation[state.conversation.length - 1]
-        if (!lastMsg || lastMsg.role !== "assistant" || !lastMsg.isStreaming) {
-          store.startAssistantMessage()
-        }
+        const lastStreaming = [...state.conversation]
+          .reverse()
+          .find((m) => m.role === "assistant" && m.isStreaming)
+        if (!lastStreaming) store.startAssistantMessage()
         store.appendToken(p.chunk)
         break
       }
@@ -252,13 +253,15 @@ export class RpcClient {
           tool_calls_made: number
           forced: boolean
         }
+        // CR-01 fix: same backwards scan — a notice inserted mid-stream must not
+        // force the addAssistantMessage else-branch (which would create a second
+        // box with the full content while the original stays streaming forever).
         const state = useAgentStore.getState()
-        const lastMsg = state.conversation[state.conversation.length - 1]
-        if (lastMsg && lastMsg.role === "assistant" && lastMsg.isStreaming) {
-          store.completeAssistantMessage(p.content)
-        } else {
-          store.addAssistantMessage(p.content)
-        }
+        const lastStreaming = [...state.conversation]
+          .reverse()
+          .find((m) => m.role === "assistant" && m.isStreaming)
+        if (lastStreaming) store.completeAssistantMessage(p.content)
+        else store.addAssistantMessage(p.content)
         store.setStatus("idle")
         store.setBusy(false)
         break
@@ -282,8 +285,11 @@ export class RpcClient {
         // D-07/D-08: chip state ONLY — no notice, no stream message,
         // never touches status/busy (ROADMAP criterion 4). Model-driven loads
         // must not inject into the conversation.
+        // WR-05 fix: scope to the ACTIVE session — an in-flight notification
+        // arriving after a session switch must not re-add a previous session's skill.
         const p = payload as { skill: string }
-        store.addLoadedSkill(p.skill)
+        const state = useAgentStore.getState()
+        if (params.request_id === state.activeSessionId) store.addLoadedSkill(p.skill)
         break
       }
     }
