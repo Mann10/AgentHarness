@@ -17,6 +17,7 @@ from skills.store import SkillStore
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
 from harness.event_bus import EventBus
+from harness.events import SkillLoadedEvent
 from harness.scheduler import Scheduler
 from harness.session_manager import SessionManager
 
@@ -210,6 +211,10 @@ class RuntimeAPI:
         loaded.append({"name": info.name, "dir": str(info.path), "tokens": body_tokens})   # D-09 record (name + base dir + tokens)
         session.skill_state["loaded"] = loaded
         await session.context.add_skill_message(info.name, body)
+        # D-07/D-08: emit ONLY after the body is in context — the chip must
+        # never show a skill whose body is not loaded. No event on the
+        # already_loaded early-return (:196) or the cap refusal (:204-207).
+        await self._event_bus.publish(SkillLoadedEvent(session_id=session.id, skill=info.name))
         return f"Loaded skill {info.name}"             # D-05 short ack
 
     async def load_skill_status(self, name: str) -> dict:

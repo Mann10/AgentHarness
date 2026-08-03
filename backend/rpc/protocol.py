@@ -84,6 +84,7 @@ class NotificationType(str, Enum):
     response_complete = "response_complete"
     cancelled = "cancelled"
     error = "error"
+    skill_loaded = "skill_loaded"
 
 
 # ── RPC Method Surface ──────────────────────────────────────
