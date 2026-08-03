@@ -25,6 +25,11 @@ function FocusablePanel({
   return <>{children(isFocused)}</>
 }
 
+// /skill intercept constants (UI-SPEC §10 — module-local const convention; no theme.ts)
+const SKILL_USAGE_LINE = "Usage: /skill <name>"        // bare /skill copy (D-05)
+const SKILL_CMD = /^\/skill(?:\s+(.+))?$/              // bare OR /skill <name>; NEVER matches /skills
+const SKILL_LOAD_FAILED = (msg: string) => `Failed to load skill: ${msg}`
+
 function InputBar({ client, onOpenPicker }: { client: RpcClient; onOpenPicker: () => void }) {
   const { busy } = useAgentStore()
   const [input, setInput] = useState("")
@@ -59,6 +64,36 @@ function InputBar({ client, onOpenPicker }: { client: RpcClient; onOpenPicker: (
           })
         } else if (trimmed === "/sessions") {
           refreshSessions()
+        } else if (SKILL_CMD.test(trimmed)) {
+          // Branch gate is the anchored regex ITSELF (research Pitfall 6) — `/skills` fails
+          // the test and falls through to the final else → submitPrompt. NOT startsWith.
+          const m = trimmed.match(SKILL_CMD)        // non-null here — same regex, no /g flag
+          const store = useAgentStore.getState()
+          const name = m?.[1]?.trim()
+          if (!name) {
+            store.addSkillNotice(SKILL_USAGE_LINE)  // info tone (bare, D-05) — not forwarded
+          } else {
+            client.loadSkill(name)
+              .then((result) => {
+                // result: { skill: canonical, status: loaded|already_loaded } — 15-CONTEXT D-06
+                const s = useAgentStore.getState()
+                if (result.status === "loaded") s.addSkillNotice(`Loaded skill ${result.skill}`, "success")
+                else s.addSkillNotice(`Skill '${result.skill}' already loaded`)  // info (no tone)
+              })
+              .catch((err: Error) => {
+                const s = useAgentStore.getState()
+                // D-04: SKILL_NOT_FOUND surfaces the BARE verbatim copy. The RPC client
+                // rejects with only the message — no code (rpc-client.ts:180) — and
+                // adapter.py:107 builds it from the exact trimmed name we sent, so
+                // equality is deterministic. The SKILL_LOAD_FAILED wrapper is reserved
+                // for every OTHER failure (INVALID_PARAMS, INTERNAL_ERROR, cap refusal...).
+                if (err.message === `Skill '${name}' not found.`) {
+                  s.addSkillNotice(`Skill '${name}' not found`, "error")   // D-04 verbatim (no trailing period)
+                } else {
+                  s.addSkillNotice(SKILL_LOAD_FAILED(err.message), "error") // other RPC failures
+                }
+              })
+          }
         } else {
           client.submitPrompt(trimmed).then(refreshSessions)
         }
