@@ -3,14 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
 status: executing
-last_updated: "2026-08-03T09:29:45.590Z"
-last_activity: 2026-08-03 -- Phase 16 planning complete
+stopped_at: Completed 16-01-PLAN.md
+last_updated: "2026-08-03T15:57:46.827Z"
+last_activity: 2026-08-03
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 18
-  completed_plans: 15
-  percent: 83
+  completed_plans: 16
+  percent: 89
 ---
 
 # Project State
@@ -20,17 +21,34 @@ progress:
 
 ## Current Position
 
-Phase: 16
-Plan: Not started
+Phase: 16 (tui-integration-skill-indicator) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-08-03 -- Phase 16 planning complete
+Last activity: 2026-08-03
+Progress: [█████████░] 89%
+Last session: 2026-08-03T15:56:59.945Z
+Stopped At: Completed 16-01-PLAN.md
+Resume File: None
+
+## Performance Metrics
+
+| Phase | Plan | Duration | Tasks | Files |
+|-------|------|----------|-------|-------|
+| Phase 16 P01 | 7min | 3 tasks | 9 files |
+
+## Decisions
+
+- [Phase 16]: skill_loaded notification emitted from load_skill() only — single shared path covers read_skill + /skill with no double-fire — load_skill_status dedups then delegates; a second emission point would double-fire (research anti-pattern)
+- [Phase 16]: SkillLoadedEvent carries session_id on the dataclass (wire request_id) but payload extractor returns {skill} only (D-06) — Status lives solely in the skills.load RPC ack — one source of truth per concern
+- [Phase 16]: handleEvent skill_loaded case touches ONLY addLoadedSkill — no notice, no status/busy, no stream message (ROADMAP criterion 4) — Notices come exclusively from the /skill RPC ack path (16-02); model-driven loads must not inject into the conversation
+- [Phase 16]: loadedSkills: [] resets in BOTH resetConversation and loadConversation (D-09) — setActiveSession is not a reset — The chip must clear on /new and session switch; setActiveSession only sets the id (research Pitfall 1)
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-08-01)
 
 **Core value:** A reliable, session-persistent terminal chat loop where the LLM agent drives tools — with a TUI that makes long conversations fast to navigate and continue.
-**Current focus:** Phase 16 — TUI integration (skill indicator)
+**Current focus:** Phase 16 — tui-integration-skill-indicator
 
 ## Progress
 

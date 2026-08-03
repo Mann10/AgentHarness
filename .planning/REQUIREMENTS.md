@@ -28,7 +28,7 @@
 - [x] **ACT-03**: Loaded skill body persists for the rest of the session as a system-role message
 - [x] **ACT-04**: Loaded skill bodies survive context summarization (system-role exemption)
 - [x] **ACT-05**: Loaded skills are session-scoped — never persisted to the JSONL session file
-- [ ] **ACT-06**: TUI shows a visible indicator when a skill is loaded
+- [x] **ACT-06**: TUI shows a visible indicator when a skill is loaded
 
 ### Skill Capabilities
 
@@ -84,7 +84,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACT-03 | Phase 13 | Complete |
 | ACT-04 | Phase 13 | Complete |
 | ACT-05 | Phase 13 | Complete |
-| ACT-06 | Phase 16 | Pending |
+| ACT-06 | Phase 16 | Complete |
 | CAP-01 | Phase 14 | Complete |
 | CAP-02 | Phase 17 | Pending |
 | CAP-03 | Phase 14 | Complete |
