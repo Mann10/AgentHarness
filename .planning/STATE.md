@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
 status: executing
-stopped_at: Completed 16-01-PLAN.md
-last_updated: "2026-08-03T15:57:46.827Z"
+stopped_at: Completed 16-02-PLAN.md
+last_updated: "2026-08-03T16:09:47.877Z"
 last_activity: 2026-08-03
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 18
-  completed_plans: 16
-  percent: 89
+  completed_plans: 17
+  percent: 94
 ---
 
 # Project State
@@ -22,12 +22,12 @@ progress:
 ## Current Position
 
 Phase: 16 (tui-integration-skill-indicator) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-08-03
-Progress: [█████████░] 89%
-Last session: 2026-08-03T15:56:59.945Z
-Stopped At: Completed 16-01-PLAN.md
+Progress: [█████████░] 94%
+Last session: 2026-08-03T16:09:47.868Z
+Stopped At: Completed 16-02-PLAN.md
 Resume File: None
 
 ## Performance Metrics
@@ -35,6 +35,7 @@ Resume File: None
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
 | Phase 16 P01 | 7min | 3 tasks | 9 files |
+| Phase 16 P02 | 5min | 1 tasks | 1 files |
 
 ## Decisions
 
@@ -42,6 +43,9 @@ Resume File: None
 - [Phase 16]: SkillLoadedEvent carries session_id on the dataclass (wire request_id) but payload extractor returns {skill} only (D-06) — Status lives solely in the skills.load RPC ack — one source of truth per concern
 - [Phase 16]: handleEvent skill_loaded case touches ONLY addLoadedSkill — no notice, no status/busy, no stream message (ROADMAP criterion 4) — Notices come exclusively from the /skill RPC ack path (16-02); model-driven loads must not inject into the conversation
 - [Phase 16]: loadedSkills: [] resets in BOTH resetConversation and loadConversation (D-09) — setActiveSession is not a reset — The chip must clear on /new and session switch; setActiveSession only sets the id (research Pitfall 1)
+- [Phase 16]: Anchored-regex slash-command gate: branch gated on SKILL_CMD.test(trimmed) (^/skill(?:\s+(.+))?\$) not startsWith — /skills fails the test and falls through to submitPrompt unchanged (Pitfall 6, T-16-05)
+- [Phase 16]: D-04 SKILL_NOT_FOUND surfaces the BARE verbatim copy 'Skill <name> not found' — message-equality against the backend (adapter.py:107); SKILL_LOAD_FAILED wrapper reserved for every other RPC failure (INVALID_PARAMS, INTERNAL_ERROR, cap refusal)
+- [Phase 16]: All /skill outcomes route through addSkillNotice(text, tone?) — never addError (sets status:error, flips header red, Pitfall 5 / T-16-07); no busy flag during load; chip not updated from this ack (notification-driven per 16-01, chip rendered in 16-03)
 
 ## Project Reference
 
