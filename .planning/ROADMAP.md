@@ -155,7 +155,7 @@ Plans:
 - [x] **Phase 13: Context Plumbing (Persist Fix)** - session serialization handles skill bodies: persist in memory, never to JSONL (completed 2026-08-01)
 - [x] **Phase 14: read_skill Provider End-to-End** - path-scoped `read_skill` tool, bundled resources, system-role body injection (completed 2026-08-02)
 - [x] **Phase 15: Session Behavior & /skill Command** - user-invocable `/skill` via the 4-layer RPC contract, loaded-skill accounting (completed 2026-08-02)
-- [ ] **Phase 16: TUI Integration (Skill Indicator)** - TUI `/skill` + visible "Skill loaded" indicator via typed event
+- [x] **Phase 16: TUI Integration (Skill Indicator)** - TUI `/skill` + visible "Skill loaded" indicator via typed event (completed 2026-08-03)
 - [ ] **Phase 17: allowed-tools Enforcement & Hardening** - tool-list filtering, intersection semantics, full E2E verification
 
 ## Phase Details
@@ -303,5 +303,5 @@ Phases execute in numeric order: 12 → 13 → 14 → 15 → 16 → 17
 | 13. Context Plumbing (Persist Fix) | v1.1 | 3/3 | Complete    | 2026-08-01 |
 | 14. read_skill Provider End-to-End | v1.1 | 5/5 | Complete    | 2026-08-02 |
 | 15. Session Behavior & /skill Command | v1.1 | 3/3 | Complete    | 2026-08-02 |
-| 16. TUI Integration (Skill Indicator) | v1.1 | 2/3 | In Progress|  |
+| 16. TUI Integration (Skill Indicator) | v1.1 | 3/3 | Complete   | 2026-08-03 |
 | 17. allowed-tools Enforcement & Hardening | v1.1 | 0/3 | Not started | - |

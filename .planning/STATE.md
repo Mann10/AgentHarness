@@ -2,32 +2,32 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
-status: executing
-stopped_at: Completed 16-02-PLAN.md
-last_updated: "2026-08-03T16:09:47.877Z"
+status: verifying
+stopped_at: Completed 16-03-PLAN.md
+last_updated: "2026-08-03T16:26:03.850Z"
 last_activity: 2026-08-03
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 18
-  completed_plans: 17
-  percent: 94
+  completed_plans: 18
+  percent: 100
 ---
 
 # Project State
 
 **Updated:** 2026-08-03
-**Status:** Ready to execute
+**Status:** Phase complete — ready for verification
 
 ## Current Position
 
 Phase: 16 (tui-integration-skill-indicator) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-08-03
-Progress: [█████████░] 94%
-Last session: 2026-08-03T16:09:47.868Z
-Stopped At: Completed 16-02-PLAN.md
+Progress: [██████████] 100%
+Last session: 2026-08-03T16:26:03.841Z
+Stopped At: Completed 16-03-PLAN.md
 Resume File: None
 
 ## Performance Metrics
@@ -36,6 +36,7 @@ Resume File: None
 |-------|------|----------|-------|-------|
 | Phase 16 P01 | 7min | 3 tasks | 9 files |
 | Phase 16 P02 | 5min | 1 tasks | 1 files |
+| Phase 16 P03 | 12min | 3 tasks | 2 files |
 
 ## Decisions
 
@@ -46,6 +47,10 @@ Resume File: None
 - [Phase 16]: Anchored-regex slash-command gate: branch gated on SKILL_CMD.test(trimmed) (^/skill(?:\s+(.+))?\$) not startsWith — /skills fails the test and falls through to submitPrompt unchanged (Pitfall 6, T-16-05)
 - [Phase 16]: D-04 SKILL_NOT_FOUND surfaces the BARE verbatim copy 'Skill <name> not found' — message-equality against the backend (adapter.py:107); SKILL_LOAD_FAILED wrapper reserved for every other RPC failure (INVALID_PARAMS, INTERNAL_ERROR, cap refusal)
 - [Phase 16]: All /skill outcomes route through addSkillNotice(text, tone?) — never addError (sets status:error, flips header red, Pitfall 5 / T-16-07); no busy flag during load; chip not updated from this ack (notification-driven per 16-01, chip rendered in 16-03)
+- [Phase 16]: Chip truncation is a pure drop-tail algorithm (formatChip): W = columns - 4; if joined names fit → render all, else drop trailing names until kept + " · +N more" fits; below the ~18-col hard floor return null and hide the row (UI-SPEC §6.1/§9)
+- [Phase 16]: Chip renders ONLY from loadedSkills store state — the store subscription is the sole data source (D-09 live-events-only, zero inference, zero-chrome when empty); hint row preserved verbatim below it
+- [Phase 16]: Notice tones discriminate on message.tone in the notice branch: success = ✓ green bold, error = ✗ red bold, undefined = existing dim italic (fallback keeps 'Cancelled'/already_loaded/Usage unchanged); error role branch untouched
+- [Phase 16]: Glyph constants NOTICE_OK / NOTICE_ERR are module-local in message.tsx (UI-SPEC §10); no accent colors extended to the chip (UI-SPEC §5)
 
 ## Project Reference
 
@@ -70,7 +75,7 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 - [x] Phase 13: Context Plumbing (Persist Fix) â€” Complete (v1.1, 3 plans)
 - [ ] Phase 14: read_skill Provider End-to-End â€” Complete (v1.1, 4 plans)
 - [ ] Phase 15: Session Behavior & /skill Command â€” Complete (v1.1, 3 plans)
-- [ ] Phase 16: TUI Integration (Skill Indicator) â€” Complete (v1.1, 3 plans)
+- [x] Phase 16: TUI Integration (Skill Indicator) â€” Complete (v1.1, 3 plans)
 - [ ] Phase 17: allowed-tools Enforcement & Hardening â€” Complete (v1.1, 3 plans)
 
 ## Deferred Items
