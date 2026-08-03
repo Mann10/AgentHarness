@@ -2,6 +2,9 @@ import { Box, Text } from "ink"
 import type { Message } from "../types.js"
 import { StreamingText } from "./streaming-text.js"
 
+const NOTICE_OK = "✓"                    // green, bold — success tone (09-UI-SPEC §6)
+const NOTICE_ERR = "✗"                   // red, bold — error tone (09-UI-SPEC §6)
+
 interface MessageProps {
   message: Message
 }
@@ -41,6 +44,24 @@ export function MessageCard({ message }: MessageProps) {
   }
 
   if (message.role === "notice") {
+    if (message.tone === "success") {
+      return (
+        <Box>
+          <Text color="green" bold>
+            {NOTICE_OK} {message.content}
+          </Text>
+        </Box>
+      )
+    }
+    if (message.tone === "error") {
+      return (
+        <Box>
+          <Text color="red" bold>
+            {NOTICE_ERR} {message.content}
+          </Text>
+        </Box>
+      )
+    }
     return (
       <Box>
         <Text dimColor italic>
