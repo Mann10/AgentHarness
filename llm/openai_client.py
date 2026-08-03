@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from collections.abc import AsyncIterator
 
-from openai import APIConnectionError, APIError, AsyncOpenAI
+from openai import APIConnectionError, APIError, APIStatusError, AsyncOpenAI
 
 from config import Config
 from context.context import ConversationContext
@@ -73,9 +73,13 @@ class OpenAIClient(BaseLLMClient):
             raise LLMConnectionError(
                 f"Failed to connect to {self.config.base_url}"
             ) from e
-        except APIError as e:
+        except APIStatusError as e:
             raise LLMResponseError(
                 f"API error: {e.status_code} {e.message}"
+            ) from e
+        except APIError as e:
+            raise LLMResponseError(
+                f"API error: {e.message}"
             ) from e
 
         msg = response.choices[0].message
@@ -129,7 +133,7 @@ class OpenAIClient(BaseLLMClient):
             raise LLMConnectionError(
                 f"Failed to connect to {self.config.base_url}"
             ) from e
-        except APIError as e:
+        except APIStatusError as e:
             raise LLMResponseError(
                 f"API error: {e.status_code} {e.message}"
             ) from e
@@ -158,9 +162,13 @@ class OpenAIClient(BaseLLMClient):
             raise LLMConnectionError(
                 f"Stream connection lost to {self.config.base_url}"
             ) from e
-        except APIError as e:
+        except APIStatusError as e:
             raise LLMResponseError(
                 f"API error during stream: {e.status_code} {e.message}"
+            ) from e
+        except APIError as e:
+            raise LLMResponseError(
+                f"API error during stream: {e.message}"
             ) from e
 
         if tool_call_parts:

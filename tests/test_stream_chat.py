@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 import httpx
-from openai import APIConnectionError, APIStatusError
+from openai import APIConnectionError, APIError, APIStatusError
 
 from config import Config
 from llm.base import StreamChunk
@@ -98,6 +98,19 @@ async def test_stream_chat_maps_stream_error() -> None:
         async for _ in client.stream_chat([{"role": "user", "content": "hi"}]):
             pass
 
+async def test_stream_chat_maps_bare_api_error() -> None:
+    """A bare APIError (no status_code, e.g. parse/validation) mid-iteration
+    surfaces as LLMResponseError without AttributeError."""
+
+    async def stream():
+        yield _text_delta("partial")
+        raise APIError("boom", request=None, body=None)
+
+    client = _make_client(stream())
+
+    with pytest.raises(LLMResponseError):
+        async for _ in client.stream_chat([{"role": "user", "content": "hi"}]):
+            pass
 
 async def test_stream_chat_passes_tools_to_api() -> None:
     """Tool dataclasses are converted to OpenAI function-schema dicts in create()."""
