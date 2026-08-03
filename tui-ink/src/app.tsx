@@ -66,7 +66,7 @@ function InputBar({ client, onOpenPicker }: { client: RpcClient; onOpenPicker: (
           refreshSessions()
         } else if (SKILL_CMD.test(trimmed)) {
           // Branch gate is the anchored regex ITSELF (research Pitfall 6) — `/skills` fails
-          // the test and falls through to the final else → submitPrompt. NOT startsWith.
+          // the test and falls through to the final else → chat prompt dispatch. NOT startsWith.
           const m = trimmed.match(SKILL_CMD)        // non-null here — same regex, no /g flag
           const store = useAgentStore.getState()
           const name = m?.[1]?.trim()
