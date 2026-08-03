@@ -31,7 +31,6 @@ const SKILL_CMD = /^\/skill(?:\s+(.+))?$/              // bare OR /skill <name>;
 const SKILL_LOAD_FAILED = (msg: string) => `Failed to load skill: ${msg}`
 
 function InputBar({ client, onOpenPicker }: { client: RpcClient; onOpenPicker: () => void }) {
-  const { busy } = useAgentStore()
   const [input, setInput] = useState("")
   const { isFocused } = useFocus({ id: "input", autoFocus: true })
 

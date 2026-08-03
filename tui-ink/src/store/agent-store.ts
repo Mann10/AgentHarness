@@ -44,6 +44,17 @@ export type AgentStore = AgentState & AgentActions
 
 const now = () => Date.now()
 
+// Returns the index of the LAST message with role "assistant" AND isStreaming, or -1.
+// CR-01/T-16-13: a notice appended mid-stream (e.g. /skill ack) becomes the array
+// tail — streaming mutations must target the streaming message wherever it sits,
+// never the array tail.
+function lastStreamingIdx(msgs: Message[]): number {
+  for (let i = msgs.length - 1; i >= 0; i--) {
+    if (msgs[i].role === "assistant" && msgs[i].isStreaming) return i
+  }
+  return -1
+}
+
 export const useAgentStore = create<AgentStore>((set, get) => ({
   sessions: [],
   activeSessionId: null,
@@ -88,10 +99,8 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   appendToken: (chunk) =>
     set((s) => {
       const msgs = [...s.conversation]
-      const last = msgs[msgs.length - 1]
-      if (last && last.role === "assistant" && last.isStreaming) {
-        msgs[msgs.length - 1] = { ...last, content: last.content + chunk }
-      }
+      const idx = lastStreamingIdx(msgs)
+      if (idx !== -1) msgs[idx] = { ...msgs[idx], content: msgs[idx].content + chunk }
       return { conversation: msgs }
     }),
 
@@ -106,23 +115,17 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   completeAssistantMessage: (content) =>
     set((s) => {
       const msgs = [...s.conversation]
-      const last = msgs[msgs.length - 1]
-      if (last && last.role === "assistant" && last.isStreaming) {
-        msgs[msgs.length - 1] = {
-          ...last,
-          content,
-          isStreaming: false,
-        }
-      }
-      return { conversation: msgs, status: content ? "idle" : "idle" }
+      const idx = lastStreamingIdx(msgs)
+      if (idx !== -1) msgs[idx] = { ...msgs[idx], content, isStreaming: false }
+      return { conversation: msgs, status: "idle" }  // IN-01: degenerate ternary removed
     }),
 
   truncateStreamingMessage: () =>
     set((s) => {
       const msgs = [...s.conversation]
-      const last = msgs[msgs.length - 1]
-      if (last && last.role === "assistant" && last.isStreaming) {
-        msgs[msgs.length - 1] = { ...last, isStreaming: false, truncated: true }
+      const idx = lastStreamingIdx(msgs)
+      if (idx !== -1) {
+        msgs[idx] = { ...msgs[idx], isStreaming: false, truncated: true }
         return { conversation: msgs, status: "idle" }
       }
       return { conversation: msgs }
