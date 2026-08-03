@@ -4,7 +4,6 @@ venv
 .obsidian/
 .agentharness/
 .opencode/
-.planning/
 .vscode/
 .pytest_cache/
 plans/
