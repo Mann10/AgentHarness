@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
 status: executing
-stopped_at: Completed 16-05-PLAN.md
-last_updated: "2026-08-04T21:50:11Z"
-last_activity: 2026-08-04 -- Phase 16 plan 05 (WR-04 gap closure) completed
+stopped_at: Plan 16-04 complete (human E2E approved)
+last_updated: "2026-08-04T22:17:36Z"
+last_activity: 2026-08-04 -- Phase 16 plan 04 (CR-01 stream-safety + WR-05 session scope) completed; human E2E approved
 progress:
   total_phases: 6
   completed_phases: 4
@@ -24,10 +24,10 @@ progress:
 Phase: 16 (tui-integration-skill-indicator) — EXECUTING
 Plan: 4 of 5
 Status: Executing Phase 16
-Last activity: 2026-08-04 -- Phase 16 plan 05 (WR-04 gap closure) completed
+Last activity: 2026-08-04 -- Phase 16 plan 04 (CR-01 stream-safety + WR-05 session scope) completed; human E2E approved
 Progress: [██████████] 100%
 Last session: 2026-08-03T16:26:03.841Z
-Stopped At: Completed 16-05-PLAN.md
+Stopped At: Plan 16-04 complete (human E2E approved)
 Resume File: None
 
 ## Performance Metrics
