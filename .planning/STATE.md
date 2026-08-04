@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
 status: executing
-stopped_at: Completed 16-03-PLAN.md
-last_updated: "2026-08-03T17:02:48.695Z"
-last_activity: 2026-08-03 -- Phase 16 execution started
+stopped_at: Completed 16-05-PLAN.md
+last_updated: "2026-08-04T21:50:11Z"
+last_activity: 2026-08-04 -- Phase 16 plan 05 (WR-04 gap closure) completed
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 20
-  completed_plans: 18
-  percent: 90
+  completed_plans: 19
+  percent: 95
 ---
 
 # Project State
@@ -22,12 +22,12 @@ progress:
 ## Current Position
 
 Phase: 16 (tui-integration-skill-indicator) — EXECUTING
-Plan: 1 of 5
+Plan: 4 of 5
 Status: Executing Phase 16
-Last activity: 2026-08-03 -- Phase 16 execution started
+Last activity: 2026-08-04 -- Phase 16 plan 05 (WR-04 gap closure) completed
 Progress: [██████████] 100%
 Last session: 2026-08-03T16:26:03.841Z
-Stopped At: Completed 16-03-PLAN.md
+Stopped At: Completed 16-05-PLAN.md
 Resume File: None
 
 ## Performance Metrics
@@ -37,6 +37,7 @@ Resume File: None
 | Phase 16 P01 | 7min | 3 tasks | 9 files |
 | Phase 16 P02 | 5min | 1 tasks | 1 files |
 | Phase 16 P03 | 12min | 3 tasks | 2 files |
+| Phase 16 P05 | 11min | 1 tasks | 1 files |
 
 ## Decisions
 
@@ -48,6 +49,7 @@ Resume File: None
 - [Phase 16]: D-04 SKILL_NOT_FOUND surfaces the BARE verbatim copy 'Skill <name> not found' — message-equality against the backend (adapter.py:107); SKILL_LOAD_FAILED wrapper reserved for every other RPC failure (INVALID_PARAMS, INTERNAL_ERROR, cap refusal)
 - [Phase 16]: All /skill outcomes route through addSkillNotice(text, tone?) — never addError (sets status:error, flips header red, Pitfall 5 / T-16-07); no busy flag during load; chip not updated from this ack (notification-driven per 16-01, chip rendered in 16-03)
 - [Phase 16]: Chip truncation is a pure drop-tail algorithm (formatChip): W = columns - 4; if joined names fit → render all, else drop trailing names until kept + " · +N more" fits; below the ~18-col hard floor return null and hide the row (UI-SPEC §6.1/§9)
+- [Phase 16]: WR-04 fixed: chip fit budget is W = columns - CHIP_PADDING_X*2 - stringWidth(CHIP_LABEL + " ") — full rendered row (padding 2 + label 7 cells) reserved before names; all fit checks use string-width display columns, not UTF-16 .length; string-width@8.2.2 used directly but NOT added to package.json (transitive ink dep, bundled by tsup)
 - [Phase 16]: Chip renders ONLY from loadedSkills store state — the store subscription is the sole data source (D-09 live-events-only, zero inference, zero-chrome when empty); hint row preserved verbatim below it
 - [Phase 16]: Notice tones discriminate on message.tone in the notice branch: success = ✓ green bold, error = ✗ red bold, undefined = existing dim italic (fallback keeps 'Cancelled'/already_loaded/Usage unchanged); error role branch untouched
 - [Phase 16]: Glyph constants NOTICE_OK / NOTICE_ERR are module-local in message.tsx (UI-SPEC §10); no accent colors extended to the chip (UI-SPEC §5)

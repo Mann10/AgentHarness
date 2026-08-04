@@ -257,7 +257,7 @@ Plans:
 - [x] 16-02-PLAN.md — InputBar `/skill` intercept (mirroring `/session`/`/new`, never falls through to `submitPrompt`)
 - [x] 16-03-PLAN.md — "Skill loaded" indicator UI (footer chip + notice tones) + blocking human E2E round-trip checkpoint
 - [ ] 16-04-PLAN.md — Gap closure: CR-01 stream-safety (backwards scan in token/response_complete + store streaming actions) + WR-05 session correlation + human E2E `/skill` during streaming (blocking checkpoint)
-- [ ] 16-05-PLAN.md — Gap closure: WR-04 honest chip width budget (string-width display-column measurement)
+- [x] 16-05-PLAN.md — Gap closure: WR-04 honest chip width budget (string-width display-column measurement)
 **UI hint**: yes
 
 ### Phase 17: allowed-tools Enforcement & Hardening
