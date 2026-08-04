@@ -3,31 +3,31 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
 status: executing
-stopped_at: Plan 16-04 complete (human E2E approved)
-last_updated: "2026-08-04T22:17:36Z"
-last_activity: 2026-08-04 -- Phase 16 plan 04 (CR-01 stream-safety + WR-05 session scope) completed; human E2E approved
+stopped_at: Phase 16 complete (verified, 5/5 plans)
+last_updated: "2026-08-04T22:30:00Z"
+last_activity: 2026-08-04 -- Phase 16 verified (4/4 must-haves, CR-01/WR-04/WR-05 closed)
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 20
-  completed_plans: 19
-  percent: 95
+  completed_plans: 20
+  percent: 100
 ---
 
 # Project State
 
-**Updated:** 2026-08-03
-**Status:** Executing Phase 16
+**Updated:** 2026-08-04
+**Status:** Executing Phase 16 (complete — ready for Phase 17)
 
 ## Current Position
 
-Phase: 16 (tui-integration-skill-indicator) — EXECUTING
-Plan: 4 of 5
-Status: Executing Phase 16
-Last activity: 2026-08-04 -- Phase 16 plan 04 (CR-01 stream-safety + WR-05 session scope) completed; human E2E approved
+Phase: 16 (tui-integration-skill-indicator) — COMPLETE (verified 2026-08-04)
+Plan: 5 of 5
+Status: Phase 16 verified — 4/4 must-haves, all gaps closed
+Last activity: 2026-08-04 -- Phase 16 verified (CR-01/WR-03/WR-04/WR-05 closed; human E2E approved)
 Progress: [██████████] 100%
-Last session: 2026-08-03T16:26:03.841Z
-Stopped At: Plan 16-04 complete (human E2E approved)
+Last session: 2026-08-04T22:30:00Z
+Stopped At: Phase 16 complete (verified, 5/5 plans)
 Resume File: None
 
 ## Performance Metrics
@@ -37,6 +37,7 @@ Resume File: None
 | Phase 16 P01 | 7min | 3 tasks | 9 files |
 | Phase 16 P02 | 5min | 1 tasks | 1 files |
 | Phase 16 P03 | 12min | 3 tasks | 2 files |
+| Phase 16 P04 | 4min | 1 tasks | 1 files |
 | Phase 16 P05 | 11min | 1 tasks | 1 files |
 
 ## Decisions
@@ -59,7 +60,7 @@ Resume File: None
 See: .planning/PROJECT.md (updated 2026-08-01)
 
 **Core value:** A reliable, session-persistent terminal chat loop where the LLM agent drives tools — with a TUI that makes long conversations fast to navigate and continue.
-**Current focus:** Phase 16 — tui-integration-skill-indicator
+**Current focus:** Phase 17 — allowed-tools-enforcement-hardening
 
 ## Progress
 
@@ -77,7 +78,7 @@ See: .planning/PROJECT.md (updated 2026-08-01)
 - [x] Phase 13: Context Plumbing (Persist Fix) â€” Complete (v1.1, 3 plans)
 - [ ] Phase 14: read_skill Provider End-to-End â€” Complete (v1.1, 4 plans)
 - [ ] Phase 15: Session Behavior & /skill Command â€” Complete (v1.1, 3 plans)
-- [x] Phase 16: TUI Integration (Skill Indicator) â€” Complete (v1.1, 3 plans)
+- [x] Phase 16: TUI Integration (Skill Indicator) â€” Complete (v1.1, 5 plans)
 - [ ] Phase 17: allowed-tools Enforcement & Hardening â€” Complete (v1.1, 3 plans)
 
 ## Deferred Items
@@ -96,6 +97,7 @@ Items acknowledged and deferred at v1.0 milestone close on 2026-08-01:
 - v1.1 roadmap created 2026-08-01: 6 phases (12-17), 20/20 requirements mapped, following research SUMMARY.md ordering â€” discovery & manifest (12) â†’ context plumbing / persist fix (13, highest risk, placed second so D-13 JSONL leak is closed before any body flows) â†’ read_skill provider (14) â†’ session behavior + /skill RPC (15) â†’ TUI indicator (16) â†’ allowed-tools enforcement & hardening (17). CAP-03 (read_skill never filtered) ships with the read_skill phase per roadmap; CAP-04 intersection semantics decided in Phase 15, enforced in Phase 17.
 - Phase 12 context gathered 2026-08-01 (17 decisions D-01..D-17): frontmatter-name-wins on mismatch, lenient name validation, case-insensitive win32 match, char-based 1500-char configurable cap with longest-first truncation (never drops skills), `# Available Skills` heading + `- name: description` bullets appended at end of _build_system_prompt, section omitted when no skills, allowed-tools parsed + shape-validated now (malformed â†’ keep skill, drop field), enforcement deferred to Phase 17.
 - Phase 16 context gathered 2026-08-03 (9 decisions D-01..D-09): persistent footer chip on a dedicated line above hints, chip shows all loaded skills, inline notices for every /skill outcome, bare /skill shows usage and never falls through, `skill_loaded` notification payload is `{skill}` only fired from the shared load_skill() path across all five touchpoints, live-events-only indicator (no backend skill_state RPC).
+- Phase 16 complete 2026-08-04 (5/5 plans): skill_loaded typed notification round-trips end-to-end, /skill intercept + footer chip + notice tones shipped, both human E2E checkpoints approved. Gap closure closed CR-01 (stream-safety backwards scan), WR-03 (dead busy destructure), WR-04 (honest string-width chip budget), WR-05 (session-scoped chip). Verified 4/4 must-haves, full suite 192 passed / 1 skipped. Code review residual: string-width used directly but not declared in package.json (transitive-only, fragility warning WR-04) + pre-existing WR-01/WR-02/WR-06/IN-02..IN-05 deferred to Phase 17 hardening.
 
 ## Quick Tasks Completed
 

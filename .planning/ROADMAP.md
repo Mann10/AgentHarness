@@ -241,7 +241,8 @@ Plans:
 - **Wave 2** *(blocked on Wave 1 completion)*
 - [x] 15-03-PLAN.md — loaded-skill token accounting + cap (D-09..D-12) + CAP-04 combined-filter semantics contract + doc (D-13/D-14)
 
-### Phase 16: TUI Integration (Skill Indicator)
+### Phase 16: TUI Integration (Skill Indicator) ✓
+**Completed**: 2026-08-04
 **Goal**: The TUI surfaces skill activity: `/skill <name>` works from the input bar and a visible "Skill loaded" indicator appears whenever a skill loads — driven by a typed `skill_loaded` notification, never by inference or stream pollution.
 **Depends on**: Phase 15
 **Requirements**: ACT-06
@@ -250,7 +251,7 @@ Plans:
   2. TUI shows a visible "Skill loaded: <name>" indicator (footer chip / inline notice) whenever a skill loads — whether model-driven (`read_skill`) or via `/skill`.
   3. The indicator round-trips end-to-end through the typed `skill_loaded` notification: keystroke → JSON-RPC → load → notification → indicator (all five touchpoints).
   4. The indicator never pollutes the assistant message stream — no fake tool cards, no streamed text chunks, no token/tool_result smuggling.
-**Plans**: 5 plans (3 finalized 2026-08-03 — waves: {16-01} → {16-02, 16-03}; 16-02 and 16-03 are parallel-safe, no shared files; 16-03 has a blocking human E2E checkpoint as its final task, mirroring 11-04-03) + 2 gap-closure plans (16-04, 16-05 — added 2026-08-03 from 16-VERIFICATION.md; wave 1, parallel-safe, no shared files)
+**Plans**: 5 plans (3 finalized 2026-08-03 — waves: {16-01} → {16-02, 16-03}; 16-02 and 16-03 are parallel-safe, no shared files; 16-03 has a blocking human E2E checkpoint as its final task, mirroring 11-04-03) + 2 gap-closure plans (16-04, 16-05 — added 2026-08-03 from 16-VERIFICATION.md; wave 1, parallel-safe, no shared files). All 5 complete 2026-08-04 — CR-01/WR-03/WR-04/WR-05 closed with evidence.
 
 Plans:
 - [x] 16-01-PLAN.md — `NotificationType.skill_loaded` across all five touchpoints (harness event → server mapping + extractor → protocol → `handleEvent` → store) + Wave 0 test file
