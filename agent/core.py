@@ -145,6 +145,12 @@ class Agent:
                     called,
                 )
 
+                # D-14 baseline: message count BEFORE committing the assistant
+                # tool_calls message — any cancel mid-gather rolls back
+                # everything from here (the orphaned tool_calls + partial tool
+                # results) so the next turn has provider-valid alternation.
+                msgs_before_gather = len(self._context._messages)
+
                 await self._context.add_assistant_tool_message(
                     response.content, response.tool_calls
                 )
@@ -161,20 +167,30 @@ class Agent:
                     self._registry.call_tool(tc.name, tc.arguments)
                     for tc in response.tool_calls
                 ]
-                results = await asyncio.gather(*tasks, return_exceptions=True)
+                try:
+                    results = await asyncio.gather(*tasks, return_exceptions=True)
 
-                for tc, result in zip(response.tool_calls, results):
-                    content = (
-                        f"Error: {result}"
-                        if isinstance(result, Exception)
-                        else result.content
-                    )
-                    await self._context.add_tool_message(tc.id, content)
-                    await self._emit(ToolResultEvent(
-                        session_id=self._session.id,
-                        tool_name=tc.name,
-                        result=content,
-                    ))
+                    for tc, result in zip(response.tool_calls, results):
+                        content = (
+                            f"Error: {result}"
+                            if isinstance(result, Exception)
+                            else result.content
+                        )
+                        await self._context.add_tool_message(tc.id, content)
+                        await self._emit(ToolResultEvent(
+                            session_id=self._session.id,
+                            tool_name=tc.name,
+                            result=content,
+                        ))
+                except asyncio.CancelledError:
+                    # D-14: cancel mid-gather — drop the orphaned assistant
+                    # tool_calls message and any partial tool messages so the
+                    # next turn has valid alternation (no dangling tool_calls).
+                    # total_tokens must stay consistent with _messages.
+                    del self._context._messages[msgs_before_gather:]
+                    self._context.total_tokens = sum(
+                        m.token_count for m in self._context._messages)
+                    raise
 
                 total_tool_calls += len(response.tool_calls)
 

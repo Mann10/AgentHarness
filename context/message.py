@@ -14,6 +14,8 @@ class Message:
     token_count: int = 0
     tool_calls: list[ToolCall] | None = None
     tool_call_id: str | None = None
+    persist: bool = True
+    skill_name: str | None = None  # D-08 tag: set only for skill-body system messages
 
     def __post_init__(self) -> None:
         if self.role not in VALID_ROLES:
@@ -30,4 +32,5 @@ class Message:
             token_count=d.get("token_count", 0),
             tool_calls=tool_calls,
             tool_call_id=d.get("tool_call_id"),
+            persist=d.get("persist", True),
         )

@@ -33,8 +33,13 @@ class RPCResponse:
 
 
 @dataclass
-class RPCError:
-    """JSON-RPC 2.0 error object."""
+class RPCError(Exception):
+    """JSON-RPC 2.0 error object.
+
+    Inherits Exception (D-08): handlers raise RPCError with a structured
+    code/message, and Dispatcher.dispatch catches it to pass the code
+    through verbatim instead of wrapping it as -32603.
+    """
     code: int = 0
     message: str = ""
     data: Any = None
@@ -46,6 +51,9 @@ INVALID_REQUEST = -32600
 METHOD_NOT_FOUND = -32601
 INVALID_PARAMS = -32602
 INTERNAL_ERROR = -32603
+
+# Domain error codes (D-08)
+SKILL_NOT_FOUND = -32001
 
 
 @dataclass
@@ -76,6 +84,7 @@ class NotificationType(str, Enum):
     response_complete = "response_complete"
     cancelled = "cancelled"
     error = "error"
+    skill_loaded = "skill_loaded"
 
 
 # ── RPC Method Surface ──────────────────────────────────────
@@ -90,4 +99,5 @@ RPC_METHODS: list[str] = [
     "sessions.get",
     "sessions.active",
     "ping",
+    "skills.load",
 ]

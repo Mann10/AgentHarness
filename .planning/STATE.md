@@ -1,133 +1,104 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: completed
-last_updated: "2026-08-01T09:27:53.240Z"
+milestone: v1.1
+milestone_name: Skills System
+status: complete
+stopped_at: v1.1 milestone closed 2026-08-04 (Phase 17 cancelled — CAP-02/CAP-04 deferred)
+last_updated: "2026-08-04"
+last_activity: 2026-08-04 -- v1.1 Skills System milestone SHIPPED (archived, tagged)
 progress:
-  total_phases: 10
-  completed_phases: 10
-  total_plans: 25
-  completed_plans: 22
-  percent: 88
+  total_phases: 6
+  completed_phases: 5
+  total_plans: 20
+  completed_plans: 20
+  percent: 100
 ---
 
 # Project State
 
-**Updated:** 2026-08-01
-**Status:** v1.0 milestone complete
+**Updated:** 2026-08-04
+**Status:** ✅ v1.1 Skills System SHIPPED — planning next milestone
 
-## Current Phase
+## Current Position
 
-**Phase 11: Session Popup & Panel Layout** — UI-SPEC approved
+Milestone: v1.1 Skills System — COMPLETE (shipped 2026-08-04)
+Phase 17: CANCELLED (allowed-tools enforcement deferred to future/end milestone)
+Last activity: 2026-08-04 -- v1.1 milestone closed, archived to .planning/milestones/, tagged v1.1
+Progress: [██████████] 100%
+Next: Run `/gsd-new-milestone` to define requirements and roadmap for the next milestone
 
-## Phase 11 Progress
+## Performance Metrics
 
-- [x] Context gathered (16 decisions D-01..D-16) — Ready for planning
-- [x] Research complete — 11-RESEARCH.md
-- [x] Validation strategy — 11-VALIDATION.md
-- [x] UI design contract approved (6/6 dimensions) — 11-UI-SPEC.md
-- [x] Phase 11 added to roadmap
-- [x] 11-01-PLAN.md — Backend: context-restore fix, sessions.get RPC, auto-title (D-06/D-10/D-13) (Wave 1)
-- [x] 11-02-PLAN.md — TUI contracts: SessionMessage type, getSessionHistory, loadConversation (D-10) (Wave 1)
-- [x] 11-03-PLAN.md — /session full-screen picker + /new + honest footer (D-06..D-09, D-11/D-12) (Wave 2)
-- [x] 11-04-PLAN.md — Conversation-first layout + live DatePanel + E2E checkpoint (D-01..D-05, D-14..D-16) (Wave 3)
+| Phase | Plans | Tasks | Completed |
+|-------|-------|-------|-----------|
+| Phase 12 Skills Discovery & Manifest | 4 | 8 | 2026-08-01 |
+| Phase 13 Context Plumbing (Persist Fix) | 3 | 6 | 2026-08-01 |
+| Phase 14 read_skill Provider End-to-End | 5 | 10 | 2026-08-02 |
+| Phase 15 Session Behavior & /skill Command | 3 | 6 | 2026-08-02 |
+| Phase 16 TUI Integration (Skill Indicator) | 5 | 11 | 2026-08-04 |
+
+## Decisions
+
+- [v1.1 close]: Phase 17 (allowed-tools enforcement) CANCELLED by user decision — CAP-02/CAP-04 deferred to future/end milestone; pure contracts (`retain_read_skills`, `intersect_allowed_tools`) stay shipped + unit-tested but un-wired
+- [Phase 16]: skill_loaded notification emitted from load_skill() only — single shared path covers read_skill + /skill with no double-fire
+- [Phase 16]: Chip renders ONLY from loadedSkills store state — live-events-only, zero inference, zero-chrome when empty
+- [Phase 15]: CAP-04 combined-filter intersection semantics locked (D-13/D-14) — contract-before-enforcement; Phase 17 was to implement only
+- [Phase 15]: `LOADED_SKILL_TOKEN_CAP` (default 8000, env-overridable) — separate loaded-skill accounting keeps summarization threshold chat-relative
+- [Phase 14]: Single shared `RuntimeAPI.load_skill()` path — model-driven and user-driven activation cannot drift; exactly-once dedup (H-01)
+- [Phase 13]: Loaded skill bodies are session-scoped — persist in memory, never to JSONL (persist filter + non-serialized skill_state)
+- [Phase 12]: Budgeted manifest (name + description, ~1,500 chars) injected at end of system prompt each turn — non-serialized by construction
+
+## Project Reference
+
+See: .planning/PROJECT.md (updated 2026-08-04 after v1.1)
+
+**Core value:** A reliable, session-persistent terminal chat loop where the LLM agent drives tools — with a TUI that makes long conversations fast to navigate and continue. Skills extend this: users encode reusable workflows the agent loads only when relevant.
+**Current focus:** Planning next milestone (/gsd-new-milestone)
 
 ## Progress
 
-- [x] Phase 1: Core Harness — Complete
-- [x] Phase 2: Session Module — Complete
-- [x] Phase 3: Fix Summarization — Complete
-- [x] Phase 4: Textual TUI + Queue + Worker — Complete
-- [x] Phase 5: Harness Runtime — Complete (8 plans)
-- [x] Phase 6: Rich Textual TUI — Complete (3 plans)
-- [x] Phase 7: TUI Visual Overhaul — Complete (3 plans)
-- [x] Phase 8: TUI Conversation Layout — Complete (3 plans in 2 waves)
-- [x] Phase 10: Token Streaming — Complete (4 plans in 4 waves)
-- [x] Phase 11: Session Popup & Panel Layout — Complete (4 plans in 4 waves)
-
-## Quick Tasks Completed
-
-| # | Description | Date | Commit | Status | Directory |
-|---|-------------|------|--------|--------|-----------|
-| 260801-jra | Show session name in conversation panel on first question | 2026-08-01 | e22128f | Verified | [260801-jra-when-new-session-is-launched-its-name-is](./quick/260801-jra-when-new-session-is-launched-its-name-is/) |
+- [x] Phase 1: Core Harness — Complete (v1.0)
+- [x] Phase 2: Session Module — Complete (v1.0)
+- [x] Phase 3: Fix Summarization — Complete (v1.0)
+- [x] Phase 4: Textual TUI + Queue + Worker — Complete (v1.0)
+- [x] Phase 5: Harness Runtime — Complete (v1.0, 8 plans)
+- [x] Phase 6: Rich Textual TUI — Complete (v1.0, 3 plans)
+- [x] Phase 7: TUI Visual Overhaul — Complete (v1.0, 3 plans)
+- [x] Phase 8: TUI Conversation Layout — Complete (v1.0, 3 plans)
+- [x] Phase 10: Token Streaming — Complete (v1.0, 4 plans)
+- [x] Phase 11: Session Popup & Panel Layout — Complete (v1.0, 4 plans)
+- [x] Phase 12: Skills Discovery & Manifest — Complete (v1.1, 4 plans)
+- [x] Phase 13: Context Plumbing (Persist Fix) — Complete (v1.1, 3 plans)
+- [x] Phase 14: read_skill Provider End-to-End — Complete (v1.1, 5 plans)
+- [x] Phase 15: Session Behavior & /skill Command — Complete (v1.1, 3 plans)
+- [x] Phase 16: TUI Integration (Skill Indicator) — Complete (v1.1, 5 plans)
+- [~] Phase 17: allowed-tools Enforcement & Hardening — CANCELLED (v1.1, 0/3 plans, CAP-02/CAP-04 deferred)
 
 ## Deferred Items
 
-Items acknowledged and deferred at milestone close on 2026-08-01:
+Items acknowledged and deferred at v1.0 milestone close on 2026-08-01:
 
 | Category | Item | Status |
 |----------|------|--------|
 | debug | enter-not-submitting | resolving |
 | verification_gap | 09-VERIFICATION.md | gaps_found |
 
-## Phase 10 Progress
+Items acknowledged and deferred at v1.1 milestone close on 2026-08-04:
 
-- [x] Context gathered (8 decisions D-01..D-08) — Ready for planning
-- [x] 10-01-PLAN.md — LLM client streaming (StreamChunk contract + stream_chat implementation) (Wave 1)
-- [x] 10-02-PLAN.md — Agent TokenProduced emission (streaming loop, no partial persistence) (Wave 2)
-- [x] 10-03-PLAN.md — TUI truncation marker + auto-scroll (D-04/D-06, D-07 verified) (Wave 3)
-- [x] 10-04-PLAN.md — End-to-end human verification (checkpoint) (Wave 4)
-
-## Phase 7 Progress
-
-- [x] 07-01-PLAN.md — Theme + Layout Foundation — Claude Code-inspired theme, minimal layout, removed sidebar/statusbar
-- [x] 07-02-PLAN.md — Inline Tool Calls — InlineToolCall widget replacing ToolCallCard, compact inline rendering
-- [x] 07-03-PLAN.md — Input Bar + Indicators + Wiring — Minimal input bar, tool/job indicators, obsolete file removal
-
-## Phase 8 Progress
-
-- [x] Context gathered (6 decisions) — Ready for planning
-- [x] 08-01-PLAN.md — StatsPanel Widget + Theme Foundation (Wave 1) — StatsPanel widget, softer dark theme, StatsPanel CSS, MessageCard background CSS
-- [x] 08-02-PLAN.md — Message Card Bifurcation (Wave 1) — Subtle dark bg on assistant messages via --assistant-bg CSS class
-- [x] 08-03-PLAN.md — Layout Restructure + Stats Wiring (Wave 2) — Header removed, split layout with StatsPanel, stats tracking wired
-
-## Phase 6 Progress
-
-- [x] Plan 01: Conversation Core — events, MessageCard, ToolCallCard, ConversationView, app.py layout
-- [x] Plan 02: Sidebar, Timeline, Enhanced Bars — JobQueueSidebar, ToolTimeline, enhanced StatusBar/InputBar
-- [x] Plan 03: Session Picker + Cleanup — SessionPicker screen, old widget removal
-
-## Phase 5 Progress
-
-- [x] Plan 00: scaffold — harness/ module structure with __init__.py
-- [x] Plan 01: EventBus, typed events, CancellationToken
-- [x] Plan 02: SessionManager — active session tracking, create/load/save/switch/list/delete, 8-test suite
-- [x] **Plan 03: Agent event emission hooks** — emit callback on Agent, 5 lifecycle emission points, 5-test suite
-- [x] **Plan 04: Scheduler** — one-turn dispatch, backlog, cancel, 7-test suite
-- [x] **Plan 05: RuntimeAPI** — orchestrator owning all subsystems, 4 public API methods, 7-test suite
-- [x] **Plan 06: TUI as Pure View Layer** — refactored from QueueManager to RuntimeAPI event consumer with StatusBar processing indicator (2 tasks, 2 commits)
-- [x] **Plan 07: main.py RuntimeAPI Integration** — refactored from inline wiring to RuntimeAPI orchestrator (1 task, 1 commit)
+| Category | Item | Status |
+|----------|------|--------|
+| requirement | CAP-02 (allowed-tools filtering) | deferred — Phase 17 cancelled, future/end milestone |
+| requirement | CAP-04 (intersection enforcement) | deferred — Phase 17 cancelled, future/end milestone |
 
 ## Notes
 
-- v1.0 milestone complete 2026-08-01 (see .planning/MILESTONES.md). Phase 11 plan 04 complete: conversation-first layout with DatePanel live-clock, SessionPanel removed, E2E human-verified. Follow-up session-name fix delivered via quick task 260801-jra (sessions.active RPC + TUI startup binding + refresh on submit).
-- Phase 11 plan 01 complete 2026-08-01: switch_session context-restore fix (load + restore_context before Agent creation, D-10), 8th RPC method sessions.get returning chronological history with isalnum() path-traversal guard (T-11-01), Session.get_messages() + SessionManager.get_session() pure-read accessors, submit_prompt first-prompt auto-title (D-13). 54 pytest green (11 new).
-- Phase 11 plans 02/03 complete 2026-08-01: TUI contracts (SessionMessage/SessionHistoryResponse types, getSessionHistory with error discrimination, loadConversation store action — typecheck clean) and /session full-screen SessionPicker overlay (key trap via conditional render, sorted rows with 8-char id + message count + relative age, switch-only, Esc/q close), /new + /sessions slash-command branches, q-gate while picker open, honest footer hints. typecheck + build green.
-- Phase 11 (Session Popup & Panel Layout) context captured 2026-07-31: 16 decisions D-01..D-16 in .planning/phases/11-session-popup-and-panel-layout/11-CONTEXT.md. Conversation becomes main panel, date/time panel on right (reverses 09-CONTEXT D-29), /session full-screen keyboard overlay to switch sessions (loads history — needs new backend sessions.get RPC), /new starts fresh via sessions.create with auto-title. Phase added to roadmap.
-- Phase 10 (Token Streaming) complete 2026-07-31: stream_chat() implemented, agent emits TokenProduced, TUI streams live tokens with truncation marker + auto-scroll, REPL batch unchanged (D-08). 43 pytest, typecheck 0 errors, human E2E verified. Closes 09-VERIFICATION Gap 1.
-- Phase 10 planning ran with `--skip-research`: no RESEARCH.md / VALIDATION.md produced by design. Nyquist validation skipped deliberately — gap is fully documented in 09-VERIFICATION.md (Phase 9 gap 1) and no new libraries/APIs are introduced (openai SDK streaming is already a dependency). 10-04's human end-to-end checkpoint is the functional validation substitute.
-- Phase 10 context captured (8 decisions D-01..D-08) in .planning/phases/10-token-streaming/10-CONTEXT.md
+- v1.1 Skills System SHIPPED 2026-08-04. Phases 12-16 complete (20 plans), Phase 17 cancelled by user decision. Milestone archived to `.planning/milestones/v1.1-ROADMAP.md` and `v1.1-REQUIREMENTS.md`; `.planning/REQUIREMENTS.md` removed (fresh requirements defined by next milestone). See `.planning/MILESTONES.md`.
+- Phase 16 complete 2026-08-04 (5/5 plans): skill_loaded typed notification round-trips end-to-end, /skill intercept + footer chip + notice tones shipped, both human E2E checkpoints approved. Gap closures: CR-01 (stream-safety backwards scan), WR-03 (dead busy destructure), WR-04 (honest string-width chip budget), WR-05 (session-scoped chip). Full suite 192 passed / 1 skipped.
+- v1.1 roadmap created 2026-08-01: 6 phases (12-17), 20/20 requirements mapped. CAP-03 (read_skill never filtered) ships with the read_skill phase; CAP-04 intersection semantics decided in Phase 15, enforcement deferred with cancelled Phase 17.
+- Deferred hardening from 16-REVIEW.md: WR-01/WR-02/WR-06/IN-02..IN-05 (pre-existing review residuals). Deferred from 14-VERIFICATION.md: H-02 (RPC stdout print banners), M-01 index-based cancel rollback, M-02 read_skill_path loaded-check.
 
-- Phase 8 context captured: 6 decisions covering header removal, launch behavior, right stats panel, message bifurcation, tool calls, and window background
-- Phase 8 does not need research — scope is layout-only, no new libraries or APIs
-- [D-01] Header removed — no Header widget in compose(), maximizes conversation space
-- [D-03] StatsPanel wired — session name, token count, response time, model name displayed in right-side panel
+## Quick Tasks Completed
 
-- Session store uses project-local `.agentharness/` dir
-- Queue uses `.agentharness/queue.db` for SQLite-backed persistence
-- TUI is opt-in via `--tui` flag; existing REPL continues working
-- Worker mode is opt-in via `--worker` flag
-- harness/ module now has __init__.py, event_bus.py, events.py, cancellation.py, session_manager.py
-- SessionManager wraps JSONLSessionStore with active session tracking
-- 8 tests in tests/test_session_manager.py cover full session lifecycle
-- Agent emits 5 event types at lifecycle points via optional emit callback
-- 5 tests in tests/test_agent_events.py cover agent event emission
-- ResponseComplete event has `forced` field to distinguish natural vs max-iterations response
-- Scheduler provides one-turn dispatch, FIFO backlog, async cancel with CancelledEvent emission
-- 7 tests in tests/test_scheduler.py cover dispatch, backlog, cancel, one-turn guarantee
-- RuntimeAPI orchestrates EventBus, Scheduler, SessionManager, Agent with 4 public API methods
-- 7 tests in tests/test_runtime.py cover API surface, lifecycle, submit/cancel, event_bus property
-- Circular import (agent→harness.events→harness→agent) resolved via lazy __getattr__ in harness/__init__.py
-- Plan 06: TUI refactored to pure view layer -- RuntimeAPI dependency, EventBus subscription on mount with 6 event handlers, StatusBar processing indicator
-- Plan 07: main.py refactored to use RuntimeAPI as central orchestrator — no inline QueueManager/store wiring, all 3 CLI modes (REPL/TUI/worker) share unified lifecycle
+| # | Description | Date | Commit | Status | Directory |
+|---|-------------|------|--------|--------|-----------|
+| 260801-jra | Show session name in conversation panel on first question | 2026-08-01 | e22128f | Verified | [260801-jra-when-new-session-is-launched-its-name-is](./quick/260801-jra-when-new-session-is-launched-its-name-is/) |

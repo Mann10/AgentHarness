@@ -10,6 +10,7 @@ import logging
 from typing import Any
 
 from backend.rpc.dispatcher import Dispatcher
+from backend.rpc.protocol import RPCError, INVALID_PARAMS, INTERNAL_ERROR, SKILL_NOT_FOUND
 from harness.runtime import RuntimeAPI
 
 logger = logging.getLogger(__name__)
@@ -95,8 +96,22 @@ class RPCAdapter:
         """Health check — returns ok."""
         return {"status": "ok"}
 
+    async def handle_skills_load(self, params: dict | None) -> dict:
+        """Load a skill by name — D-06/D-08. Errors raise RPCError (structured)."""
+        if params is None or "name" not in params or not isinstance(params["name"], str) or not params["name"].strip():
+            raise RPCError(code=INVALID_PARAMS, message="Missing 'name' in params")
+        name = params["name"].strip()
+        try:
+            return await self._runtime.load_skill_status(name)
+        except KeyError:
+            raise RPCError(code=SKILL_NOT_FOUND, message=f"Skill '{name}' not found.")
+        except RuntimeError as exc:
+            # D-11 cap-breach contract: mapped to documented -32603 INTERNAL_ERROR
+            # with the verbatim D-11 message (the message string IS the contract).
+            raise RPCError(code=INTERNAL_ERROR, message=str(exc))
+
     def register_all(self, dispatcher: Dispatcher) -> None:
-        """Register all 8 RPC methods with the given dispatcher."""
+        """Register all 10 RPC methods with the given dispatcher."""
         dispatcher.register("chat", self.handle_chat)
         dispatcher.register("cancel", self.handle_cancel)
         dispatcher.register("sessions.list", self.handle_sessions_list)
@@ -106,3 +121,4 @@ class RPCAdapter:
         dispatcher.register("sessions.get", self.handle_sessions_get)
         dispatcher.register("sessions.active", self.handle_sessions_active)
         dispatcher.register("ping", self.handle_ping)
+        dispatcher.register("skills.load", self.handle_skills_load)

@@ -118,6 +118,20 @@ async def _handle_session_cmd(
         print(f"Session renamed to \"{title}\".")
         return True
 
+    if cmd == "/skill":
+        name = (parts[1] if len(parts) > 1 else "").strip()
+        if not name:
+            print("Usage: /skill <name>")                  # D-02 no-arg → usage
+            return True
+        try:
+            ack = await runtime.load_skill(name)           # D-07: REPL calls load_skill directly
+            print(ack)                                     # D-01: short ack (loaded / already loaded)
+        except KeyError:
+            print(f"Skill '{name}' not found.")            # D-02 distinct error
+        except RuntimeError as exc:
+            print(str(exc))                                # D-11: cap-refusal message reaches the REPL user
+        return True                                        # handled — never fall through to chat
+
     return False
 
 
@@ -192,14 +206,37 @@ async def run_repl(
         await runtime.shutdown()
 
 
+def _build_runtime(
+    config: Config,
+    client: OpenAIClient,
+    registry: ToolRegistry,
+) -> RuntimeAPI:
+    """Construct the RuntimeAPI with the SkillStore and register the __skills__ provider.
+
+    The __skills__ provider MUST be registered BEFORE runtime.start() — registry.start()
+    runs inside Agent.start() during _create_agent(). Returns the started-by-caller runtime.
+    """
+    from pathlib import Path
+    from skills.store import SkillStore
+
+    skill_store = SkillStore(Path.cwd() / ".agentharness" / "skills")
+    runtime = RuntimeAPI(config, client, registry, skill_store=skill_store)
+    skill_provider = runtime.make_skill_provider()
+    registry.add_provider("__skills__", skill_provider)  # namespace=None → un-prefixed (D-02)
+    return runtime
+
+
 async def run_worker(
     config: Config,
     client: OpenAIClient,
     registry: ToolRegistry,
     worker_count: int,
 ) -> None:
-    runtime = RuntimeAPI(config, client, registry)
+    runtime = _build_runtime(config, client, registry)
     await runtime.start()
+    assert "read_skill" in [t.name for t in registry.list_tools()], (
+        "D-03: __skills__ provider failed to register read_skill"
+    )
 
     from jobqueue.manager import QueueManager
     queue_manager = QueueManager()
@@ -264,8 +301,11 @@ async def run_rpc(config: Config, client: OpenAIClient, registry: ToolRegistry) 
     RPC mode is designed for the TypeScript TUI subprocess workflow (D-16, D-17).
     All output must be NDJSON on stdout — stderr for logging only.
     """
-    runtime = RuntimeAPI(config, client, registry)
+    runtime = _build_runtime(config, client, registry)
     await runtime.start()
+    assert "read_skill" in [t.name for t in registry.list_tools()], (
+        "D-03: __skills__ provider failed to register read_skill"
+    )
 
     from backend.rpc.server import RPCServer
     server = RPCServer(runtime)
@@ -307,8 +347,11 @@ async def main() -> None:
     elif args.rpc:
         await run_rpc(config, client, registry)
     else:
-        runtime = RuntimeAPI(config, client, registry)
+        runtime = _build_runtime(config, client, registry)
         await runtime.start()
+        assert "read_skill" in [t.name for t in registry.list_tools()], (
+            "D-03: __skills__ provider failed to register read_skill"
+        )
         try:
             await run_repl(config, client, registry, runtime)
         finally:

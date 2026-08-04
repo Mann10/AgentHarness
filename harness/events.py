@@ -61,6 +61,19 @@ class CancelledEvent(HarnessEvent):
 
 
 @dataclass
+class SkillLoadedEvent(HarnessEvent):
+    """Emitted when a skill body is injected into context (D-07/D-08).
+
+    Fires ONLY on real loads from the shared load_skill() path — never on
+    already_loaded (nothing changed), not_found, or cap refusal (load didn't
+    happen). session_id is carried for wire request_id consistency; it is NOT
+    part of the payload (D-06: {skill} only).
+    """
+    session_id: str = ""
+    skill: str = ""
+
+
+@dataclass
 class TokenProduced(HarnessEvent):
     """Emitted for each chunk of token output during streaming."""
     session_id: str = ""
@@ -76,3 +89,4 @@ EVENT_TOKEN_PRODUCED = "TokenProduced"
 EVENT_RESPONSE_COMPLETE = "ResponseComplete"
 EVENT_ERROR = "ErrorEvent"
 EVENT_CANCELLED = "CancelledEvent"
+EVENT_SKILL_LOADED = "SkillLoadedEvent"   # name == class name (EventBus routes on type.__name__)

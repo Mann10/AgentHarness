@@ -69,6 +69,13 @@ class Dispatcher:
                 id=request.id,
                 result=result,
             )
+        except RPCError as rpc_err:
+            # Domain errors (D-08): return the handler's own code/message
+            # verbatim — do NOT log (expected domain errors).
+            return RPCResponse(
+                id=request.id,
+                error=rpc_err,
+            )
         except Exception as exc:
             logger.exception("Handler error for method '%s': %s", request.method, exc)
             return RPCResponse(

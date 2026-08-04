@@ -11,9 +11,13 @@ from config import Config
 from llm import OpenAIClient
 from session.models import Session, SessionSummary, derive_title
 from session.store import JSONLSessionStore
+from skills.provider import SkillToolProvider
+from skills.limits import loaded_skill_token_cap
+from skills.store import SkillStore
 from tool import LocalToolProvider, ToolRegistry, register_builtin_tools
 
 from harness.event_bus import EventBus
+from harness.events import SkillLoadedEvent
 from harness.scheduler import Scheduler
 from harness.session_manager import SessionManager
 
@@ -44,12 +48,14 @@ class RuntimeAPI:
         registry: ToolRegistry,
         store: JSONLSessionStore | None = None,
         *,
+        skill_store: SkillStore | None = None,
         backlog_maxsize: int = 10,
     ) -> None:
         self._config = config
         self._client = client
         self._registry = registry
         self._summarize_fn = self._make_summarize_fn(client)
+        self._skill_store = skill_store
 
         # Runtime-owned subsystems
         self._event_bus = EventBus()
@@ -168,6 +174,85 @@ class RuntimeAPI:
         """True if an agent turn is currently executing."""
         return self._scheduler is not None and self._scheduler.is_busy
 
+    # -- Skills (D-09 single shared load path) ------------------
+
+    async def load_skill(self, name: str) -> str:
+        """D-09: single shared load path (read_skill tool + /skill command later).
+
+        Dedup (D-07) via session.skill_state['loaded'] → injection (D-08) via
+        add_skill_message → short ack (D-05). Body flows as system message only.
+        H-01: dedup compares the CANONICAL name from SkillStore.lookup()
+        (case-insensitive on win32), never the raw caller name — case-variant
+        re-loads are no-ops.
+        """
+        if self._skill_store is None:
+            raise RuntimeError("SkillStore not configured")
+        session = self._session_manager.active_session
+        if session is None:
+            raise RuntimeError("No active session")
+        info = self._skill_store.lookup(name)          # KeyError → clear error (canonical name)
+        loaded = session.skill_state.get("loaded", [])
+        existing = next((e for e in loaded if e["name"] == info.name), None)
+        if existing is not None:
+            return f"Skill '{info.name}' already loaded"   # D-07 no-op ack (canonical name)
+        body = self._skill_store.load(name)
+        # D-09: count the body's tokens at load time (tiktoken via client).
+        # D-11: refuse BEFORE the mark (H-03 mark-before-inject) — a refused
+        # load leaves no partial state and injects no body message.
+        body_tokens = self._client.count_tokens(body)
+        new_total = sum(e.get("tokens", 0) for e in loaded) + body_tokens
+        cap = loaded_skill_token_cap()
+        if new_total > cap:
+            raise RuntimeError(
+                f"Skill '{info.name}' not loaded — loaded-skill token cap ({cap}) would be exceeded"
+            )
+        # H-03 hardening: mark the record BEFORE the injection await — any
+        # concurrent load_skill caller sees the record (no TOCTOU double-inject).
+        loaded.append({"name": info.name, "dir": str(info.path), "tokens": body_tokens})   # D-09 record (name + base dir + tokens)
+        session.skill_state["loaded"] = loaded
+        await session.context.add_skill_message(info.name, body)
+        # D-07/D-08: emit ONLY after the body is in context — the chip must
+        # never show a skill whose body is not loaded. No event on the
+        # already_loaded early-return (:196) or the cap refusal (:204-207).
+        await self._event_bus.publish(SkillLoadedEvent(session_id=session.id, skill=info.name))
+        return f"Loaded skill {info.name}"             # D-05 short ack
+
+    async def load_skill_status(self, name: str) -> dict:
+        """D-06: structured load result — {skill: <canonical>, status: loaded|already_loaded}.
+
+        No body echoed. KeyError propagates for unknown skills (adapter maps to
+        SKILL_NOT_FOUND). The actual load goes through self.load_skill — the same
+        shared path as read_skill (D-07), so activation cannot drift.
+        """
+        if self._skill_store is None:
+            raise RuntimeError("SkillStore not configured")
+        session = self._session_manager.active_session
+        if session is None:
+            raise RuntimeError("No active session")
+        info = self._skill_store.lookup(name)          # KeyError → unknown skill
+        loaded = session.skill_state.get("loaded", [])
+        if any(e["name"] == info.name for e in loaded):   # canonical dedup (H-01)
+            return {"skill": info.name, "status": "already_loaded"}
+        await self.load_skill(info.name)                   # D-07 shared path
+        return {"skill": info.name, "status": "loaded"}
+
+    async def _read_skill_path(self, skill: str, rel: str) -> str:
+        """read_skill_path handler — delegates to SkillStore (14-01 traversal guard)."""
+        if self._skill_store is None:
+            raise RuntimeError("SkillStore not configured")
+        return self._skill_store.read_path(skill, rel)
+
+    def make_skill_provider(self) -> SkillToolProvider:
+        """Build the __skills__ provider bound to this runtime's load/read handlers.
+
+        Registered by main.py BEFORE runtime.start() — the provider must be in the
+        registry before registry.start() runs inside Agent.start().
+        """
+        return SkillToolProvider(
+            load_handler=self.load_skill,
+            read_handler=self._read_skill_path,
+        )
+
     # -- Lifecycle -----------------------------------------
 
     async def start(self) -> None:
@@ -220,6 +305,16 @@ class RuntimeAPI:
         session = self._session_manager.active_session
         if session is None:
             raise RuntimeError("Cannot create agent: no active session")
+
+        # Phase 12 seam: attach the skills manifest once per Session object.
+        if session.skill_manifest is None and self._skill_store is not None:
+            from skills.discovery import discover_skills
+            from skills.manifest import build_manifest_text
+
+            entries = discover_skills(self._skill_store._root)
+            text = build_manifest_text(entries)
+            if text:
+                session.skill_manifest = text
 
         if self._agent is not None:
             await self._agent.shutdown()

@@ -36,6 +36,7 @@ from harness.events import (
     ResponseComplete,
     CancelledEvent,
     ErrorEvent,
+    SkillLoadedEvent,
     EVENT_TURN_STARTED,
     EVENT_TOOL_CALL,
     EVENT_TOOL_RESULT,
@@ -43,6 +44,7 @@ from harness.events import (
     EVENT_RESPONSE_COMPLETE,
     EVENT_CANCELLED,
     EVENT_ERROR,
+    EVENT_SKILL_LOADED,
 )
 from harness.runtime import RuntimeAPI
 
@@ -58,6 +60,7 @@ _DOMAIN_TO_NOTIFICATION: dict[str, str] = {
     EVENT_RESPONSE_COMPLETE: NotificationType.response_complete.value,
     EVENT_CANCELLED: NotificationType.cancelled.value,
     EVENT_ERROR: NotificationType.error.value,
+    EVENT_SKILL_LOADED: NotificationType.skill_loaded.value,
 }
 
 # ── Payload extraction helpers ──────────────────────────────
@@ -107,6 +110,11 @@ def _extract_cancelled_payload(event: CancelledEvent) -> dict:
     return {"session_id": event.session_id}
 
 
+def _extract_skill_loaded_payload(event: SkillLoadedEvent) -> dict:
+    """D-06: payload is {skill: canonical name} ONLY — status lives in the RPC ack."""
+    return {"skill": event.skill}
+
+
 def _extract_error_payload(event: ErrorEvent) -> dict:
     return {"session_id": event.session_id, "error": event.error}
 
@@ -120,6 +128,7 @@ _PAYLOAD_EXTRACTORS: dict[str, callable] = {
     EVENT_RESPONSE_COMPLETE: _extract_response_complete_payload,
     EVENT_CANCELLED: _extract_cancelled_payload,
     EVENT_ERROR: _extract_error_payload,
+    EVENT_SKILL_LOADED: _extract_skill_loaded_payload,
 }
 
 
@@ -165,6 +174,7 @@ class RPCServer:
         await self._event_bus.subscribe(EVENT_RESPONSE_COMPLETE, self._on_event)
         await self._event_bus.subscribe(EVENT_CANCELLED, self._on_event)
         await self._event_bus.subscribe(EVENT_ERROR, self._on_event)
+        await self._event_bus.subscribe(EVENT_SKILL_LOADED, self._on_event)
 
         # Start reading stdin loop
         self._read_task = asyncio.create_task(self._read_loop())
@@ -181,6 +191,7 @@ class RPCServer:
         await self._event_bus.unsubscribe(EVENT_RESPONSE_COMPLETE, self._on_event)
         await self._event_bus.unsubscribe(EVENT_CANCELLED, self._on_event)
         await self._event_bus.unsubscribe(EVENT_ERROR, self._on_event)
+        await self._event_bus.unsubscribe(EVENT_SKILL_LOADED, self._on_event)
 
         if self._read_task is not None and not self._read_task.done():
             self._read_task.cancel()

@@ -14,6 +14,7 @@ from harness.events import (
     ResponseComplete,
     ErrorEvent,
     CancelledEvent,
+    SkillLoadedEvent,
     HarnessEvent,
     EVENT_TURN_STARTED,
     EVENT_TOOL_CALL,
@@ -22,6 +23,7 @@ from harness.events import (
     EVENT_RESPONSE_COMPLETE,
     EVENT_ERROR,
     EVENT_CANCELLED,
+    EVENT_SKILL_LOADED,
 )
 
 # Lazy-imported modules (break circular import: agent/core -> harness.events -> harness/__init__ -> {runtime,scheduler} -> agent)
@@ -52,6 +54,7 @@ __all__ = [
     "ResponseComplete",
     "ErrorEvent",
     "CancelledEvent",
+    "SkillLoadedEvent",
     "HarnessEvent",
     "EVENT_TURN_STARTED",
     "EVENT_TOOL_CALL",
@@ -60,4 +63,5 @@ __all__ = [
     "EVENT_RESPONSE_COMPLETE",
     "EVENT_ERROR",
     "EVENT_CANCELLED",
+    "EVENT_SKILL_LOADED",
 ]

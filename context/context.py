@@ -37,6 +37,10 @@ class ConversationContext:
     async def add_user_message(self, content: str) -> None:
         await self.add_message(Message(role="user", content=content))
 
+    async def add_skill_message(self, name: str, body: str) -> None:
+        """D-08: system-role skill body, persist=False, tagged skill_name (Phase 16 seam)."""
+        await self.add_message(Message(role="system", content=body, persist=False, skill_name=name))
+
     async def add_assistant_message(self, content: str) -> None:
         await self.add_message(Message(role="assistant", content=content))
 
@@ -82,6 +86,8 @@ class ConversationContext:
         recent = self._messages[-keep_count:] if keep_count > 0 else []
 
         recent_ids = {id(m) for m in recent}
+        # System-role messages (summary + loaded skill bodies, D-12) are exempt
+        # from summarization — bodies persist for the session (ACT-04).
         to_summarize = [
             m
             for m in self._messages

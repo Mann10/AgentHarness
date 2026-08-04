@@ -23,3 +23,20 @@
 **Known deferred items at close:** 2 (see STATE.md Deferred Items — debug `enter-not-submitting`, Phase 09 verification gap).
 
 ---
+
+## v1.1 Skills System (Shipped: 2026-08-04)
+
+**Phases completed:** 6 phases, 20 plans executed (Phase 17 cancelled), 41 tasks
+
+**Key accomplishments:**
+
+- Budgeted skills manifest (name + description, ~1,500-char cap, longest-first trim) injected at the end of the system prompt each turn via a non-serialized `Session.skill_manifest` seam — `# Available Skills` section, omitted when empty
+- Persist-safe plumbing: `Message.persist` flag, `to_events()` persist filter, `mark_saved()` identity-based watermark — loaded skill bodies survive summarization (system-role exemption at context.py:88) but never serialize to the JSONL session file
+- `read_skill` end-to-end: `SkillStore` with canonicalize+contain path-traversal guard (win32 vectors), reserved un-namespaced `__skills__` provider, single shared `RuntimeAPI.load_skill()` path with case-insensitive exactly-once dedup (H-01 closed) and mark-before-inject TOCTOU hardening
+- `/skill <name>` slash command via 4-layer RPC contract (protocol → dispatcher → adapter → runtime → TS) with distinct error/usage handling, `LOADED_SKILL_TOKEN_CAP` (default 8000) separate token accounting, and cap-refusal surfaced in every user path
+- TUI skill indicator: typed `skill_loaded` notification across all five touchpoints, footer chip + notice tones, InputBar `/skill` intercept, honest string-width chip width budget (WR-04) and stream-safety backwards scan (CR-01) — human E2E round-trip approved
+- Test suite grew 63 → 192 passed (+1 skipped); Phase 16 verified 4/4 must-haves
+
+**Known gaps at close (Phase 17 cancelled):** CAP-02 (`allowed-tools` filtering) and CAP-04 (intersection enforcement) remain Pending — deferred to a future/end milestone. Pure contracts (`retain_read_skills`, `intersect_allowed_tools`) shipped + unit-tested but un-wired. See `17-CONTEXT.md`.
+
+---
