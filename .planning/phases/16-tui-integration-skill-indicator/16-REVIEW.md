@@ -1,69 +1,50 @@
 ---
 phase: 16-tui-integration-skill-indicator
-reviewed: 2026-08-03T00:00:00Z
+reviewed: 2026-08-04T00:00:00Z
 depth: standard
-files_reviewed: 12
+files_reviewed: 4
 files_reviewed_list:
-  - backend/rpc/protocol.py
-  - backend/rpc/server.py
-  - harness/__init__.py
-  - harness/events.py
-  - harness/runtime.py
-  - tests/test_skill_loaded_notification.py
   - tui-ink/src/app.tsx
   - tui-ink/src/bridge/rpc-client.ts
   - tui-ink/src/components/footer.tsx
-  - tui-ink/src/components/message.tsx
   - tui-ink/src/store/agent-store.ts
-  - tui-ink/src/types.ts
 findings:
   critical: 1
   warning: 6
-  info: 5
-  total: 12
+  info: 6
+  total: 13
 status: issues_found
 ---
 
 # Phase 16: Code Review Report
 
-**Reviewed:** 2026-08-03T00:00:00Z
+**Reviewed:** 2026-08-04T00:00:00Z
 **Depth:** standard
-**Files Reviewed:** 12
+**Files Reviewed:** 4 (gap-closure deltas on top of the 12-file 16-01..16-03 review)
 **Status:** issues_found
 
 ## Summary
 
-Reviewed the complete `skill_loaded` notification pipeline (harness event → RPC server mapping/extractor → wire notification → TUI handleEvent → zustand chip state), the `/skill` InputBar intercept with notice tones, and the footer chip row. Backend wiring is solid: the D-06 `{skill}`-only payload contract holds (`test_payload_is_skill_only` passes by construction), event emission correctly fires only after the body is in context, and `EventBus.publish` swallows subscriber exceptions so a failing stdout write cannot break `load_skill`. No injection/traversal/leak findings — `SkillStore.lookup/load` resolve only against discovered skill dirs, and `json.dumps` escapes embedded newlines so the NDJSON stream stays line-safe.
+Re-reviewed the complete `skill_loaded` pipeline plus the Phase 16 gap-closure deltas (plans 16-04 and 16-05) against the four changed files: `rpc-client.ts` (CR-01 backwards-scan in `token`/`response_complete`, WR-05 `request_id === activeSessionId` guard on `skill_loaded`), `agent-store.ts` (`lastStreamingIdx` helper threading through `appendToken`/`completeAssistantMessage`/`truncateStreamingMessage`, IN-01 ternary removed), `app.tsx` (dead `busy` destructure dropped), and `footer.tsx` (WR-04 honest width budget with `string-width` display columns).
 
-The dominant defect is on the TUI side: the `/skill` notice path can permanently strand the in-flight streaming assistant message (CR-01) — the phase's headline feature corrupts the conversation view whenever a skill is loaded mid-response. Secondary issues: the JSON-RPC error code is discarded forcing a fragile verbatim-string match, tool_call_id is dropped at add time forcing name-based result matching, the footer chip width budget ignores the label, and several promise chains can reject unhandled.
+**Gap-closure verdict — substantively correct.** The CR-01 fix holds up under trace: the handler backwards-scan and the store `lastStreamingIdx` helper target the same message (both scans run on the same synchronous call stack, so they cannot disagree), and a mid-stream notice no longer spawns a second assistant box, drops tokens, or strands the original with `isStreaming: true`. The WR-05 guard is correctly wired — backend `_event_to_notification` sets `request_id = session_id`, and `SkillLoadedEvent` carries `session.id`, so `params.request_id === state.activeSessionId` is a valid session correlation (verified against `backend/rpc/server.py`). The WR-04 budget is now honest: `W = columns - CHIP_PADDING_X*2 - stringWidth("Skill: ")` = `columns - 9`, which exactly covers the rendered `<Box paddingX={1}>` + label, so a passing chip cannot wrap. All fit comparisons use `stringWidth` (display columns), fixing the UTF-16 undercount for CJK/emoji skill names. The dead `busy` destructure removal is correct — grep confirms `setBusy(true)` has zero call sites, so `busy` is permanently `false` and a gate would have refused every load.
+
+**No new critical defects introduced by the gap-closure.** Two new quality findings: `string-width` is imported directly in footer.tsx but is not declared in `package.json` (it is only a transitive Ink dependency — fragile against Ink dependency changes), and the mid-turn `/skill` chip timing caveat remains undocumented (see WR-03 closure note). Findings resolved by this pass: CR-01, WR-03 (dead destructure), WR-04, WR-05, IN-01. Findings still open (untouched by gap-closure): WR-01, WR-02, WR-06, IN-02..IN-05. CR-01 is preserved below as the historical record with the verified fix.
 
 ## Critical Issues
 
-### CR-01: Skill notice added mid-stream strands the streaming assistant message
+### CR-01: Skill notice added mid-stream strands the streaming assistant message — FIXED and verified in 16-04
 
-**File:** `tui-ink/src/bridge/rpc-client.ts:240-243` (trigger: `tui-ink/src/app.tsx:76-96`, `tui-ink/src/store/agent-store.ts:188-194`)
-**Issue:** When the user runs `/skill <name>` while a response is streaming, the RPC response resolves and `addSkillNotice` appends a `notice` message to the conversation while the last entry is the streaming assistant message. The next `token` event then sees `lastMsg.role !== "assistant"` and calls `startAssistantMessage()`, spawning a *second* assistant box; all subsequent tokens and `response_complete`/`error`/`cancelled` apply to the new box (those handlers only inspect the last message). The original streaming message keeps `isStreaming: true` forever: the conversation permanently renders a second "▸" spinner box, the old box's `StreamingText` never finalizes, and the turn's completed content is split across two boxes. This is reachable in the phase's primary use case (loading a skill during an active conversation) and is permanent UI state corruption.
-**Fix:** In the `token` handler, scan the conversation backwards for the last `assistant` message with `isStreaming` and append to it; only call `startAssistantMessage()` when none exists:
-```ts
-case "token": {
-  const p = payload as { session_id: string; chunk: string; request_id: string }
-  const state = useAgentStore.getState()
-  const lastStreaming = [...state.conversation]
-    .reverse()
-    .find((m) => m.role === "assistant" && m.isStreaming)
-  if (!lastStreaming) store.startAssistantMessage()
-  store.appendToken(p.chunk)
-  break
-}
-```
-(Alternatively, `addSkillNotice` could truncate a trailing streaming message first, matching the `cancelled` path — but that loses the notice's interleaving and still drops the streaming box.)
+**File:** `tui-ink/src/bridge/rpc-client.ts:236-247` (token), `248-268` (response_complete); `tui-ink/src/store/agent-store.ts:51-56, 99-132`
+**Issue:** Original finding (16-01..16-03): a mid-stream `/skill` notice made the tail-only handlers spawn a second assistant box and strand the original with `isStreaming: true`. **Closed by 16-04** — `token` and `response_complete` now scan backwards for the last `assistant && isStreaming` message, and the store actions index the same message via `lastStreamingIdx`. Verified: typecheck/build pass, human E2E (8 steps) approved, no second-box/spinner-strand reproduction in the traced paths.
+**Remaining note (not a defect):** the token handler appends via two store updates per event (`startAssistantMessage()` + `appendToken()`). This is not a correctness issue (both run in the same synchronous handler, so no interleaving is possible), and the `idx !== -1` guard in `appendToken` makes the second update a no-op when the first didn't apply — acceptable defense-in-depth.
 
 ## Warnings
 
-### WR-01: JSON-RPC error code discarded — forces fragile verbatim-string equality
+### WR-01: JSON-RPC error code discarded — forces fragile verbatim-string equality (OPEN — untouched by gap-closure)
 
-**File:** `tui-ink/src/bridge/rpc-client.ts:180` (dependent: `tui-ink/src/app.tsx:90`)
-**Issue:** `pending.reject(new Error((msg.error as { message?: string }).message ?? "RPC error"))` throws away `msg.error.code` (-32001 SKILL_NOT_FOUND, -32603, etc.). app.tsx:90 then discriminates on `err.message === \`Skill '${name}' not found.\`` — an exact-match against backend copy (adapter.py:107). Any rewording of that message silently converts the D-04 bare-copy branch into the generic `SKILL_LOAD_FAILED` wrapper, and the code comments encode this coupling as if it were a contract. Two sources of truth (message text + code) are both needed; only one is transported.
+**File:** `tui-ink/src/bridge/rpc-client.ts:179-180` (dependent: `tui-ink/src/app.tsx:89-93`)
+**Issue:** `pending.reject(new Error((msg.error as { message?: string }).message ?? "RPC error"))` throws away `msg.error.code` (-32001 SKILL_NOT_FOUND, etc.). app.tsx:89 then discriminates on exact message equality — any backend rewording silently converts the D-04 bare-copy branch into the generic `SKILL_LOAD_FAILED` wrapper. The gap-closure pass did not touch this path.
 **Fix:** Preserve the code and branch on it:
 ```ts
 if (msg.error) {
@@ -75,53 +56,39 @@ if (msg.error) {
 if (err.code === -32001) { s.addSkillNotice(`Skill '${name}' not found`, "error") }
 ```
 
-### WR-02: tool_call_id dropped at add-time — tool results matched by tool *name*
+### WR-02: tool_call_id dropped at add-time — tool results matched by tool *name* (OPEN — untouched by gap-closure)
 
-**File:** `tui-ink/src/store/agent-store.ts:131-146, 148-171` (dependent: `tui-ink/src/bridge/rpc-client.ts:222, 233`)
-**Issue:** `addToolCall(name, args, callId)` never stores the backend's `tool_call_id` (parameter unused). `updateToolResult`/`setToolCallError` then match `tc.name === callId || tc.id === callId`, and rpc-client.ts:233 passes `p.tool_name` as `callId`. When the same tool is invoked twice in one turn (e.g., two `read_skill` calls), every entry with that name is updated — the first call's result is overwritten with the second's, both get the same `duration`, and `tc.id === callId` can never match a backend id. Pre-existing, but in the reviewed files and the tool-monitor path adjacent to this phase's skill work.
-**Fix:** Add a `callId?: string` field to `ToolCallStatus`, store `p.tool_call_id` in `addToolCall`, and match exclusively on it:
-```ts
-addToolCall: (name, args, callId) => set((s) => ({ toolCalls: [...s.toolCalls, { id: nextToolId(), name, args, callId: callId ?? undefined, status: "running", startedAt: now(), result: undefined, duration: undefined }] }))
-updateToolResult: (callId, result) => set((s) => ({ toolCalls: s.toolCalls.map((tc) => tc.callId === callId ? { ...tc, status: "success" as const, result, duration: now() - tc.startedAt } : tc) }))
+**File:** `tui-ink/src/store/agent-store.ts:134-149, 151-174` (dependent: `tui-ink/src/bridge/rpc-client.ts:222-223, 233-234`)
+**Issue:** `addToolCall(name, args, callId)` never stores the backend's `tool_call_id` (parameter unused). `updateToolResult`/`setToolCallError` match `tc.name === callId || tc.id === callId`, and rpc-client.ts passes `p.tool_name` as `callId`. Two calls to the same tool in one turn overwrite each other's results and durations. Pre-existing; not in the gap-closure scope.
+**Fix:** Store `callId` on the tool-call record and match exclusively on it.
+
+### WR-03: `/skill` intercept gating — dead `busy` destructure removed; mid-turn chip timing caveat remains (CLOSED for the dead code, caveat below)
+
+**File:** `tui-ink/src/app.tsx:34` (destructure removed)
+**Issue:** The dead `const { busy }` destructure is gone (16-04). This closure is sound: grep confirms `setBusy(true)` has zero call sites, so `busy` is permanently `false` and a gate would have refused every load. The remaining semantic caveat: `/skill` during an in-flight turn lights the chip immediately while the running model may have already snapshotted its context — the skill body is in `session.context`, so the chip claim is accurate for the *session*, but the *current* turn may not see it until the next one. This is a documented design decision (16-04 SUMMARY, "mid-turn loads are safe via the scan fix"), not a bug — tracked as IN-06 below rather than a warning.
+**Fix:** None required for correctness; consider a one-line hint in the chip row or notice copy if users need the next-turn semantics spelled out.
+
+### WR-04: Footer chip width budget — fixed; new dependency-declaration defect (gap-closure pass)
+
+**File:** `tui-ink/src/components/footer.tsx:1, 18-28`
+**Issue:** The original budget defect (`columns - 4`, UTF-16 `.length`) is fixed: `W = columns - CHIP_PADDING_X*2 - stringWidth(CHIP_LABEL + " ")` = `columns - 9`, exactly matching the rendered `paddingX={1}` + label, and all fit checks use `stringWidth`. **However, the fix introduces a new defect:** `import stringWidth from "string-width"` (line 1) is a direct import of a module that is NOT declared in `tui-ink/package.json` `dependencies` — it resolves only because Ink happens to depend on it transitively. Any future Ink release that drops or restructures that transitive dependency breaks `npm run build`/`typecheck` with a module-not-found error, and the current declaration does not pin a version. The 16-05 SUMMARY itself claims "no new dependency" while adding one.
+**Fix:** Declare it explicitly:
+```json
+// tui-ink/package.json dependencies
+"string-width": "^7.0.0"
 ```
 
-### WR-03: `/skill` intercept not gated on `busy`; the `busy` selector is dead
+### WR-05: `skill_loaded` session correlation — FIXED and verified (16-04)
 
-**File:** `tui-ink/src/app.tsx:34, 67-96`
-**Issue:** `const { busy } = useAgentStore()` (line 34) is destructured but never referenced — the gate was clearly intended and dropped. The `/skill` branch therefore executes while a turn is in flight. Loading a skill mid-turn injects the system message into `session.context` after the running turn may have already snapshotted its context, so the in-flight model may never see the body — yet the `skill_loaded` notification unconditionally lights the chip, claiming the skill is loaded in the conversation. This is also the enabler of CR-01.
-**Fix:** Either gate the branch (`if (busy) { store.addSkillNotice("Wait for the response to finish before loading a skill"); return }` — or auto-defer) or, if mid-turn loads are intended, drop the dead variable and document the mid-turn semantics; the chip claim then needs to be scoped to when the body actually enters the turn's context.
+**File:** `tui-ink/src/bridge/rpc-client.ts:284-294`
+**Issue:** Original finding: the handler ignored `params.request_id` and set the chip unconditionally, so a notification in flight across a session switch re-added the previous session's skill after `loadConversation`/`resetConversation` cleared it. **Closed by 16-04** — the guard `if (params.request_id === state.activeSessionId)` is correct: the backend's `_event_to_notification` sets `request_id = getattr(event, "session_id", "")` and `SkillLoadedEvent(session_id=session.id)`, so the comparison is a genuine session correlation. `addLoadedSkill` still dedups, and the clear-on-switch paths still hold.
+**Remaining note (pre-existing, out of gap-closure scope):** `turn_started`, `token`, `response_complete`, `error`, and `cancelled` are NOT session-gated — a stale in-flight turn from a previous session could still append to the new session's conversation view after a mid-stream switch. Lower severity than WR-05 because the Scheduler runs one turn at a time and `switch_session` creates a fresh Agent, but worth a future hardening pass.
 
-### WR-04: Footer chip width budget omits the "Skill: " label — "fitting" chips still overflow
+### WR-06: Unhandled promise rejections in InputBar chains can terminate the TUI (OPEN — untouched by gap-closure)
 
-**File:** `tui-ink/src/components/footer.tsx:14-24`
-**Issue:** `const W = columns - 4` budgets only the chip text (2 cells padding each side), but the rendered row also contains `CHIP_LABEL` ("Skill: " — 7 cells) plus `paddingX={1}` (2 cells), i.e. ~9 cells beyond the chip text. A chip with `columns - 11 < length <= columns - 4` passes the fit check yet the row is `columns + 5` wide, so Ink wraps the chip onto a second line and breaks the footer layout. Additionally the budget is measured in UTF-16 code units (`joined.length`) while cells are display columns — any multibyte skill name (CJK/emoji) undercounts and overflows.
-**Fix:** Include label and padding in the budget and measure display width:
-```ts
-import stringWidth from "string-width"   // already a transitive Ink dep
-const W = columns - 4 - stringWidth(CHIP_LABEL)
-const joined = names.join(CHIP_SEPARATOR)
-if (stringWidth(joined) <= W) return joined
-```
-
-### WR-05: `skill_loaded` applied without session correlation
-
-**File:** `tui-ink/src/bridge/rpc-client.ts:281-287`
-**Issue:** The handler reads only `payload.skill`; the notification's `request_id` (the backend's session id, per `_event_to_notification`) is ignored and the chip is set unconditionally. `loadConversation` (session switch) and `resetConversation` (`/new`) clear `loadedSkills`, but a `skill_loaded` notification already in flight when the user switches sessions arrives *after* the clear and re-adds a skill belonging to the previous session — chip and active session then disagree (the new session's context does not contain the skill body). Narrow race, but chip accuracy is the phase's core feature.
-**Fix:** Guard on the active session:
-```ts
-case "skill_loaded": {
-  const p = payload as { skill: string }
-  const state = useAgentStore.getState()
-  if (params.request_id === state.activeSessionId) store.addLoadedSkill(p.skill)
-  break
-}
-```
-
-### WR-06: Unhandled promise rejections in InputBar chains can terminate the TUI
-
-**File:** `tui-ink/src/app.tsx:57-64, 98`
-**Issue:** The `/new` chain (`client.createSession().then(...).then(...)`) and `client.submitPrompt(trimmed).then(refreshSessions)` have no `.catch`. If the backend errors (e.g., the RPC process exited after connect — `stop()`/exit handling leaves `pending` rejected), the rejection is unhandled; Node ≥15 defaults to `--unhandled-rejections=throw`, which terminates the TUI process. The new `/skill` branch correctly has a `.catch`; its siblings don't. Pre-existing pattern, but in the reviewed file and adjacent to the new branch.
-**Fix:** Route failures through the store, e.g.:
+**File:** `tui-ink/src/app.tsx:56-63, 97`
+**Issue:** The `/new` chain and `client.submitPrompt(trimmed).then(refreshSessions)` have no `.catch`. Node ≥15 defaults to `--unhandled-rejections=throw`, terminating the TUI process on a backend error. The `/skill` branch correctly has a `.catch`; its siblings don't. Pre-existing.
+**Fix:**
 ```ts
 client.submitPrompt(trimmed).then(refreshSessions).catch((err: Error) => {
   useAgentStore.getState().addError(err.message)
@@ -130,38 +97,38 @@ client.submitPrompt(trimmed).then(refreshSessions).catch((err: Error) => {
 
 ## Info
 
-### IN-01: Degenerate ternary in `completeAssistantMessage`
+### IN-01: Degenerate ternary in `completeAssistantMessage` — FIXED (16-04)
 
-**File:** `tui-ink/src/store/agent-store.ts:117`
-**Issue:** `status: content ? "idle" : "idle"` — both branches identical; the conditional is dead and the intent is unclear (an error state for empty content was likely meant). The caller (rpc-client response_complete) sets `idle` anyway.
-**Fix:** `return { conversation: msgs, status: "idle" }`, or make the ternary meaningful (`content ? "idle" : "error"`) if empty content should be surfaced.
+**File:** `tui-ink/src/store/agent-store.ts:120`
+**Issue:** `status: content ? "idle" : "idle"` replaced with a plain `status: "idle"` (verified in the diff; comment at line 120 documents the removal). Closed.
 
-### IN-02: `SkillLoadStatus` documents a status the backend never returns
+### IN-02: `SkillLoadStatus` documents a status the backend never returns (OPEN)
 
 **File:** `tui-ink/src/types.ts:9`
-**Issue:** `"not_found"` is part of `SkillLoadStatus`, but the backend never returns it in a successful `skills.load` result — unknown skills raise `KeyError` and come back as JSON-RPC error -32001 (adapter.py:106-107). app.tsx only branches on `loaded`/`already_loaded`; the third union member is misleading.
-**Fix:** Drop `"not_found"` from the type (or carry it as the rejected-error contract if the RPC client ever surfaces codes — see WR-01).
+**Issue:** `"not_found"` is never returned in a successful `skills.load` result — unknown skills come back as JSON-RPC error -32001. **Fix:** Drop `"not_found"` from the type (or wire it to the WR-01 code-carrying contract).
 
-### IN-03: `EventPayload` discriminated union is dead code
+### IN-03: `EventPayload` discriminated union is dead code (OPEN)
 
-**File:** `tui-ink/src/types.ts:71-79` (dependent: `tui-ink/src/bridge/rpc-client.ts:189-196, 207-289`)
-**Issue:** The union is exported but never used for narrowing — rpc-client casts `msg.params` to a raw shape and the `handleEvent` switch is untyped with no `default` branch. A new backend event type would be silently dropped with no compile error, and payload field renames wouldn't be caught.
-**Fix:** Type the switch against `EventPayload` (exhaustive `switch` with `never` default), or at minimum add a `default` case that logs unknown types.
+**File:** `tui-ink/src/types.ts:71-79` (dependent: `tui-ink/src/bridge/rpc-client.ts:189-196, 199-296`)
+**Issue:** The union is exported but never used for narrowing; the `handleEvent` switch is untyped with no `default` branch — a new backend event type is silently dropped. **Fix:** Type the switch against `EventPayload` with a `never` default, or add a `default` that logs unknown types.
 
-### IN-04: `_write_json` local re-import + `default=str` masks serialization bugs
+### IN-04: `_write_json` local re-import + `default=str` masks serialization bugs (OPEN)
 
 **File:** `backend/rpc/server.py:135-140`
-**Issue:** `from dataclasses import asdict, is_dataclass` re-imports inside the function while `asdict` is already imported at module top (line 15). More importantly, `json.dumps(data, default=str)` silently stringifies any non-JSON-serializable value — a dataclass in a payload would serialize as its `repr` instead of failing loudly, hiding contract violations.
-**Fix:** Drop the local import and remove `default=str` (let `TypeError` surface in the event handler, where `EventBus.publish` logs it via `return_exceptions=True`).
+**Issue:** Local `from dataclasses import asdict, is_dataclass` re-import; `json.dumps(data, default=str)` silently stringifies non-serializable values. **Fix:** Drop the local import and `default=str`.
 
-### IN-05: No validation of the `jsonrpc` protocol version
+### IN-05: No validation of the `jsonrpc` protocol version (OPEN)
 
 **File:** `backend/rpc/server.py:298-303`
-**Issue:** `raw.get("jsonrpc", "2.0")` accepts any value; a `"jsonrpc": "1.0"` request is processed as 2.0. Spec-compliance nit (JSON-RPC 2.0 requires rejecting non-2.0 with -32600).
-**Fix:** Validate `raw.get("jsonrpc") == "2.0"` in the request-validation branch and respond with `INVALID_REQUEST` otherwise.
+**Issue:** `raw.get("jsonrpc", "2.0")` accepts any value; a `"jsonrpc": "1.0"` request is processed as 2.0. **Fix:** Validate `raw.get("jsonrpc") == "2.0"` and respond `-32600` otherwise.
+
+### IN-06: Mid-turn `/skill` chip timing caveat — documented in SUMMARY, not in code
+
+**File:** `tui-ink/src/bridge/rpc-client.ts:284-294` (chip set), `tui-ink/src/app.tsx:66-95` (mid-turn branch)
+**Issue:** Loading a skill mid-turn lights the chip immediately; the in-flight model may not see the body until the next turn (context snapshot). Not a bug — 16-04 SUMMARY documents this as the intended "safe via scan fix" semantics. **Fix (optional):** a code comment at the `skill_loaded` handler or the `/skill` branch noting the next-turn visibility, so the semantics survive future refactors.
 
 ---
 
-_Reviewed: 2026-08-03T00:00:00Z_
+_Reviewed: 2026-08-04T00:00:00Z_
 _Reviewer: OpenCode (gsd-code-reviewer)_
 _Depth: standard_
