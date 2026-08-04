@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Skills System
 status: executing
-stopped_at: Phase 16 complete (verified, 5/5 plans)
-last_updated: "2026-08-04T22:30:00Z"
-last_activity: 2026-08-04 -- Phase 16 verified (4/4 must-haves, CR-01/WR-04/WR-05 closed)
+stopped_at: Phase 17 cancelled (allowed-tools enforcement deferred to end milestone); v1.1 milestone to close
+last_updated: "2026-08-04T17:17:06.767Z"
+last_activity: 2026-08-04 -- Phase 16 verified (CR-01/WR-03/WR-04/WR-05 closed; human E2E approved)
 progress:
   total_phases: 6
   completed_phases: 5
@@ -26,9 +26,9 @@ Plan: 5 of 5
 Status: Phase 16 verified — 4/4 must-haves, all gaps closed
 Last activity: 2026-08-04 -- Phase 16 verified (CR-01/WR-03/WR-04/WR-05 closed; human E2E approved)
 Progress: [██████████] 100%
-Last session: 2026-08-04T22:30:00Z
-Stopped At: Phase 16 complete (verified, 5/5 plans)
-Resume File: None
+Last session: 2026-08-04T17:17:06.762Z
+Stopped At: Phase 17 cancelled (allowed-tools enforcement deferred to end milestone); v1.1 milestone to close
+Resume File: .planning/phases/17-allowed-tools-enforcement-hardening/17-CONTEXT.md
 
 ## Performance Metrics
 
