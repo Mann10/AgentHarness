@@ -29,7 +29,7 @@ export function ConversationPanel({ focused }: ConversationPanelProps) {
           {"  "}· {title}
         </Text>
       </Box>
-      <Box flexDirection="column-reverse" flexGrow={1} marginY={1}>
+      <Box flexDirection="column-reverse" flexGrow={1} marginY={1} gap={1}>
         {status === "thinking" && conversation.length > 0 && (
           <Box>
             <Text color="yellow" dimColor>
