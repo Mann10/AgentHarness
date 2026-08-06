@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import asyncio
+from unittest.mock import MagicMock
 
 import pytest
 
+from backend.rpc.server import RPCServer
 from harness.event_bus import EventBus
-from harness.events import BacklogChangedEvent
+from harness.events import EVENT_BACKLOG_CHANGED, BacklogChangedEvent
 from harness.scheduler import Scheduler
 from tests.conftest import StubAgent
 
@@ -131,4 +133,72 @@ async def test_cancel_clears_backlog_and_emits_zero() -> None:
     assert isinstance(received[-1], BacklogChangedEvent)
     assert received[-1].depth == 0
     assert received[-1].next_prompt == ""
+    await s.shutdown()
+
+
+# -- Dimension 2: exact wire format (D-v10, {depth, next_prompt} only) --------
+
+
+@pytest.mark.asyncio
+async def test_event_maps_to_notification_wire_format() -> None:
+    """BacklogChangedEvent maps to the exact JSON-RPC notification dict the TUI
+    parses: type=backlog_changed, request_id=session_id, payload={depth, next_prompt}."""
+    server = RPCServer(MagicMock())
+    notif = server._event_to_notification(
+        BacklogChangedEvent(session_id="sess-1", depth=2, next_prompt="fix the bug")
+    )
+    assert notif == {
+        "jsonrpc": "2.0",
+        "method": "event",
+        "params": {
+            "type": "backlog_changed",
+            "request_id": "sess-1",
+            "payload": {"depth": 2, "next_prompt": "fix the bug"},
+        },
+    }
+
+
+@pytest.mark.asyncio
+async def test_payload_is_depth_and_next_prompt_only() -> None:
+    """D-v10: the notification payload has exactly the 'depth' and 'next_prompt'
+    keys — no session_id, no event_id leak (session rides on request_id)."""
+    server = RPCServer(MagicMock())
+    notif = server._event_to_notification(
+        BacklogChangedEvent(session_id="sess-1", depth=2, next_prompt="fix the bug")
+    )
+    assert set(notif["params"]["payload"].keys()) == {"depth", "next_prompt"}
+    assert notif["params"]["payload"] == {"depth": 2, "next_prompt": "fix the bug"}
+
+
+# -- Dimension 3: Scheduler → EventBus → RPCServer → NDJSON forwarding --------
+
+
+@pytest.mark.asyncio
+async def test_scheduler_to_server_forwards_backlog_changed_notification(
+    monkeypatch,
+) -> None:
+    """A real Scheduler enqueue forwards exactly one backlog_changed notification
+    end-to-end. Assert the event channel independently (Pitfall 2 pattern) — the
+    enqueue notification fires inside the awaited submit_prompt BEFORE any chat
+    response is written."""
+    bus = EventBus()
+    agent = StubAgent(delay=0.5)
+    s = Scheduler(agent, bus)
+    await s.start()
+
+    server = RPCServer(MagicMock())
+    writes: list = []
+    monkeypatch.setattr("backend.rpc.server._write_json", writes.append)
+    # Manual subscribe reproduces exactly what server.start() does (no stdin
+    # read loop under pytest).
+    await bus.subscribe(EVENT_BACKLOG_CHANGED, server._on_event)
+
+    await s.submit_prompt("first")
+    await asyncio.sleep(0.05)  # let the first turn start
+    await s.submit_prompt("second")
+
+    events = [w for w in writes if w.get("method") == "event"]
+    assert len(events) == 1
+    assert events[0]["params"]["type"] == "backlog_changed"
+    assert events[0]["params"]["payload"] == {"depth": 1, "next_prompt": "second"}
     await s.shutdown()

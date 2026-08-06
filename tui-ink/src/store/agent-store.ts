@@ -38,6 +38,7 @@ interface AgentActions {
   clearToolCalls: () => void
   incrementToolCallCount: () => void
   addLoadedSkill: (name: string) => void
+  setBacklog: (depth: number, nextPrompt: string) => void
 }
 
 export type AgentStore = AgentState & AgentActions
@@ -68,10 +69,18 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
   error: null,
   busy: false,
   loadedSkills: [] as string[],
+  queue: { depth: 0, nextPrompt: "" },
 
   setSessions: (sessions) => set({ sessions }),
 
-  setActiveSession: (id) => set({ activeSessionId: id }),
+  setActiveSession: (id) =>
+    set({
+      activeSessionId: id,
+      // D-v10: reset the queue slice on session switch (WR-05 philosophy) — a
+      // stale backlog from the previous session must never linger; the backend
+      // re-populates via the next backlog_changed event.
+      queue: { depth: 0, nextPrompt: "" },
+    }),
 
   addUserMessage: (content) =>
     set((s) => ({
@@ -244,4 +253,6 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
 
   incrementToolCallCount: () =>
     set((s) => ({ toolCallCount: s.toolCallCount + 1 })),
+
+  setBacklog: (depth, nextPrompt) => set({ queue: { depth, nextPrompt } }),
 }))

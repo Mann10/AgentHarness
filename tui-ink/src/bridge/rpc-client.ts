@@ -292,6 +292,14 @@ export class RpcClient {
         if (params.request_id === state.activeSessionId) store.addLoadedSkill(p.skill)
         break
       }
+      case "backlog_changed": {
+        // D-v10: session-scoped via request_id (WR-05 pattern) — an event for a
+        // non-active session must not repaint the panel. Store resets queue on switch.
+        const p = payload as { depth: number; next_prompt: string }
+        const state = useAgentStore.getState()
+        if (params.request_id === state.activeSessionId) store.setBacklog(p.depth, p.next_prompt)
+        break
+      }
     }
   }
 }
