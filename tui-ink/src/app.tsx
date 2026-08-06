@@ -6,6 +6,7 @@ import { SessionPicker } from "./components/session-picker.js"
 import { DatePanel } from "./panels/date-panel.js"
 import { ConversationPanel } from "./panels/conversation-panel.js"
 import { ToolMonitorPanel } from "./panels/tool-monitor-panel.js"
+import { QueuePanel } from "./panels/queue-panel.js"
 import { useAgentStore } from "./store/agent-store.js"
 import { RpcClient } from "./bridge/rpc-client.js"
 
@@ -206,6 +207,7 @@ export function App({ client, cwd }: AppProps) {
       <FocusablePanel id="tool-monitor">
         {(focused) => <ToolMonitorPanel focused={focused} />}
       </FocusablePanel>
+      <QueuePanel />
       <FocusablePanel id="input">
         {(focused) => <InputBar client={client} onOpenPicker={() => setPickerOpen(true)} />}
       </FocusablePanel>
