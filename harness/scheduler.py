@@ -155,9 +155,7 @@ class Scheduler:
         drain / cancel). depth=0 hides the TUI panel."""
         depth = self._backlog.qsize()
         next_prompt = self._backlog_mirror[0] if self._backlog_mirror else ""
-        await self._bus.publish(BacklogChangedEvent(
-            session_id=self._session_id(), depth=depth, next_prompt=next_prompt,
-        ))
+        await self._bus.publish(BacklogChangedEvent(session_id=self._session_id(), depth=depth, next_prompt=next_prompt))
 
     async def _run_turn(
         self,
