@@ -68,6 +68,11 @@ export interface SkillLoadedPayload {
   skill: string        // canonical name (D-06: { skill } only)
 }
 
+export interface BacklogChangedPayload {
+  depth: number        // D-v10: queue depth + head prompt — session rides on request_id
+  next_prompt: string
+}
+
 export type EventPayload =
   | { type: "turn_started"; payload: TurnStartedPayload }
   | { type: "tool_call"; payload: ToolCallPayload }
@@ -77,6 +82,7 @@ export type EventPayload =
   | { type: "error"; payload: ErrorPayload }
   | { type: "cancelled"; payload: CancelledPayload }
   | { type: "skill_loaded"; payload: SkillLoadedPayload }
+  | { type: "backlog_changed"; payload: BacklogChangedPayload }
 
 export type AgentStatus = "idle" | "thinking" | "streaming" | "error"
 
@@ -113,4 +119,5 @@ export interface AgentState {
   error: string | null
   busy: boolean
   loadedSkills: string[]
+  queue: { depth: number; nextPrompt: string }  // D-v10: Scheduler backlog mirror (runtime-global, NOT conversation state)
 }

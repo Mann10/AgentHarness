@@ -4,8 +4,8 @@ milestone: v1.1
 milestone_name: Skills System
 status: complete
 stopped_at: v1.1 milestone closed 2026-08-04 (Phase 17 cancelled — CAP-02/CAP-04 deferred)
-last_updated: "2026-08-04"
-last_activity: 2026-08-04 -- v1.1 Skills System milestone SHIPPED (archived, tagged)
+last_updated: "2026-08-06"
+last_activity: 2026-08-06 -- Completed quick task 260806-v10: TUI Queue panel for backlogged prompts
 progress:
   total_phases: 6
   completed_phases: 5
@@ -16,14 +16,14 @@ progress:
 
 # Project State
 
-**Updated:** 2026-08-04
+**Updated:** 2026-08-06
 **Status:** ✅ v1.1 Skills System SHIPPED — planning next milestone
 
 ## Current Position
 
 Milestone: v1.1 Skills System — COMPLETE (shipped 2026-08-04)
 Phase 17: CANCELLED (allowed-tools enforcement deferred to future/end milestone)
-Last activity: 2026-08-04 -- v1.1 milestone closed, archived to .planning/milestones/, tagged v1.1
+Last activity: 2026-08-06 - Completed quick task 260806-v10: TUI Queue panel for backlogged prompts (v1.1 milestone closed 2026-08-04, archived, tagged v1.1)
 Progress: [██████████] 100%
 Next: Run `/gsd-new-milestone` to define requirements and roadmap for the next milestone
 
@@ -102,3 +102,4 @@ Items acknowledged and deferred at v1.1 milestone close on 2026-08-04:
 | # | Description | Date | Commit | Status | Directory |
 |---|-------------|------|--------|--------|-----------|
 | 260801-jra | Show session name in conversation panel on first question | 2026-08-01 | e22128f | Verified | [260801-jra-when-new-session-is-launched-its-name-is](./quick/260801-jra-when-new-session-is-launched-its-name-is/) |
+| 260806-v10 | TUI Queue panel for backlogged prompts (FIFO backlog surfaced over RPC) | 2026-08-06 | 8382764 | — | [260806-v10-build-a-tui-queue-panel-component-when-a](./quick/260806-v10-build-a-tui-queue-panel-component-when-a/) |

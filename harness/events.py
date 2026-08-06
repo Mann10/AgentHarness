@@ -61,6 +61,19 @@ class CancelledEvent(HarnessEvent):
 
 
 @dataclass
+class BacklogChangedEvent(HarnessEvent):
+    """Emitted when the Scheduler FIFO backlog changes (enqueue / drain / cancel).
+
+    Payload contract: {depth, next_prompt} ONLY (D-06 style) — session_id rides
+    on the notification request_id for TUI session-scoping (WR-05 pattern).
+    next_prompt is the FULL queued text; truncation is a TUI-presentation concern.
+    """
+    session_id: str = ""
+    depth: int = 0
+    next_prompt: str = ""
+
+
+@dataclass
 class SkillLoadedEvent(HarnessEvent):
     """Emitted when a skill body is injected into context (D-07/D-08).
 
@@ -90,3 +103,4 @@ EVENT_RESPONSE_COMPLETE = "ResponseComplete"
 EVENT_ERROR = "ErrorEvent"
 EVENT_CANCELLED = "CancelledEvent"
 EVENT_SKILL_LOADED = "SkillLoadedEvent"   # name == class name (EventBus routes on type.__name__)
+EVENT_BACKLOG_CHANGED = "BacklogChangedEvent"  # name == class name (EventBus routes on type.__name__)

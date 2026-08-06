@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections import deque
 from collections.abc import Awaitable, Callable
 
 from agent import Agent
 from agent.result import AgentResult
 from harness.cancellation import CancellationToken
 from harness.event_bus import EventBus
-from harness.events import CancelledEvent
+from harness.events import BacklogChangedEvent, CancelledEvent
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,12 @@ class Scheduler:
         self._bus = event_bus
         self._on_turn_complete = on_turn_complete
         self._backlog: asyncio.Queue[str] = asyncio.Queue(maxsize=backlog_maxsize)
+        # D-v10: parallel FIFO mirror of the backlog for queue-head peek —
+        # asyncio.Queue has no peek, and the TUI panel needs the next prompt.
+        # Every queue mutation is immediately followed by the mirror mutation
+        # in the same synchronous block (no await between) → the mirror never
+        # drifts even under event-loop interleaving.
+        self._backlog_mirror: deque[str] = deque()
         self._current_task: asyncio.Task[AgentResult] | None = None
         self._cancellation_token: CancellationToken | None = None
         self._running = False
@@ -85,10 +92,12 @@ class Scheduler:
         else:
             try:
                 await self._backlog.put(prompt)
+                self._backlog_mirror.append(prompt)  # mirror mutation is synchronous — no interleaving
                 logger.info(
                     "Agent busy, prompt queued (backlog: ~%d)",
                     self._backlog.qsize(),
                 )
+                await self._emit_backlog_changed()
             except asyncio.QueueFull:
                 logger.warning("Backlog full, dropping prompt: %.50s", prompt)
 
@@ -113,6 +122,14 @@ class Scheduler:
                 self._current_task.cancel()
                 logger.info("Cancel requested for current turn")
 
+        # D-v10: cancel() clears the backlog — queued prompts under a cancelled turn
+        # never execute (the drain never runs on a cancelled task). Empty it now so the
+        # TUI Queue panel hides (depth=0) instead of showing prompts that will never run.
+        while not self._backlog.empty():
+            self._backlog.get_nowait()
+        self._backlog_mirror.clear()
+        await self._emit_backlog_changed()
+
     @property
     def is_busy(self) -> bool:
         """True if a turn is currently executing."""
@@ -125,6 +142,20 @@ class Scheduler:
     def backlog_size(self) -> int:
         """Number of prompts waiting in the backlog."""
         return self._backlog.qsize()
+
+    def _session_id(self) -> str:
+        """Safe agent session access — StubAgent has no _session (CancelledEvent pattern)."""
+        try:
+            return self._agent._session.id
+        except AttributeError:
+            return ""
+
+    async def _emit_backlog_changed(self) -> None:
+        """Publish current backlog state. Call after EVERY mutation (enqueue /
+        drain / cancel). depth=0 hides the TUI panel."""
+        depth = self._backlog.qsize()
+        next_prompt = self._backlog_mirror[0] if self._backlog_mirror else ""
+        await self._bus.publish(BacklogChangedEvent(session_id=self._session_id(), depth=depth, next_prompt=next_prompt))
 
     async def _run_turn(
         self,
@@ -168,6 +199,8 @@ class Scheduler:
         # Drain backlog: process next queued prompt (FIFO)
         if not self._backlog.empty():
             next_prompt = self._backlog.get_nowait()
+            self._backlog_mirror.popleft()
+            await self._emit_backlog_changed()  # depth drops; depth=0 when this was the last queued prompt
             self._cancellation_token = CancellationToken()
             self._current_task = asyncio.create_task(
                 self._run_turn(next_prompt, self._cancellation_token)
